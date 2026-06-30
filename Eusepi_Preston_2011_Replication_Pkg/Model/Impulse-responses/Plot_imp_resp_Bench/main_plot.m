@@ -62,7 +62,8 @@ up_band_L{j1}(j2) =  vec_sort(band_up);
 
 end
 
-load data_imp_R
+load(fullfile(imp_resp_dir, 'COEFF_STORE_impresp_mat_ree_bench.mat'), ...
+    'imp_resp_vec_RBC_ree_bench');
 
 
 

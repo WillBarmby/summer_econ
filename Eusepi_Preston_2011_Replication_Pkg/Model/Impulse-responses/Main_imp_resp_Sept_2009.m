@@ -1,6 +1,8 @@
 
 
+if exist('skip_clear','var') ~= 1
 clear all;%clc
+end
 %%% MAIN FILE FOR GENERATIONG IMPULSE RESPONSES
 
 
@@ -48,7 +50,12 @@ opt_x1 = opt_x;
 
 
 fb = 1;
-lern = 1;
+
+if exist('imp_resp_learning','var') ~= 1
+imp_resp_learning = 1;
+end
+
+lern = imp_resp_learning;
 
 
 exp_gen = 1;
@@ -308,13 +315,18 @@ toc
  
 
 if store_c == 1
-    
-  imp_resp_vec_RBC_learn_bench2 = imp_resp_vec;
-  
-    % save COEFF_STORE_impresp_mat_learn_bench2
-    % imp_resp_vec_RBC_learn_bench2 / edited out for robust data saving.
+
+    if exist('imp_resp_output_file','var') ~= 1
+    imp_resp_output_file = 'COEFF_STORE_impresp_mat_learn_bench2.mat';
+    end
+
+    if exist('imp_resp_output_var','var') ~= 1
+    imp_resp_output_var = 'imp_resp_vec_RBC_learn_bench2';
+    end
+
     main_dir = fileparts(mfilename('fullpath'));
-    
-    save(fullfile(main_dir, 'COEFF_STORE_impresp_mat_learn_bench2.mat'), ...
-        'imp_resp_vec_RBC_learn_bench2');
+
+    imp_resp_output.(imp_resp_output_var) = imp_resp_vec;
+
+    save(fullfile(main_dir, imp_resp_output_file), '-struct', 'imp_resp_output');
 end    
