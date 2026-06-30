@@ -2,13 +2,16 @@
 clear all
 
 
+plot_dir = fileparts(mfilename('fullpath'));
+imp_resp_dir = fullfile(plot_dir, '..');
 
-load data_imp_L
+load(fullfile(imp_resp_dir, 'COEFF_STORE_impresp_mat_learn_bench2.mat'), ...
+    'imp_resp_vec_RBC_learn_bench2');
 
+imp_resp_vec_L = imp_resp_vec_RBC_learn_bench2;
 
-
-
-imp_resp_vec_L = imp_resp_vec_RBC_learn_bench;
+% load data_imp_L
+% imp_resp_vec_L = imp_resp_vec_RBC_learn_bench;
 
 
 

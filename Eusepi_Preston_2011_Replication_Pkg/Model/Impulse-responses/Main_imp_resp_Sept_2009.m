@@ -311,6 +311,10 @@ if store_c == 1
     
   imp_resp_vec_RBC_learn_bench2 = imp_resp_vec;
   
-    save COEFF_STORE_impresp_mat_learn_bench2 imp_resp_vec_RBC_learn_bench2
+    % save COEFF_STORE_impresp_mat_learn_bench2
+    % imp_resp_vec_RBC_learn_bench2 / edited out for robust data saving.
+    main_dir = fileparts(mfilename('fullpath'));
     
+    save(fullfile(main_dir, 'COEFF_STORE_impresp_mat_learn_bench2.mat'), ...
+        'imp_resp_vec_RBC_learn_bench2');
 end    
