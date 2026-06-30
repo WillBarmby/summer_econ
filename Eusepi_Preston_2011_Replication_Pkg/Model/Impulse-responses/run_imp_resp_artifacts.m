@@ -10,19 +10,24 @@ cd(model_dir);
 %% Learning case
 skip_clear = 1;
 imp_resp_learning = 1;
-imp_resp_output_file = 'COEFF_STORE_impresp_mat_learn_bench2.mat';
-imp_resp_output_var = 'imp_resp_vec_RBC_learn_bench2';
+imp_resp_store = 0;
 
 run('Main_imp_resp_Sept_2009.m');
 
-clearvars -except model_dir old_dir cleanup
+imp_resp_vec_L = imp_resp_vec;
+
+clearvars -except model_dir old_dir cleanup imp_resp_vec_L
 
 %% Rational expectations case
 skip_clear = 1;
 imp_resp_learning = 0;
-imp_resp_output_file = 'COEFF_STORE_impresp_mat_ree_bench.mat';
-imp_resp_output_var = 'imp_resp_vec_RBC_ree_bench';
+imp_resp_store = 0;
 
 run('Main_imp_resp_Sept_2009.m');
+
+imp_resp_vec_R = imp_resp_vec;
+
+save(fullfile(model_dir, 'imp_resp_bench_artifacts.mat'), ...
+    'imp_resp_vec_L', 'imp_resp_vec_R');
 
 end

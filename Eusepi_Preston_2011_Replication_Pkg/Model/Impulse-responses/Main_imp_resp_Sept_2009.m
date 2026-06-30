@@ -29,7 +29,11 @@ band_down = 1;(1-0.15)*n_draws;
 
 %% OPTIONS
 
-store_c  = 1; %% set == 1 to store matrix of impulse responses 
+if exist('imp_resp_store','var') ~= 1
+imp_resp_store = 1;
+end
+
+store_c  = imp_resp_store; %% set == 1 to store matrix of impulse responses
 
 
 %% Define model parameters ans select options in the simulation files
