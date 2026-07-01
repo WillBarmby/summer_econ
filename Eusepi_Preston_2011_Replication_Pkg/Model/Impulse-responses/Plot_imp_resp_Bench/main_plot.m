@@ -159,7 +159,7 @@ axis([0 40 0.5 5.0]);
 
 plot(1:NIR,median_imp_resp_vec_L{h}(1,1:NIR),'k-',1:NIR,median_imp_resp_vec_R{h}(1,1:NIR),'k--',1:NIR,low_band_L{h}(1:NIR),'k:',1:NIR,up_band_L{h}(1:NIR),'k:','linewidth',2);
   
- title('hours')
+ title('Hours')
 
   xlabel('Quarters');%ylabel('%dev. from un-shocked BGP'); 
   
@@ -187,7 +187,7 @@ plot(1:NIR,median_imp_resp_vec_L{rk_sum}(1,1:NIR),'k-',1:NIR,median_imp_resp_vec
 
 plot(1:NIR,median_imp_resp_vec_L{w_sum}(1,1:NIR),'k-',1:NIR,median_imp_resp_vec_R{w_sum}(1,1:NIR),'k--',1:NIR,low_band_L{w_sum}(1:NIR),'k:',1:NIR,up_band_L{w_sum}(1:NIR),'k:','linewidth',2);
   
- title('E_t\Sigma^\infty_T_=_t\beta^T^-^t^+^1w_T_+_1')
+ title('$E_t \Sigma_{T=t}^\infty \beta^{T-t+1} w_{T+1}$')
 
   xlabel('Quarters');ylabel('% dev. from SS');
   
@@ -210,7 +210,7 @@ figure(3);
 
 plot(1:NIR,median_imp_resp_vec_L{Exprk1}(1,1:NIR),'k-',1:NIR,median_imp_resp_vec_L{y}(1,1:NIR)-median_imp_resp_vec_R{y}(1,1:NIR),'k--',1:NIR,low_band_L{Exprk1}(1:NIR),'k:',1:NIR,up_band_L{Exprk1}(1:NIR),'k:','linewidth',2);
   
- title('R^k Forecast Errors and Y^L^E-Y^R^E')
+ title('$R^k$ Forecast Errors and $Y^{LE}-Y^{RE}$')
 
   xlabel('Quarters');ylabel('% dev. from SS');
   
@@ -221,7 +221,7 @@ plot(1:NIR,median_imp_resp_vec_L{Exprk1}(1,1:NIR),'k-',1:NIR,median_imp_resp_vec
 
 plot(ax,Rkpath_learn,'k-',ax,RKpath_REE,'k--','linewidth',2);
   
- title('R^k Forecast Path')
+ title('$R^k$ Forecast Path')
 
  axis([0 100 -0.05 0.9]);
  
@@ -234,7 +234,7 @@ plot(ax,Rkpath_learn,'k-',ax,RKpath_REE,'k--','linewidth',2);
  
 plot(1:NIR,median_imp_resp_vec_L{Exp40}(1,1:NIR),'k-',1:NIR,median_imp_resp_vec_R{Exp40}(1,1:NIR),'k--',1:NIR,low_band_L{Exp40}(1:NIR),'k:',1:NIR,up_band_L{Exp40}(1:NIR),'k:','linewidth',2);
   
- title('R^k 10-Years-Ahead Forecast')
+ title('$R^k$ 10-Years-Ahead Forecast')
 axis([0 40 -0.025 0.1]);
   xlabel('Quarters');ylabel('% dev. from SS');
 
