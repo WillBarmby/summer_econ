@@ -24,7 +24,11 @@ sim_L = 2000; %% this denotes the total number of observations that have
 T_tot = sim_L+T_imp; %% total length of simulation
 
 
-n_draws = 100; %% number of IR simulated
+if exist('imp_resp_n_draws','var') ~= 1
+imp_resp_n_draws = 100;
+end
+
+n_draws = imp_resp_n_draws; %% number of IR simulated
 
 %% select percentile
 band_up = 1;.15*n_draws;
