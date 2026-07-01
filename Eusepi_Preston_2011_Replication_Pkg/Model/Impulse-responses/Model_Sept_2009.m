@@ -5,7 +5,7 @@
 %% in this version, the vector param includes: inf_H,sigma,eta,rho_z,rho_a 
 %% We include present value of labor income and capital income
 
-% function [A,C,invA0,k_y,disc,ct1] = Model_Sept_2009(param)
+function [A,C,invA0,k_y,disc,ct1] = Model_Sept_2009(param)
 
 
 % The model includes capital utilization, externalities and nonseparability between leisure and
@@ -15,13 +15,13 @@
  
  
 %% Set param in case the file is not used as a function (comment otherwise)
- clear all 
- param(1) = 1;  %% IH
- param(2) = 0; %% External effects
- param(3) = 1; %% sigma
- param(4) = 1; %% simple RBC (Takes 1 or zero)
- param(5) = 0.0001; %% elasticity of labor supply
- param(6) = 0; %% 0 for standard nonsep, 1 for partic. model (NOT USED)
+ % clear all 
+ % param(1) = 1;  %% IH
+ % param(2) = 0; %% External effects
+ % param(3) = 1; %% sigma
+ % param(4) = 1; %% simple RBC (Takes 1 or zero)
+ % param(5) = 0.0001; %% elasticity of labor supply
+ % param(6) = 0; %% 0 for standard nonsep, 1 for partic. model (NOT USED)
 
 %% Control on bounds for calibrated coefficients
 

@@ -1,6 +1,8 @@
 
 
+if exist('skip_clear','var') ~= 1
 clear all;%clc
+end
 %%% MAIN FILE FOR GENERATIONG IMPULSE RESPONSES
 
 
@@ -18,7 +20,7 @@ sim_L = 2000; %% this denotes the total number of observations that have
 T_tot = sim_L+T_imp; %% total length of simulation
 
 
-n_draws = 5000; %% number of IR simulated
+n_draws = 100; %% number of IR simulated
 
 %% select percentile
 band_up = 1;.15*n_draws;
@@ -27,7 +29,11 @@ band_down = 1;(1-0.15)*n_draws;
 
 %% OPTIONS
 
-store_c  = 1; %% set == 1 to store matrix of impulse responses 
+if exist('imp_resp_store','var') ~= 1
+imp_resp_store = 1;
+end
+
+store_c  = imp_resp_store; %% set == 1 to store matrix of impulse responses
 
 
 %% Define model parameters ans select options in the simulation files
@@ -48,7 +54,12 @@ opt_x1 = opt_x;
 
 
 fb = 1;
-lern = 1;
+
+if exist('imp_resp_learning','var') ~= 1
+imp_resp_learning = 1;
+end
+
+lern = imp_resp_learning;
 
 
 exp_gen = 1;
@@ -308,9 +319,18 @@ toc
  
 
 if store_c == 1
-    
-  imp_resp_vec_RBC_learn_bench2 = imp_resp_vec;
-  
-    save COEFF_STORE_impresp_mat_learn_bench2 imp_resp_vec_RBC_learn_bench2
-    
+
+    if exist('imp_resp_output_file','var') ~= 1
+    imp_resp_output_file = 'COEFF_STORE_impresp_mat_learn_bench2.mat';
+    end
+
+    if exist('imp_resp_output_var','var') ~= 1
+    imp_resp_output_var = 'imp_resp_vec_RBC_learn_bench2';
+    end
+
+    main_dir = fileparts(mfilename('fullpath'));
+
+    imp_resp_output.(imp_resp_output_var) = imp_resp_vec;
+
+    save(fullfile(main_dir, imp_resp_output_file), '-struct', 'imp_resp_output');
 end    

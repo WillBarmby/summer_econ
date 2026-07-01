@@ -2,13 +2,11 @@
 clear all
 
 
+plot_dir = fileparts(mfilename('fullpath'));
+imp_resp_dir = fullfile(plot_dir, '..');
 
-load data_imp_L
-
-
-
-
-imp_resp_vec_L = imp_resp_vec_RBC_learn_bench;
+load(fullfile(imp_resp_dir, 'imp_resp_bench_artifacts.mat'), ...
+    'imp_resp_vec_L', 'imp_resp_vec_R');
 
 
 
@@ -58,15 +56,6 @@ up_band_L{j1}(j2) =  vec_sort(band_up);
   end 
 
 end
-
-load data_imp_R
-
-
-
-
-imp_resp_vec_R = imp_resp_vec_RBC_ree_bench;
-
-
 
 %% select percentile
 band_up = .15*size(imp_resp_vec_R{1},1);
