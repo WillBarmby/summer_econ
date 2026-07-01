@@ -1,6 +1,18 @@
 
 clear all; %clc
 
+pkg_dir = fileparts(fileparts(fileparts(mfilename('fullpath'))));
+sim_codes_dir = fileparts(mfilename('fullpath'));
+euler_common_dir = fullfile(sim_codes_dir, 'Euler_common');
+if ~isempty(strfind(path, euler_common_dir))
+    rmpath(euler_common_dir);
+end
+[~, current_folder_name] = fileparts(pwd);
+if strncmp(current_folder_name, 'simulation_codes_Euler', length('simulation_codes_Euler'))
+    addpath(euler_common_dir, '-begin');
+end
+addpath(fullfile(pkg_dir, 'Common'), '-end');
+
  global epsZ 
  
  

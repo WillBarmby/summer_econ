@@ -11,6 +11,9 @@
      
 %% comment if use as a function        
    clear all;clc;
+
+   pkg_dir = fileparts(fileparts(fileparts(mfilename('fullpath'))));
+   addpath(fullfile(pkg_dir, 'Common'), '-end');
    
  bcm = 0;
 

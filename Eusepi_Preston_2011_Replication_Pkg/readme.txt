@@ -33,6 +33,14 @@
        mean_arki std_arki, mean_awi std_awi, i=1,2,3,4, (compute the statistics        for  simulated forecast errors)
 
   
+  
+      Shared Matlab functions used by multiple folders are stored in the
+      package-level folder "Common". The common simulation driver
+      "main_stats.m" is stored in "Model/Simulation-Codes"; run it while the
+      current Matlab folder is the target simulation folder. Scenario folders
+      that require a different driver still keep their local "main_stats.m".
+      The Euler-specific shared model simulation file is stored in
+      "Model/Simulation-Codes/Euler_common".
 
 2.2.1 For Table 1-2, The folders are:
 

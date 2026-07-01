@@ -1,6 +1,9 @@
 
 clear all; %clc
 
+pkg_dir = fileparts(fileparts(fileparts(fileparts(mfilename('fullpath')))));
+addpath(fullfile(pkg_dir, 'Common'), '-end');
+
  global epsZ 
  
  
