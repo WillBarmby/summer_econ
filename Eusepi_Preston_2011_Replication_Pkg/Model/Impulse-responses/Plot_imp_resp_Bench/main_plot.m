@@ -1,6 +1,6 @@
 %% PLOTS IMPULSE RESPONSES
-clear all
-
+clear all; close all;
+set(groot,'defaultTextInterpreter','latex');
 
 plot_dir = fileparts(mfilename('fullpath'));
 imp_resp_dir = fullfile(plot_dir, '..');
@@ -177,7 +177,7 @@ figure(2);
 
 plot(1:NIR,median_imp_resp_vec_L{rk_sum}(1,1:NIR),'k-',1:NIR,median_imp_resp_vec_R{rk_sum}(1,1:NIR),'k--',1:NIR,low_band_L{rk_sum}(1:NIR),'k:',1:NIR,up_band_L{rk_sum}(1:NIR),'k:','linewidth',2);
   
- title('E_t\Sigma^\infty_T_=_t\beta^T^-^t^+^1R^k_T_+_1')
+ title('$E_t \Sigma_{T=t}^\infty \beta^{T-t+1} R^k_{t+1}$')
 
   xlabel('Quarters');ylabel('% dev. from SS');
   
