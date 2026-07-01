@@ -12,3 +12,16 @@ Thumbs.db
 # Terminal outputs
 tree.txt
 diff.txt
+
+# MATLAB autosaves and temporary files
+*.asv
+*.m~
+*.autosave
+
+# Archival/package debris found in the original replication bundle
+*.ptl
+
+# Generated figures
+*.fig
+*.png
+*.pdf
