@@ -5,8 +5,11 @@ T_imp = main_config.impulse_horizon;
 n_impulse_resp = idx.ir_series_count;
 
 %% select percentile
-band_up = main_config.band_upper_order_stat;.15*size(imp_resp_vec{1},1);
-band_down = main_config.band_lower_order_stat;(1-0.15)*size(imp_resp_vec{1},1);
+band_up = main_config.band_upper_order_stat;
+% was in og code but were not used there either: .15*size(imp_resp_vec{1},1);
+band_down = main_config.band_lower_order_stat;
+% was in og code but were not used there either: (1-0.15)*size(imp_resp_vec{1},1);
+
 
 %% Create median impulse responses and bands
 for j = 1:n_impulse_resp
