@@ -45,6 +45,11 @@ rho_x = 0;  %% autoregressive coeff. in inv. neutral. shock
 gamma = exp(0.0053); %% mean of gdp growth in current data
 eps_H = params.inverse_labor_elasticity; %% inv. of elasticity of labor supply
 phi_bar = 0.01; %% marginal cost of labor participation
+calibration = struct( ...
+    'delta', delta, ...
+    'alpha', alpha, ...
+    'gamma', gamma, ...
+    'eps_H', eps_H);
 
 %% [b] ESTIMATED (or just coming from another file)
 
@@ -53,6 +58,7 @@ phi_bar = 0.01; %% marginal cost of labor participation
 external_effects = params.external_effects; %% external effects
 sigma = params.sigma; %% parameter in the utility function
 beta = 0.99*gamma^(sigma-1); %% adjusted discount rate (not really used...)
+calibration.beta = beta;
 
 %% Verify parameters' bounds
 
@@ -69,43 +75,17 @@ end
 
 
 %% [3] STEADY STATE
-%% Paramters of the capital production function
-delta_tilda = 1-(1-delta)/gamma; %% investment to capital ratio
-
-beta_tilda = beta*gamma^(1-sigma); %% modified discount rate
-
-%% Steady State values of main variables
-
-theta = (gamma*beta_tilda^(-1)-(1-delta))/delta;
-
-if RBC_dummy == 0
-    u_ss = 1;
-else
-    u_ss = (theta*delta)^(1/theta); %% capital utilization
-end
-
-yk_ratio = delta*theta/(alpha*gamma);
-ik_ratio = delta_tilda;
-ck_ratio = yk_ratio-ik_ratio;
-cy_ratio = ck_ratio/yk_ratio;
-R_bar = beta^(-1)-(1-delta)/gamma^(sigma); % Will — does not appear to be used anywhere
-delta_s = (1-delta)/gamma;
-R_tilda = beta_tilda^(-1)-delta_s;
-psi = cy_ratio^(-1)*(1-alpha);
-
-%% coeffs. convolutions of parameters
-
-if partic == 0
-
-    eps_c = ck_ratio+(eps_H-psi*(sigma-1)/sigma)^(-1)*R_tilda*(1-alpha)/alpha;
-    eps_w = (1+(eps_H-psi*(sigma-1)/sigma)^(-1))*R_tilda*(1-alpha)/alpha;
-    chi = psi*(1-sigma)/(sigma*eps_H+psi*(1-sigma));
-    c_c = (1-beta_tilda)*(1-chi)/eps_c;
-else
-
-    %%TO BE ADDED
-
-end
+steady_state = calculate_model_steady_state(sigma, calibration, RBC_dummy, partic);
+beta_tilda = steady_state.beta_tilda;
+theta = steady_state.theta;
+ik_ratio = steady_state.ik_ratio;
+cy_ratio = steady_state.cy_ratio;
+R_tilda = steady_state.R_tilda;
+psi = steady_state.psi;
+eps_c = steady_state.eps_c;
+eps_w = steady_state.eps_w;
+chi = steady_state.chi;
+c_c = steady_state.c_c;
 
 %% discounts
 disc = [beta_tilda]; %% NOTE: if take Euler Approach, just set disc as having one
