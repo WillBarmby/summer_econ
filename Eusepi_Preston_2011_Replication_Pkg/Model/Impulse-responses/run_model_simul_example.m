@@ -3,39 +3,25 @@
 % These are the standalone values that were previously commented in the
 % simulation function.
 
-pkg_dir = fileparts(fileparts(fileparts(mfilename('fullpath'))));
-addpath(fullfile(pkg_dir, 'Common'), '-end');
+setup_ir_paths();
+config = ir_default_config();
+example = config.simulation_example;
 
-%% Simulation parameters (general)
-exp_gen = 1;
-imp_resp = 0;
-full = 1;
-
-%% These parameters are not needed by this configuration.
-epsZ_imp1 = 1;
-ini1 = 0;
-ini2 = 0;
-ini3 = 0;
-ini4 = 0;
-ini5 = 0;
-sim_L = 1;
-
-opt_x = exp(-0.034);
-
-% x(1): Infinite-horizon formulation flag
-% x(2): External-effects parameter
-% x(3): Utility-function parameter sigma
-% x(4): Simple-RBC specification flag
-% x(5): Inverse labor-supply elasticity
-% x(6): Fixed gain learning
-x = [1; 0; 1; 1; 0.01; 0.0049];
-
-S_mat = opt_x';
-
-fb = 1;
-lern = 1;
-
-epsZ = randn(1, 22000);
+exp_gen = example.expectations_enabled;
+imp_resp = example.impulse_response_enabled;
+full = example.full_sample;
+epsZ_imp1 = example.initial_shock;
+ini1 = example.initial_regressors;
+ini2 = example.initial_precision;
+ini3 = example.initial_state;
+ini4 = example.initial_omega_c;
+ini5 = example.initial_omega_0;
+sim_L = example.training_sample_length;
+x = example.model_param;
+S_mat = example.shock_scale';
+fb = example.feedback;
+lern = example.learning;
+epsZ = randn(1, example.shock_sample_length);
 
 [Y_var, Exp_R_1Q, Exp_R_3Q, Exp_w_1Q, Exp_w_2Q, Exp_w_3Q, ...
     Exp_w_4Q, Exp_rk_1Q, Exp_rk_2Q, Exp_rk_3Q, Exp_rk_4Q, ...
