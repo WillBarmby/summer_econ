@@ -16,7 +16,6 @@ function [A,C,invA0,k_y,disc,invalid_params] = build_model_matrices(param)
 % and rental rates of capital
 
 invalid_params = false; %% Control on bounds for calibrated coefficients
-solvem = 1; %% Solve the model     %% set == 1 if want to solve del model
 
 %% Choose Specs
 inf_H = param(1); %% if set == 1 chooses inf. horizon approach, %% Otherwise Euler Aproach. %% In this file we ONLY have the IH approach
@@ -374,19 +373,3 @@ C(idx.gamma_x, idx.eps_x) = 1;
 C = invA0*C;
 
 %disp('matrices have been created')
-
-%% Solve and convert to REDS-SOLDS
-if solvem == 1
-    ini_cond_0 = zeros(n_var,1);
-    ini_cond = zeros(n_var,n_var);
-    %ini_cond = OMEGA_c_RE;
-    [OMEGA_0_RE, OMEGA_c_RE] = REE_solve(ini_cond_0,ini_cond,A,C,invA0,k_y,disc);
-
-    [T_0_RE, T_L_RE, T_s_RE, T_c_RE, T_Ls_RE] = ...
-        ALM_fun(A,C,invA0,OMEGA_0_RE,OMEGA_c_RE,k_y,disc);
-
-    %% not active...
-    % n_states = 2;
-    %
-    %  [D,F,G,H] = State_Space_convert(T_L_RE,T_s_RE,n_states,n_var);
-end  %% closes solvem loop
