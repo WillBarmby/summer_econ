@@ -11,7 +11,7 @@
 
      function [Y_var,Exp_R_1Q,Exp_R_3Q,Exp_w_1Q,Exp_w_2Q,Exp_w_3Q,...
          Exp_w_4Q,Exp_rk_1Q,Exp_rk_2Q,Exp_rk_3Q,Exp_rk_4Q,...
-              Regressors_ini,R_mat_ini,state_ini,OMEGA_c_ini,OMEGA_0_ini,ct2] = ...
+              Regressors_ini,R_mat_ini,state_ini,OMEGA_c_ini,OMEGA_0_ini,invalid_simulation] = ...
          Model_Simul_Oct_2009(x,S_mat,fb,lern,exp_gen,imp_resp,full,epsZ_imp1,ini1,ini2,ini3,ini4,ini5,sim_L,epsZ);
 %% COMMENT BELOW IF USING AS A FUNCTION!
 
@@ -68,7 +68,7 @@
 
 
 % Control on bounds for calibrated coefficients
- ct2 = 0;
+ invalid_simulation = false;
 
 
 
@@ -148,7 +148,7 @@ end
  %% in the Documentation fle: ALM_documentation.tex
 
 
-[A,C,invA0,k_y,disc,ct1] = Model_Sept_2009(x);
+[A,C,invA0,k_y,disc,invalid_params] = Model_Sept_2009(x);
 
 % jump
 
@@ -173,15 +173,15 @@ gamma_x = 13;
 
 
 
-ct2 = ct1;
+invalid_simulation = invalid_params;
 
 if g_gain < 0 | g_gain > 0.025
 
-     ct2 = 1;
+     invalid_simulation = true;
 
 end
 
-if ct2 == 0
+if ~invalid_simulation
 
 
  %% ATTENTION!: Regression equations/coefficients
@@ -329,7 +329,7 @@ end
 %% Solve with REDS-SOLDS
 
 
- [OMEGA_0_RE OMEGA_c_RE ct1] = REDS_SOLDS_Model_Sept_2009(x);
+ [OMEGA_0_RE OMEGA_c_RE invalid_params] = REDS_SOLDS_Model_Sept_2009(x);
 
 
 %% Solve with T-map iteration (double check solution!, other variables)
@@ -594,7 +594,7 @@ if max(Y_var(:,ctn_s)) > 1000
 
    disp('exploding series')
 
-   ct2 = 1; Y_var = 0; Exp_Y_var = 0;
+   invalid_simulation = true; Y_var = 0; Exp_Y_var = 0;
             Regressors_ini = 0; R_mat_ini = 0;
             state_ini = 0; OMEGA_c_ini = 0; OMEGA_0_ini = 0;
            Exp_R_1Q = 0;Exp_R_3Q = 0; Exp_w_1Q = 0;
@@ -729,7 +729,7 @@ if sga == 0
 
    disp('warning: singular R matrix')
 
-   ct2 = 1; Y_var = 0; Exp_Y_var = 0;
+   invalid_simulation = true; Y_var = 0; Exp_Y_var = 0;
             Regressors_ini = 0; R_mat_ini = 0;
             state_ini = 0; OMEGA_c_ini = 0; OMEGA_0_ini = 0;
            Exp_R_1Q = 0;Exp_R_3Q = 0; Exp_w_1Q = 0;
@@ -955,9 +955,9 @@ end %% ends imp_resp loop
 
 
 
-end  %% end the ct2 loop
+end  %% end the invalid_simulation loop
 
- if ct2 == 1
+ if invalid_simulation
 
             Y_var = 0;
             Regressors_ini = 0; R_mat_ini = 0;
