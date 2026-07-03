@@ -16,10 +16,11 @@ function [A,C,invA0,k_y,disc,invalid_params] = build_model_matrices(param)
 % and rental rates of capital
 
 invalid_params = false; %% Control on bounds for calibrated coefficients
+params = parse_model_parameters(param);
 
 %% Choose Specs
-inf_H = param(1); %% if set == 1 chooses inf. horizon approach, %% Otherwise Euler Aproach. %% In this file we ONLY have the IH approach
-RBC_dummy = 1-param(4); %% set == 0 for simple RBC
+inf_H = params.infinite_horizon; %% if set == 1 chooses inf. horizon approach, %% Otherwise Euler Aproach. %% In this file we ONLY have the IH approach
+RBC_dummy = 1-params.simple_rbc; %% set == 0 for simple RBC
 partic = 0; %% set == 1 for model with partic. (NOT USED)
 
 %% [1] DEFINE VARIABLES
@@ -42,15 +43,15 @@ delta = 0.025; %% depreciation rate
 alpha = 0.34; %% capital share
 rho_x = 0;  %% autoregressive coeff. in inv. neutral. shock
 gamma = exp(0.0053); %% mean of gdp growth in current data
-eps_H = param(5); %% inv. of elasticity of labor supply
+eps_H = params.inverse_labor_elasticity; %% inv. of elasticity of labor supply
 phi_bar = 0.01; %% marginal cost of labor participation
 
 %% [b] ESTIMATED (or just coming from another file)
 
 %% [c] ESTIMATED PARAMETERS
 
-external_effects = param(2); %% external effects
-sigma = param(3); %% parameter in the utility function
+external_effects = params.external_effects; %% external effects
+sigma = params.sigma; %% parameter in the utility function
 beta = 0.99*gamma^(sigma-1); %% adjusted discount rate (not really used...)
 
 %% Verify parameters' bounds
