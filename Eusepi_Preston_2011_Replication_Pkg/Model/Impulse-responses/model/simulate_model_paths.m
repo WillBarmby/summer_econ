@@ -1,4 +1,6 @@
 
+%% Formerly Model_Simul_Oct_2009.m in this impulse-response folder.
+%% Renamed to describe its current role: simulating model paths.
 
 
  %%% THIS FUNCTION SIMULATES A MODEL (defined by Model function) GIVEN THE

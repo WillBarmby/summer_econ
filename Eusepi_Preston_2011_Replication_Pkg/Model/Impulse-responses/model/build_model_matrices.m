@@ -1,3 +1,5 @@
+%% Formerly Model_Sept_2009.m in this impulse-response folder.
+%% Renamed to describe its current role: constructing model matrices.
 %% THIS FUNCTION CONSTRUCTS THE MODEL IN MATRIX FORM
 %% We include present value of labor income and capital income
 %% in this version, the vector param includes:

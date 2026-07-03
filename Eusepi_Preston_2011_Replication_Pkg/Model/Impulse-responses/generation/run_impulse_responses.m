@@ -1,5 +1,8 @@
 function [imp_resp_vec, median_imp_resp_vec, low_band, up_band] = run_impulse_responses(config)
 %% RUN_IMPULSE_RESPONSES Generate benchmark impulse responses.
+%
+% Extracted from the former body of Main_imp_resp_Sept_2009.m. The legacy
+% file remains as the short user-facing entrypoint.
 
 if nargin < 1
     config = ir_default_config();
