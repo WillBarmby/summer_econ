@@ -31,10 +31,6 @@ else
 end
 
 %% select percentile
-band_up = main_config.band_upper_order_stat;.15*n_draws;
-
-band_down = main_config.band_lower_order_stat;(1-0.15)*n_draws;
-
 store_c = main_config.store_output; %% set == 1 to store matrix of impulse responses
 
 %% Define the IR matrices
@@ -44,12 +40,6 @@ n_impulse_resp = idx.ir_series_count; %% number of impulse responses that you wa
 for j = 1:n_impulse_resp
 
   imp_resp_vec{j} = zeros(n_draws,T_imp-1);  %%remember, the vector is one unit shorter...
-
-  median_imp_resp_vec{j} = zeros(1,T_imp-1);
-
-  low_band{j} = zeros(1,T_imp-1);
-
-  up_band{j} = zeros(1,T_imp-1);
 
 end
 
@@ -73,40 +63,12 @@ for ctn = 1:n_draws
 
 end %% end draws loop
 
-%% Create median impulse responses and bands
-
-%% Median impulse responses
-for j1 =1:n_impulse_resp
-
-  for j2 = 1:T_imp-1
-
-    median_imp_resp_vec{j1}(j2) = median(imp_resp_vec{j1}(:,j2));
-
-  end
-
-end
-
-%% Compute bands
-for j1 =1:n_impulse_resp
-
-  for j2 = 1:T_imp-1
-
-    vec_sort = sort(imp_resp_vec{j1}(:,j2));
-
-    low_band{j1}(j2) = vec_sort(band_down);  %%$work in progress (define percentile?)...
-
-    up_band{j1}(j2) =  vec_sort(band_up);
-
-  end
-
-end
+[median_imp_resp_vec, low_band, up_band] = summarize_ir_bands(imp_resp_vec, main_config, idx);
 
 toc
 
 if store_c == 1
-  imp_resp_output.(main_config.output_var) = imp_resp_vec;
-
-  save(fullfile(main_config.output_dir, main_config.output_file), '-struct', 'imp_resp_output');
+  save_ir_output(main_config, imp_resp_vec);
 end
 
 end
