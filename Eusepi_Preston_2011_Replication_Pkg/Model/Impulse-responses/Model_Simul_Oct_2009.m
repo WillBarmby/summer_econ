@@ -100,25 +100,26 @@ end
 
 [A,C,invA0,k_y,disc,invalid_params] = Model_Sept_2009(x);
 
-% jump
+idx = ir_variable_indices();
 
-rk = 1;
-wage = 2;
-output = 4;
-hours = 5;
-cons = 12;
-invst = 9;
-mp = 8; %% externality
-caput = 6;
-rk_sum = 10; %% capital income
-w_sum = 11; %% labor income
-bond = 3;
+% jump
+rk = idx.rk;
+wage = idx.wage;
+output = idx.output;
+hours = idx.hours;
+cons = idx.cons;
+invst = idx.invst;
+mp = idx.mp; %% externality
+caput = idx.caput;
+rk_sum = idx.rk_sum; %% capital income
+w_sum = idx.w_sum; %% labor income
+bond = idx.bond;
 
 % state
-cap = 7;
+cap = idx.cap;
 
 %% exogenous variables
-gamma_x = 13;
+gamma_x = idx.gamma_x;
 
 
 

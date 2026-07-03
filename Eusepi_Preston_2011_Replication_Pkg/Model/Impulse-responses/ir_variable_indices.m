@@ -1,21 +1,29 @@
 function idx = ir_variable_indices()
 %% IR_VARIABLE_INDICES Named positions for model and impulse-response series.
 
+%% endogenous variables: jump variables
 idx.rk = 1;
 idx.wage = 2;
 idx.bond = 3;
 idx.output = 4;
 idx.hours = 5;
 idx.caput = 6;
-idx.capital = 7;
-idx.mp = 8;
+idx.mp = 8; %% externality
 idx.investment = 9;
-idx.rk_sum = 10;
-idx.w_sum = 11;
+idx.rk_sum = 10; %% capital income
+idx.w_sum = 11; %% labor income
 idx.consumption = 12;
+
+%% endogenous variables: state variables
+idx.capital = 7;
+
+%% exogenous variables
 idx.gamma_x = 13;
+
+%% shocks
 idx.eps_x = 1;
 
+%% legacy aliases used by impulse-response scripts
 idx.cons = idx.consumption;
 idx.invst = idx.investment;
 idx.cap = idx.capital;

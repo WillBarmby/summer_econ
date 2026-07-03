@@ -120,27 +120,19 @@ for ctn = 1:n_draws
 
   %% Model parameters that we need
   % vars location (needed below)
-  % jump
+  idx = ir_variable_indices();
 
   % jump
-
-  rk = 1;
-  wage = 2;
-  output = 4;
-  hours = 5;
-  cons = 12;
-  invst = 9;
-  mp = 8; %% externality
-  caput = 6;
-  rk_sum = 10; %% capital income
-  w_sum = 11; %% labor income
-  bond = 3;
-
-  % state
-  cap = 7;
+  rk = idx.rk;
+  wage = idx.wage;
+  output = idx.output;
+  hours = idx.hours;
+  cons = idx.cons;
+  invst = idx.invst;
+  bond = idx.bond;
 
   %% exogenous variables
-  gamma_x = 13;
+  gamma_x = idx.gamma_x;
 
 
 
