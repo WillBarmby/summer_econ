@@ -3,12 +3,9 @@
 %%% INCLUDING INVESTMENT ADJUSTMENT COSTS
 
 
- 
-   
-   function [A,B,C,NY,NX,NK] = external_habit_model_new(param)
- 
- global zeta
 
+
+   function [A,B,C,NY,NX,NK] = external_habit_model_new(param,zeta)
 %% NOTE: the vector param includes all the parameters.
 %% IMPORTANT: verify that the vector param contain te same parameters as in
 %% the Model file!
@@ -16,7 +13,7 @@
 
 
  %zeta = 0.7;
- 
+
 %% Simulate estimated model
 
 %  clear all
@@ -28,57 +25,57 @@
 %   -13.0006
 %    -2.4470
 %      ];
-%  
+%
 %  std_vec_s = [exp(x(1));exp(x(2));exp(x(3));exp(-30);exp(x(4));exp(x(5));exp(x(6));exp(x(7))];
 % %std_vec_s = [exp(0);exp(0);exp(0);exp(0);exp(0);exp(0);exp(0);exp(0)];
-% 
-% zeta = 0.57; 
-%      param(1) = 1.5; param(2) = 1; param(3) = 4^(-1)*param(2)/zeta; param(4) = 0; 
+%
+% zeta = 0.57;
+%      param(1) = 1.5; param(2) = 1; param(3) = 4^(-1)*param(2)/zeta; param(4) = 0;
 %      param(5) = 0.5; param(6) = 0.15; param(7) = 0.8;
 %      param(8) = 0.99; param(9) = 0.85; param(10) = 0.9; param(11) = 0.99; param(12) = 0.5;
 %      param(13) = -0.3; param(14) = 0.0053;
 
 %% Comment is use as function file
- 
+
 %        clear all
-% %  
-%      zeta = 0.57; 
-%      param(1) = 1.5; param(2) = 1; param(3) = 4^(-1)*param(2)/zeta; param(4) = 0; 
+% %
+%      zeta = 0.57;
+%      param(1) = 1.5; param(2) = 1; param(3) = 4^(-1)*param(2)/zeta; param(4) = 0;
 %      param(5) = 0.0; param(6) = 0.404; param(7) = 0.8;
 %      param(8) = 0.9;
-%      
+%
 %      param(9) = 0.8; param(10) = 0.8; param(11) = 0.99; param(12) = 0.55; param(13) = 0;
-%       
+%
 % LIST OF PARAMETERS
 %  phi_N = param(2); %% elst. in individual labor supply
-%   
+%
 %   sigma = param(1); %% parameter in the utility function
-% 
+%
 %   phi_ee = param(3); %% elst. labor participation
-% 
+%
 %   eta = param(4); %% externality
-% 
-%   phi_i = param(5); %% invst adj. costs 
-%  
+%
+%   phi_i = param(5); %% invst adj. costs
+%
 %   eps_delta = param(6); %% cap utilization
-% 
+%
 %   omega = param(7); %% unempl. consumption
-%   
+%
 %   rho_g = param(8); %% autocorrelation of neutral shock
-%   
+%
 %   rho_a = param(10); %% autoregressive coeff. in tfp shock
-%   
+%
 %   rho_rw = param(13); %% autocorrelation of nonstat neutral shock
-% 
+%
 %   rho_i = param(9);  %% autoregressive coeff. in inv. spec. shock
-%   
+%
 %   rho_p = param(11); %% autocorrelation of part. shock
-%   
+%
 %   nu = param(12); %% habit parameter
 %
 %   gamma_a = param(14); %% ss growth rate
 %
-%   
+%
 %%%%-------------------------------------------------------
 %% Control on bounds for calibrated coefficients
 
@@ -99,7 +96,7 @@ output = 4;
 tot_hours = 5;
 cons = 6;
 invst = 7;
-partic = 3; 
+partic = 3;
 caput = 8;
 indiv_hours = 9;
 cons_e = 10;
@@ -125,9 +122,9 @@ output_lag = 26;
 wage_lag  = 27;
 inv_shock = 28;
 tfp_shock = 29;
-gov_shock = 30; 
+gov_shock = 30;
 part_shock = 31;
-tfp_shock_rw = 32; 
+tfp_shock_rw = 32;
 
 ni_shock = 33; % iid shock
 n_g_shock = 34; % iid shock
@@ -135,7 +132,7 @@ n_rw_shock = 35;% iid shock
 n_p_shock = 36;% iid shock
 n_a0_shock = 37; % iid shock (last before lagged shocks)
 
- 
+
 
 
 
@@ -171,7 +168,7 @@ alpha = 0.34; %% capital share
 
 % n_ss = 0.3; %% steady state hours (not used)
 
-e_ss = 0.68; %% steady state participation 
+e_ss = 0.68; %% steady state participation
 
 g = 0.00000002; %% ratio of gov. spending to gdp
 
@@ -183,54 +180,54 @@ beta = 0.99;
 
 %omega = 0.8; %% ratio between consumption of unemployed and employed
 
-%zeta = 0.2; %% cost of participating as a fraction of wage earnings 
+%zeta = 0.2; %% cost of participating as a fraction of wage earnings
 
-sigma_calib = 1; %% set==1 if you want to calibrate sigma as a function of 
+sigma_calib = 1; %% set==1 if you want to calibrate sigma as a function of
                  %%the cost of participating
-                 
+
 theta_calib = 0; %% set ==1 to calibrate caput as function of dicount rate and deprec
 
 %% [c] 'ESTIMATED' PARAMETERS
 
   phi_N = param(2); %% elst. in individual labor supply
-  
+
   sigma = param(1); %% parameter in the utility function
 
   phi_ee = param(3); %% elst. labor participation
 
   eta = param(4); %% externality
 
-  phi_i = param(5); %% invst adj. costs 
- 
+  phi_i = param(5); %% invst adj. costs
+
   eps_delta = param(6); %% cap utilization
 
   omega = param(7); %% unempl. consumption
-  
+
   rho_g = param(8); %% autocorrelation of neutral shock
-  
+
   rho_a = param(10); %% autoregressive coeff. in tfp shock
-  
+
   rho_rw = param(13); %% autocorrelation of nonstat neutral shock
 
   rho_i = param(9);  %% autoregressive coeff. in inv. spec. shock
-  
+
   rho_p = param(11); %% autocorrelation of part. shock
-  
+
   nu = param(12); %% habit parameter
-  
+
   gamma_a = exp(param(14)); %% ss growth rate
-  
+
 %   if sigma < 1.01
-%       
+%
 %       omega = 0.999999;
-%       
+%
 %   end
 
- % if ct1 == 0  
-      
-  
+ % if ct1 == 0
+
+
 %% [3] STEADY STATE
- 
+
 
 %% Compute steady state (part I)
 
@@ -256,28 +253,28 @@ s_e = e_ss/(e_ss+(1-e_ss)*omega);
 
 
 if sigma_calib == 1
- 
+
   sigma = (1-zeta)/(1-zeta-((1-omega)*psi^(-1)*s_e));
-  
+
   zeta_lam = zeta_lam_fixed;
- 
+
 else
-    
+
 zeta_lam = psi-(sigma/(sigma-1))*(1-omega)*s_e;
 
 
 end
 
 if theta_calib == 1
-    
+
     theta = (beta_tilda^(-1)-(1-delta))/delta;
-    
+
     eps_delta = theta-1;
-    
+
 end
 
 if zeta_lam < 0
-    
+
     disp('wrong calibration')
     return
 end
@@ -298,14 +295,14 @@ nu_bound = omega*s_e-nu*gamma_a^(-1)*e_ss;
 
 beta = beta_tilda*gamma_a^sigma;
 
- 
- %%  MODEL SOLUTION 
- 
+
+ %%  MODEL SOLUTION
+
  A = zeros(n_a0_shock+6,n_a0_shock+6); %% there are six extra variables and is Schmitt Grohe' and Uribe what's news paper
- 
+
  B = A;
 
- 
+
 A(lambda_mult,lambda_mult) = 1-beta_tilda*(1-delta);
 
 A(lambda_mult,rk) = 1-beta_tilda*(1-delta);
@@ -317,7 +314,7 @@ A(lambda_mult,tfp_shock_rw) = -sigma*rho_rw;
 
 A(inv_mult,invst) = beta_tilda*gamma_a^3*phi_i;
 
-A(inv_mult,tfp_shock_rw) = beta_tilda*gamma_a^3*phi_i*rho_rw; 
+A(inv_mult,tfp_shock_rw) = beta_tilda*gamma_a^3*phi_i*rho_rw;
 
 A(inv_mult,inv_shock) = 1;
 
@@ -392,7 +389,7 @@ A(tfp_shock,tfp_shock) = 1;
 
 A(gov_shock,gov_shock) = 1;
 
-A(tfp_shock_rw,tfp_shock_rw) = 1; 
+A(tfp_shock_rw,tfp_shock_rw) = 1;
 
 A(part_shock,part_shock) = 1;
 
@@ -429,14 +426,14 @@ B(inv_mult,inv_lag) = -phi_i*gamma_a^2;
 
 
 
-B(wage,output) = 1; 
+B(wage,output) = 1;
 
 B(wage,wage) = -1;
 
 B(wage,tot_hours) = -1;
 
 
- 
+
 
 B(indiv_hours,indiv_hours) = phi_N;
 
@@ -457,13 +454,13 @@ B(cons_e,cons_lag) = -nu*gamma_a^(-1)*e_ss/(s_e-nu*gamma_a^(-1)*e_ss);
 
  %% Alternative eq without habit (do not use)
 % B(cons_e,cons_e) = -1;
-% 
+%
 % if omega < 0.99
-% 
+%
 % B(cons_e,indiv_hours) = ((sigma-1)/sigma)*psi*s_e^(-1);
-% 
+%
 % end
-% 
+%
 % B(cons_e,cons_u) = 1;
 
 
@@ -496,7 +493,7 @@ B(partic,cons_u) = -omega*s_e;
  B(cons_u,cons_u) = omega*s_e/(omega*s_e-nu*gamma_a^(-1)*e_ss);
 
  B(cons_u,lambda_mult) = sigma^(-1);
- 
+
  B(cons_u,cons_lag) = -nu*gamma_a^(-1)*e_ss/(omega*s_e-nu*gamma_a^(-1)*e_ss);
 
 
@@ -638,7 +635,7 @@ B(part_shock,part_shock) = rho_p;
  % tfp process
 
 B(tfp_shock,tfp_shock) = rho_a;
- 
+
 B(tfp_shock,n_a0_shock+1:end) = [1 0 0 1 0 1]; %% lagged shocks affecting tfp
 
 B(n_a0_shock+4:end,n_a0_shock+1:end) = [0 1 0 0 0 0
@@ -662,19 +659,19 @@ B(n_g_shock,n_g_shock) = 0;
  %% Shocks (i.i.d.)
 
 % n_i = 1;
-% 
+%
 % n_g = 2;
-% 
+%
 % n_rw = 3;
-% 
+%
 % n_p = 4;
-% 
+%
 % n_a0 = 5;
-% 
+%
 % n_a1 = 6;
-% 
+%
 % n_a2 = 7;
-% 
+%
 % n_a3 = 8;
 
 
@@ -716,57 +713,57 @@ NY = 37+6; NK = 22; NX = 8;
 %% COMPUTE IMPULSE RESPONSESE
 
   %% define states
- 
- 
+
+
 
 %  [Br,Cr,Lr,NF] = redsf(A,B,C,NY,NX,NK);
-%  
+%
 %  [D,F,G,H] = soldsf(Br,Cr,Lr,NY,NX,NK,NF);
-%  
+%
 %  D=real(D); F=real(F); G=real(G); H=real(H);
-% 
-%  
-% 
-% 
+%
+%
+%
+%
 %  NIR = 25;
-% 
+%
 %  %% shocks
 % % n_i = 1;
-% % 
+% %
 % % n_g = 2;
-% % 
+% %
 % % n_rw = 3;
-% % 
+% %
 % % n_p = 4;
-% % 
+% %
 % % n_a0 = 5;
-% % 
+% %
 % % n_a1 = 6;
-% % 
+% %
 % % n_a2 = 7;
-% % 
+% %
 % % n_a3 = 8;
-% 
-%  
+%
+%
 %   SHOCK = n_i;
-%  
-%   
-%  
+%
+%
+%
 % imp_resp = irf(SHOCK, NIR, D, F, G, H, std_vec_s);
-% 
+%
 
-% 
+%
 % %% Compute variable response in deviation from det. trend
-% 
+%
 % imp_resp_dt = zeros(4,NIR); %% includes: cons,inv,out,prod
-% 
-%  imp_resp_dt(:,1) = [imp_resp(15:16,1);imp_resp(18:19,1)];  
-%  
-%  
+%
+%  imp_resp_dt(:,1) = [imp_resp(15:16,1);imp_resp(18:19,1)];
+%
+%
 %  for j = 2:NIR
-%  
+%
 %  imp_resp_dt(:,j) = [imp_resp(15:16,j);imp_resp(18:19,j)]+imp_resp_dt(:,j-1);
-%      
+%
 %  end
 
 
@@ -777,32 +774,32 @@ NY = 37+6; NK = 22; NX = 8;
 
 % %% COMPUTE POPULATION MOMENTS
 % VCVX = zeros(size(C,2),size(C,2));
-% 
+%
 % VCVX(SHOCK,SHOCK) = 1;
-% 
+%
 % VCVK = vcv(VCVX, G, H);
-% 
+%
 % %% Variance covariance matrix
-% 
+%
 % LAG = 0;
-% 
+%
 % ACM = acm(LAG, VCVX, VCVK, D, F, G, H);
-% 
+%
 % %% Autocorrelation function
-% 
+%
 % NACF = 2;
-% 
+%
 % ACF = acf(NACF, VCVX, VCVK, D, F, G, H);
-% 
+%
 % %% COMPUTE MOMENTS FOR THE VARIABLES OF INTEREST
-% 
+%
 % % rk = 1;
 % % wage = 2;
 % % output = 4;
 % % tot_hours = 5;
 % % cons = 6;
 % % invst = 7;
-% % partic = 3; 
+% % partic = 3;
 % % caput = 8;
 % % indiv_hours = 9;
 % % cons_e = 10;
@@ -810,35 +807,35 @@ NY = 37+6; NK = 22; NX = 8;
 % % lab_prod = 12;
 % % inv_mult = 13;
 % % lambda_mult = 14;
-% 
-% 
-%  %% Relative std 
-%  
+%
+%
+%  %% Relative std
+%
 %  std_output = sqrt(ACM(output,output));
-%  
+%
 %  cons_output = sqrt(ACM(cons,cons))/std_output;
-%  
+%
 %  invst_output = sqrt(ACM(invst,invst))/std_output;
-%  
+%
 %  lab_prod_output = sqrt(ACM(lab_prod,lab_prod))/std_output;
-%  
+%
 %  % wage_output = sqrt(ACM(wage,wage))/std_output; % same as productivity
-%  
+%
 %  tot_hours_output = sqrt(ACM(tot_hours,tot_hours))/std_output;
-%  
+%
 %  partic_indiv_hours = sqrt(ACM(partic,partic))/sqrt(ACM(indiv_hours,indiv_hours));
-%  
+%
 %  %% Correlations
-%  
+%
 %  corr_output_cons = ACM(cons,output)/(sqrt(ACM(cons,cons))*std_output);
-% 
+%
 %  corr_output_invst = ACM(invst,output)/(sqrt(ACM(invst,invst))*std_output);
-%  
+%
 %  corr_output_lab_prod = ACM(lab_prod,output)/(sqrt(ACM(lab_prod,lab_prod))*std_output);
-%  
+%
 %  corr_output_tot_hours = ACM(tot_hours,output)/(sqrt(ACM(tot_hours,tot_hours))*std_output);
-%  
+%
 %  %% Autocorrelation
-%  
+%
 %  auto_cons = ACF(cons,2)/ACM(cons,cons);
-%  
+%
