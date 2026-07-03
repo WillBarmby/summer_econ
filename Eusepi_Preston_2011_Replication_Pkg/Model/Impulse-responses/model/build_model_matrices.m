@@ -56,13 +56,14 @@ beta = 0.99*gamma^(sigma-1); %% adjusted discount rate (not really used...)
 
 %% Verify parameters' bounds
 
-if external_effects > 1 || sigma > 2.8 || sigma < 1
+invalid_params = validate_model_parameters(params);
+
+if invalid_params
     A = {};
     C = [];
     invA0 = [];
     k_y = 1;
     disc = [];
-    invalid_params = true;
     return;
 end
 
