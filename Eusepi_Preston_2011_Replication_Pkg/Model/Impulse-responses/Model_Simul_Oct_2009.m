@@ -13,56 +13,6 @@
          Exp_w_4Q,Exp_rk_1Q,Exp_rk_2Q,Exp_rk_3Q,Exp_rk_4Q,...
               Regressors_ini,R_mat_ini,state_ini,OMEGA_c_ini,OMEGA_0_ini,invalid_simulation] = ...
          Model_Simul_Oct_2009(x,S_mat,fb,lern,exp_gen,imp_resp,full,epsZ_imp1,ini1,ini2,ini3,ini4,ini5,sim_L,epsZ);
-%% COMMENT BELOW IF USING AS A FUNCTION!
-
-%    clear all
-%   %clc
-%
-% %% Simulation parameters (general)
-%  exp_gen = 1;
-%
-%  imp_resp = 0;
-%
-%  full = 1;
-%
-%
-%
-%
-%  %% the parameters below are not needed (they are assigned arbitrary values)
-%  epsZ_imp1 = 1;
-%
-%  ini1 = 0; ini2 = 0; ini3 = 0; ini4 = 0;
-%
-%  sim_L = 1;
-%
-%
-% opt_x = exp(-0.034);
-%
-% %  param(1) = 1;  %% IH
-% %  param(2) = 0; %% External effects
-% %  param(3) = 1.2; %% sigma
-% %  param(4) = 0; %% simple RBC (Takes 1 or zero)
-% % param(5) = 0.01; %% frish labor supply elasticity
-% %  param(6) = 0; %% 0 for standard nonsep, 1 for partic. model
-%
-%   x = [1;0;1;1;0.01;0.0049]; %% parameters full model
-%
-%  S_mat = [(opt_x)]';
-%
-%  fb = 1;
-%
-%  lern = 1;
-%
-%
-%
-%
-% epsZ = randn(1,22000);
-%  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
  gs = 0;
 
 
