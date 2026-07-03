@@ -13,19 +13,17 @@
          Exp_w_4Q,Exp_rk_1Q,Exp_rk_2Q,Exp_rk_3Q,Exp_rk_4Q,...
               Regressors_ini,R_mat_ini,state_ini,OMEGA_c_ini,OMEGA_0_ini,invalid_simulation] = ...
          Model_Simul_Oct_2009(x,S_mat,fb,lern,exp_gen,imp_resp,full,epsZ_imp1,ini1,ini2,ini3,ini4,ini5,sim_L,epsZ);
- gs = 0;
-
-
+options = model_simul_default_options();
 
 % Control on bounds for calibrated coefficients
- invalid_simulation = false;
+invalid_simulation = false;
 
 
 
 %%%%%%%%%%%%%%%%%%%%%--- OPTIONS ---%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-gen_shocks = gs; %% set to 1 to generate new sequence of shocks
+gen_shocks = options.generate_shocks; %% set to 1 to generate new sequence of shocks
 
 learning = lern;  %% set == 0 for simulation under REE (no learning update)
 
@@ -33,38 +31,38 @@ feedback = fb;  %% set == 0 for NO feedbacks (active if learning ==1)
                %% NOTE: this gives the option of simulating the model under
                %% REE while estimating the PLM recursively.
 
-cg = 1;        %% set == 1 if constant gain (active if learning ==1)
+cg = options.constant_gain;        %% set == 1 if constant gain (active if learning ==1)
 
-sga = 0;       %% set == 1 is stochastig gradient (active if learning ==1)
+sga = options.stochastic_gradient;       %% set == 1 is stochastig gradient (active if learning ==1)
 
-n_c = 1;       %% set == 1 if want to include the constant in the agent's
+n_c = options.include_constant;       %% set == 1 if want to include the constant in the agent's
                %% regression.
 
-p_f = 0;       %% set == 1 to activate projection facility
+p_f = options.projection_facility;       %% set == 1 to activate projection facility
                %% NOTE: also computes the beliefs' distribution in the case
                %% of no-feedbacks from learning
                %% (active if learning ==1)
 
-pf_k = 8;   %% defines how tight is the projection facility
+pf_k = options.projection_facility_tightness;   %% defines how tight is the projection facility
                %% (active if learning ==1)
 
-store = 0;   %% set == 1 to store the coefficients (active if learning==1)
+store = options.store_coefficients;   %% set == 1 to store the coefficients (active if learning==1)
 
 
-s_length = 55000; %% length of the simulation (active if gen_shocks ==1)
+s_length = options.simulation_length; %% length of the simulation (active if gen_shocks ==1)
 
-ini_gain = 500; %% initial gain for RLS (active if learning==1)
+ini_gain = options.initial_gain; %% initial gain for RLS (active if learning==1)
 
 g_gain = x(6); %% fixed gain learning (active if learning==1)
 
-R_mat_tol = 1.0856345e-010; %% if RCOND of inv(R) is above R_mat_tol,
+R_mat_tol = options.r_matrix_tolerance; %% if RCOND of inv(R) is above R_mat_tol,
                             %% the learning algorithm switches to SG
                             %% (active if learning==1)
 
-ini_cds = 0;   %% set == 1 if initial conditions for calculating REE are
+ini_cds = options.initial_conditions_defined;   %% set == 1 if initial conditions for calculating REE are
                %% already defined
 
-bigT_vec = [1 2 40 120];   %% vector containing the expectations horizons (active if exp_gen == 1 )
+bigT_vec = options.expectation_horizons;   %% vector containing the expectations horizons (active if exp_gen == 1 )
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
