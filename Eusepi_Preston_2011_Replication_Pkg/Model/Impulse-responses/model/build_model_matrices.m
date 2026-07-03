@@ -25,15 +25,16 @@ partic = 0; %% set == 1 for model with partic. (NOT USED)
 
 %% [1] DEFINE VARIABLES
 
-n_var = 13; % total number of variables
-n_exog_vars = 1; % number of exogenous variables
-n_shocks = 1; %i.i.d. shocks
+dims = model_dimensions();
+n_var = dims.n_var;
+n_exog_vars = dims.n_exog_vars;
+n_shocks = dims.n_shocks;
 
 %% endogenous variables
 idx = ir_variable_indices();
 
 %% forecasting horizon (finite)
-k_y = 1;
+k_y = dims.forecasting_horizon;
 
 %% [2] DEFINE PARAMETERS
 
@@ -68,7 +69,7 @@ if invalid_params
     A = {};
     C = [];
     invA0 = [];
-    k_y = 1;
+    k_y = dims.forecasting_horizon;
     disc = [];
     return;
 end
