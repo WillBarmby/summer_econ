@@ -20,6 +20,7 @@ config.main.shock_scale = exp(-0.034);
 config.main.normalized_shock_size = 1;
 config.main.band_upper_order_stat = 1;
 config.main.band_lower_order_stat = 1;
+config.main.model_param = [1; 0; 1; 1; 0.0001; 0.002];
 
 config.model = struct();
 config.model.param = zeros(6, 1);
