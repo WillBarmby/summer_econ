@@ -1,5 +1,5 @@
 function options = model_simul_default_options()
-%% MODEL_SIMUL_DEFAULT_OPTIONS Defaults used by Model_Simul_Oct_2009.
+%% MODEL_SIMUL_DEFAULT_OPTIONS Defaults used by simulate_model_paths.
 
 options = struct();
 

@@ -12,7 +12,7 @@
      function [Y_var,Exp_R_1Q,Exp_R_3Q,Exp_w_1Q,Exp_w_2Q,Exp_w_3Q,...
          Exp_w_4Q,Exp_rk_1Q,Exp_rk_2Q,Exp_rk_3Q,Exp_rk_4Q,...
               Regressors_ini,R_mat_ini,state_ini,OMEGA_c_ini,OMEGA_0_ini,invalid_simulation] = ...
-         Model_Simul_Oct_2009(x,S_mat,fb,lern,exp_gen,imp_resp,full,epsZ_imp1,ini1,ini2,ini3,ini4,ini5,sim_L,epsZ);
+         simulate_model_paths(x,S_mat,fb,lern,exp_gen,imp_resp,full,epsZ_imp1,ini1,ini2,ini3,ini4,ini5,sim_L,epsZ);
 options = model_simul_default_options();
 
 % Control on bounds for calibrated coefficients
@@ -96,7 +96,7 @@ end
  %% in the Documentation fle: ALM_documentation.tex
 
 
-[A,C,invA0,k_y,disc,invalid_params] = Model_Sept_2009(x);
+[A,C,invA0,k_y,disc,invalid_params] = build_model_matrices(x);
 
 idx = ir_variable_indices();
 

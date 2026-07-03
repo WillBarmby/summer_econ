@@ -6,7 +6,7 @@
 % param(3): Utility-function parameter sigma
 % param(4): Simple-RBC specification flag
 % param(5): Inverse labor-supply elasticity
-function [A,C,invA0,k_y,disc,invalid_params] = Model_Sept_2009(param)
+function [A,C,invA0,k_y,disc,invalid_params] = build_model_matrices(param)
 
 % The model includes capital utilization, externalities and nonseparability between leisure and
 % consumption
