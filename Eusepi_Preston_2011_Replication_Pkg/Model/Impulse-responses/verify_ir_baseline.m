@@ -23,8 +23,15 @@ expected_path = fullfile(model_dir, expected_file);
 expected = load(expected_path, 'imp_resp_vec_L', 'imp_resp_vec_R', 'summary');
 
 actual_file = 'baseline_ir_verify_tmp.mat';
+if isfield(expected.summary, 'n_draws')
+    n_draws = expected.summary.n_draws;
+else
+    % The original 100-draw fixture predates the n_draws metadata field.
+    % Its raw artifact dimensions are the authoritative fallback.
+    n_draws = size(expected.imp_resp_vec_L{1}, 1);
+end
 run_ir_baseline_artifacts(expected.summary.seed_learning, ...
-    expected.summary.n_draws, actual_file);
+    n_draws, actual_file);
 actual = load(fullfile(model_dir, actual_file), ...
     'imp_resp_vec_L', 'imp_resp_vec_R', 'summary');
 delete(fullfile(model_dir, actual_file));
