@@ -7,7 +7,7 @@ T = size(shocks,2)+1;
 n = numel(initial_y);
 y = zeros(n,T); y(:,1) = initial_y(:);
 beliefs = initial_learning;
-diagnostics = repmat(struct(),1,T-1);
+diagnostics = cell(1,T-1);
 belief_distance = NaN(1,T-1);
 plm_roots = NaN(1,T-1);
 alm_roots = NaN(1,T-1);
@@ -21,7 +21,7 @@ for t = 2:T
     end
     x = plugin.regressor(y,t);
     target = plugin.outcome(y,t);
-    [beliefs,diagnostics(t-1)] = update_rls(beliefs,x,target,plugin.learning);
+    [beliefs,diagnostics{t-1}] = update_rls(beliefs,x,target,plugin.learning);
     if beliefs.invalid
         invalid = true; break
     end

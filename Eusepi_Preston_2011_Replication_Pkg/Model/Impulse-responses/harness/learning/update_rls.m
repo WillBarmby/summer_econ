@@ -19,8 +19,7 @@ if condition < config.rcond_tolerance
     return
 end
 error = y-state.coefficients*x;
-B1 = state.coefficients+gain*(R1\x)*error';
-B1 = B1';
+B1 = state.coefficients+gain*error*(R1\x)';
 projected = false;
 if isfield(config,'project') && ~isempty(config.project)
     [B1,projected] = config.project(B1,state.coefficients);
