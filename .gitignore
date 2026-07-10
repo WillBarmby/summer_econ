@@ -26,4 +26,9 @@ diff.txt
 *.png
 *.pdf — 
 
+# Dynare-generated code and local installation overrides
+comparison_outputs/
+dynare_generated/
+local_dynare_config.m
+
 comparison_outputs/
