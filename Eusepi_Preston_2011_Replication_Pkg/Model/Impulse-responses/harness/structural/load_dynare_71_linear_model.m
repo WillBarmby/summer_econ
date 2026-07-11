@@ -2,6 +2,7 @@ function model = load_dynare_71_linear_model(mod_path)
 %% LOAD_DYNARE_71_LINEAR_MODEL Load an explicitly linear deviation-form model.
 
 runtime = configure_dynare_71();
+reset_dynare_71_globals();
 assert(isfile(mod_path),'Dynare model not found: %s',mod_path);
 source = fileread(mod_path);
 assert(~isempty(regexp(source,'model\s*\([^;)]*linear[^;)]*\)\s*;','once')), ...

@@ -2,6 +2,7 @@ function test_dynare_expectation_reference()
 %% TEST_DYNARE_EXPECTATION_REFERENCE Compare direct evaluator with Dynare 7.1.
 
 configure_dynare_71();
+reset_dynare_71_globals();
 model_dir = fullfile(fileparts(fileparts(mfilename('fullpath'))),'models');
 work = tempname; mkdir(work);
 copyfile(fullfile(model_dir,'var_expectation_poc.mod'),work);
