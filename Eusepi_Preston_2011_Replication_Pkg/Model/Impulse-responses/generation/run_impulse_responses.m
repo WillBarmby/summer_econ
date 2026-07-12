@@ -1,4 +1,4 @@
-function [imp_resp_vec, median_imp_resp_vec, low_band, up_band] = run_impulse_responses(config)
+function [imp_resp_vec, median_imp_resp_vec, low_band, up_band, draw_results] = run_impulse_responses(config)
 %% RUN_IMPULSE_RESPONSES Generate benchmark impulse responses.
 %
 % Extracted from the former body of Main_imp_resp_Sept_2009.m. The legacy
@@ -51,10 +51,16 @@ for ctn = 1:n_draws
 
   disp(ctn);
 
-  imp_resp_draw = simulate_ir_draw(main_config, epsZ_full, idx);
+  draw_results{ctn} = simulate_ir_draw(main_config, epsZ_full, idx);
 
-  for j = 1:n_impulse_resp
-    imp_resp_vec{j}(ctn,:) = imp_resp_draw(j,:);
+  if draw_results{ctn}.status == "completed"
+    for j = 1:n_impulse_resp
+      imp_resp_vec{j}(ctn,:) = draw_results{ctn}.ir_series(j,:);
+    end
+  else
+    for j = 1:n_impulse_resp
+      imp_resp_vec{j}(ctn,:) = NaN;
+    end
   end
 
 end %% end draws loop

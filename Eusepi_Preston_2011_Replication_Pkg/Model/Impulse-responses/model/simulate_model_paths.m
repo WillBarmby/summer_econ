@@ -13,12 +13,17 @@
 
 function [Y_var,Exp_R_1Q,Exp_R_3Q,Exp_w_1Q,Exp_w_2Q,Exp_w_3Q,...
     Exp_w_4Q,Exp_rk_1Q,Exp_rk_2Q,Exp_rk_3Q,Exp_rk_4Q,...
-    Regressors_ini,R_mat_ini,state_ini,OMEGA_c_ini,OMEGA_0_ini,invalid_simulation] = ...
-    simulate_model_paths(x,S_mat,fb,lern,exp_gen,imp_resp,full,epsZ_imp1,ini1,ini2,ini3,ini4,ini5,sim_L,epsZ);
+    Regressors_ini,R_mat_ini,state_ini,OMEGA_c_ini,OMEGA_0_ini,invalid_simulation,simulation_status] = ...
+    simulate_model_paths(x,S_mat,fb,lern,exp_gen,imp_resp,full,epsZ_imp1,ini1,ini2,ini3,ini4,ini5,sim_L,epsZ,explosion_policy);
 options = model_simul_default_options();
 
 % Control on bounds for calibrated coefficients
 invalid_simulation = false;
+simulation_status = struct('status',"completed",'period',NaN, ...
+    'variable_index',NaN,'value',NaN,'criterion',"", ...
+    'explosion_policy',explosion_policy);
+Regressors_ini = []; R_mat_ini = []; state_ini = [];
+OMEGA_c_ini = []; OMEGA_0_ini = [];
 
 
 
@@ -541,17 +546,36 @@ if ~invalid_simulation
 
         %% checking for exploding series
 
-        if max(Y_var(:,ctn_s)) > 1000
+        monitored = explosion_policy.variable_indices;
+        current_values = Y_var(monitored,ctn_s);
+        nonfinite_index = find(~isfinite(current_values),1);
+        magnitude_index = find(abs(current_values) > explosion_policy.magnitude_limit,1);
+        if (explosion_policy.reject_nonfinite && ~isempty(nonfinite_index)) || ...
+                ~isempty(magnitude_index)
 
             disp('exploding series')
-
-            invalid_simulation = true; Y_var = 0; Exp_Y_var = 0;
-            Regressors_ini = 0; R_mat_ini = 0;
-            state_ini = 0; OMEGA_c_ini = 0; OMEGA_0_ini = 0;
-            Exp_R_1Q = 0;Exp_R_3Q = 0; Exp_w_1Q = 0;
-            Exp_w_2Q = 0;Exp_w_3Q = 0;Exp_w_4Q = 0;
-            Exp_rk_1Q = 0; Exp_rk_2Q = 0;Exp_rk_3Q = 0;Exp_rk_4Q = 0;
-
+            if ~isempty(nonfinite_index)
+                trigger_index = nonfinite_index;
+                criterion = "nonfinite";
+            else
+                trigger_index = magnitude_index;
+                criterion = "magnitude_limit";
+            end
+            simulation_status = struct('status',"explosive",'period',ctn_s, ...
+                'variable_index',monitored(trigger_index), ...
+                'value',current_values(trigger_index),'criterion',criterion, ...
+                'explosion_policy',explosion_policy);
+            Y_var = Y_var(:,1:ctn_s);
+            Exp_R_1Q = Exp_R_1Q(1:min(end,ctn_s));
+            Exp_R_3Q = Exp_R_3Q(1:min(end,ctn_s));
+            Exp_w_1Q = Exp_w_1Q(1:min(end,ctn_s));
+            Exp_w_2Q = Exp_w_2Q(1:min(end,ctn_s));
+            Exp_w_3Q = Exp_w_3Q(1:min(end,ctn_s));
+            Exp_w_4Q = Exp_w_4Q(1:min(end,ctn_s));
+            Exp_rk_1Q = Exp_rk_1Q(1:min(end,ctn_s));
+            Exp_rk_2Q = Exp_rk_2Q(1:min(end,ctn_s));
+            Exp_rk_3Q = Exp_rk_3Q(1:min(end,ctn_s));
+            Exp_rk_4Q = Exp_rk_4Q(1:min(end,ctn_s));
             return
 
         end
@@ -681,6 +705,9 @@ if ~invalid_simulation
                     disp('warning: singular R matrix')
 
                     invalid_simulation = true; Y_var = 0; Exp_Y_var = 0;
+                    simulation_status.status = "invalid";
+                    simulation_status.period = ctn_s;
+                    simulation_status.criterion = "singular_moment_matrix";
                     Regressors_ini = 0; R_mat_ini = 0;
                     state_ini = 0; OMEGA_c_ini = 0; OMEGA_0_ini = 0;
                     Exp_R_1Q = 0;Exp_R_3Q = 0; Exp_w_1Q = 0;
