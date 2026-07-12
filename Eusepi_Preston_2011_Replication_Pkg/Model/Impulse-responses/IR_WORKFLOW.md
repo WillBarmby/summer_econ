@@ -19,7 +19,7 @@ execution path easier to follow.
 
 ## High-Level Flow
 
-1. `ir_default_config` defines the horizon, training length, model parameters,
+1. `make_ir_config` explicitly constructs the reference horizon, training length, model parameters,
    shock scale, learning flag, and output defaults.
 2. `run_impulse_responses` draws random shock histories and loops over Monte
    Carlo draws.
@@ -31,6 +31,11 @@ execution path easier to follow.
 5. `build_ir_series` converts raw model rows and expectation arrays into the 14
    reported impulse-response series.
 6. `summarize_ir_bands` computes medians and order-statistic bands across draws.
+
+`run_impulse_responses` requires a complete configuration and validates it
+before simulation. A configured magnitude or non-finite trigger terminates the
+affected draw and returns the observed path prefix and trigger metadata. Such a
+draw is reported as explosive rather than silently converted to zeros.
 
 ## Baseline Path vs Shocked Path
 

@@ -5,16 +5,9 @@ function run_ir_baseline_artifacts(seed, n_draws, output_file)
 % It runs Main_imp_resp_Sept_2009.m for learning and rational expectations
 % with fixed RNG seeds, then saves raw IR cells and compact diagnostics.
 
-if nargin < 1
-    seed = 20260701;
-end
-
-if nargin < 2
-    n_draws = 100;
-end
-
-if nargin < 3
-    output_file = 'baseline_ir_artifacts.mat';
+if nargin ~= 3
+    error('IRBaseline:RequiredArguments', ...
+        'seed, n_draws, and output_file are all required.');
 end
 
 model_dir = setup_ir_paths();

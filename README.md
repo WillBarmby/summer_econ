@@ -31,7 +31,7 @@ with 5 draws and is intended for day-to-day refactor checks.
 From the repository root:
 
 ```bash
-matlab -batch "cd('Eusepi_Preston_2011_Replication_Pkg/Model/Impulse-responses'); verify_ir_baseline('baseline_ir_smoke_artifacts.mat')"
+matlab -batch "cd('Eusepi_Preston_2011_Replication_Pkg/Model/Impulse-responses'); verify_ir_baseline('baseline_ir_smoke_artifacts.mat', 1e-10)"
 ```
 
 Expected result:
@@ -46,7 +46,7 @@ will indicate whether dimensions, NaN/Inf flags, or a specific IR series changed
 ## Run The Stronger Test
 
 ```bash
-matlab -batch "cd('Eusepi_Preston_2011_Replication_Pkg/Model/Impulse-responses'); verify_ir_baseline('baseline_ir_artifacts.mat')"
+matlab -batch "cd('Eusepi_Preston_2011_Replication_Pkg/Model/Impulse-responses'); verify_ir_baseline('baseline_ir_artifacts.mat', 1e-10)"
 ```
 
 This takes longer because it compares against the 100-draw baseline.
@@ -79,14 +79,20 @@ The verifier compares:
 - raw learning IR values,
 - raw rational-expectations IR values.
 
-The comparison tolerance defaults to `1e-10`.
+The comparison tolerance is passed explicitly as `1e-10` in the commands above.
 
 ## Notes
 
-The legacy driver `Main_imp_resp_Sept_2009.m` now accepts an optional
+The compatibility driver `Main_imp_resp_Sept_2009.m` accepts an optional
 `imp_resp_n_draws` variable. If that variable is not set, it defaults to 100 draws,
 preserving the original behavior.
 
 The smoke fixture stores its draw count in the `.mat` file, so
 `verify_ir_baseline('baseline_ir_smoke_artifacts.mat')` reruns with 5 draws
 automatically. The draw count is not hard-coded in the verifier.
+
+New computation should call `make_ir_config`, modify fields explicitly, and
+pass the complete struct to `run_impulse_responses`. That function validates
+all fields and does not supply missing values. Explosive learning paths are
+returned with their valid prefix and trigger metadata; they are not replaced
+with zero responses.

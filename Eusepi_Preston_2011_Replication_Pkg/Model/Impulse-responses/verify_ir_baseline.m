@@ -5,12 +5,9 @@ function verify_ir_baseline(expected_file, tolerance)
 % impulse-response generator using the seed and draw count stored in the
 % expected artifact, then compares raw learning and RE IR cells.
 
-if nargin < 1
-    expected_file = 'baseline_ir_smoke_artifacts.mat';
-end
-
-if nargin < 2
-    tolerance = 1e-10;
+if nargin ~= 2
+    error('IRBaseline:RequiredArguments', ...
+        'expected_file and tolerance are both required.');
 end
 
 model_dir = fileparts(mfilename('fullpath'));

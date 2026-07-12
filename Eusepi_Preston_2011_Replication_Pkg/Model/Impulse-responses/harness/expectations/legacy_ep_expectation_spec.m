@@ -1,8 +1,9 @@
 function formulation = legacy_ep_expectation_spec(model, kind)
 %% LEGACY_EP_EXPECTATION_SPEC Explicit EE/IH formulation for E&P.
 
-if nargin < 2
-    kind = 'IH';
+if nargin ~= 2
+    error('Expectations:RequiredFormulation', ...
+        'The model and expectations formulation are both required.');
 end
 n = numel(model.variable_names);
 formulation = struct('name',['E&P ' upper(kind)],'kind',upper(kind), ...

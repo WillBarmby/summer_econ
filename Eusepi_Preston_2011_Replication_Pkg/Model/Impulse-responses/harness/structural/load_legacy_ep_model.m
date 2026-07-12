@@ -1,9 +1,8 @@
 function model = load_legacy_ep_model(param)
 %% LOAD_LEGACY_EP_MODEL Populate the canonical interface from E&P matrices.
 
-if nargin < 1
-    cfg = ir_default_config();
-    param = cfg.main.model_param;
+if nargin ~= 1
+    error('LegacyModel:RequiredParameters','An explicit parameter vector is required.');
 end
 [A,C,invA0,k_y,disc,invalid] = build_model_matrices(param);
 assert(~invalid, 'Invalid E&P calibration.');
