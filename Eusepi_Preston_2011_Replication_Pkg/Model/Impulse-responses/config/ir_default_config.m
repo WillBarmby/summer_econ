@@ -21,6 +21,12 @@ config.main.normalized_shock_size = 1;
 config.main.band_upper_order_stat = 1;
 config.main.band_lower_order_stat = 1;
 config.main.model_param = [1; 0; 1; 1; 0.0001; 0.002];
+config.main.n_draws = config.default_n_draws;
+config.main.output_dir = fileparts(fileparts(mfilename('fullpath')));
+config.main.explosion_policy = struct( ...
+    'magnitude_limit', 1000, ...
+    'reject_nonfinite', true, ...
+    'variable_indices', 1:13);
 
 config.model = struct();
 config.model.param = zeros(6, 1);

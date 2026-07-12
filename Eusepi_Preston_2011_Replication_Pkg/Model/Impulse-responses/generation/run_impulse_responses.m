@@ -4,18 +4,15 @@ function [imp_resp_vec, median_imp_resp_vec, low_band, up_band] = run_impulse_re
 % Extracted from the former body of Main_imp_resp_Sept_2009.m. The legacy
 % file remains as the short user-facing entrypoint.
 
-if nargin < 1
-    config = ir_default_config();
+if nargin ~= 1
+    error('IRConfig:Required','run_impulse_responses requires one complete configuration.');
 end
 
 setup_ir_paths();
+validate_ir_config(config);
 
 main_config = config.main;
 idx = ir_variable_indices();
-
-if ~isfield(main_config, 'output_dir')
-    main_config.output_dir = fileparts(mfilename('fullpath'));
-end
 
 %%% MAIN FILE FOR GENERATIONG IMPULSE RESPONSES
 
@@ -27,11 +24,7 @@ sim_L = main_config.training_sample_length; %% observations discarded before gen
 
 T_tot = sim_L+T_imp; %% total length of simulation
 
-if isfield(main_config, 'n_draws')
-    n_draws = main_config.n_draws;
-else
-    n_draws = config.default_n_draws;
-end
+n_draws = main_config.n_draws;
 
 %% select percentile
 store_c = main_config.store_output; %% set == 1 to store matrix of impulse responses
