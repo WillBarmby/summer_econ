@@ -1,33 +1,19 @@
 function run_imp_resp_artifacts
 %% GENERATE IMPULSE RESPONSE ARTIFACTS FOR PLOTTING
 
-model_dir = fileparts(mfilename('fullpath'));
-old_dir = pwd;
-cleanup = onCleanup(@() cd(old_dir));
-
-cd(model_dir);
+model_dir = setup_ir_paths();
+config = make_ir_config();
+config.main.store_output = false;
 
 %% Learning case
-skip_clear = 1;
-imp_resp_learning = 1;
-imp_resp_store = 0;
-
-run('Main_imp_resp_Sept_2009.m');
-
-imp_resp_vec_L = imp_resp_vec;
-
-clearvars -except model_dir old_dir cleanup imp_resp_vec_L
+config.main.learning = true;
+[imp_resp_vec_L,~,~,~,learning_draws] = run_impulse_responses(config);
 
 %% Rational expectations case
-skip_clear = 1;
-imp_resp_learning = 0;
-imp_resp_store = 0;
-
-run('Main_imp_resp_Sept_2009.m');
-
-imp_resp_vec_R = imp_resp_vec;
+config.main.learning = false;
+[imp_resp_vec_R,~,~,~,re_draws] = run_impulse_responses(config);
 
 save(fullfile(model_dir, 'imp_resp_bench_artifacts.mat'), ...
-    'imp_resp_vec_L', 'imp_resp_vec_R');
+    'imp_resp_vec_L', 'imp_resp_vec_R', 'learning_draws', 're_draws');
 
 end

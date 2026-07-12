@@ -17,36 +17,21 @@ if nargin < 3
     output_file = 'baseline_ir_artifacts.mat';
 end
 
-model_dir = fileparts(mfilename('fullpath'));
-old_dir = pwd;
-cleanup = onCleanup(@() cd(old_dir));
-
-cd(model_dir);
+model_dir = setup_ir_paths();
+config = make_ir_config();
+config.main.n_draws = n_draws;
+config.main.store_output = false;
 
 %% Learning case
 rng(seed, 'twister');
-skip_clear = 1;
-imp_resp_learning = 1;
-imp_resp_store = 0;
-imp_resp_n_draws = n_draws;
-
-run('Main_imp_resp_Sept_2009.m');
-
-imp_resp_vec_L = imp_resp_vec;
+config.main.learning = true;
+[imp_resp_vec_L,~,~,~,learning_draws] = run_impulse_responses(config);
 summary_L = summarize_ir_cells(imp_resp_vec_L);
-
-clearvars -except seed n_draws output_file model_dir old_dir cleanup imp_resp_vec_L summary_L
 
 %% Rational expectations case
 rng(seed + 1, 'twister');
-skip_clear = 1;
-imp_resp_learning = 0;
-imp_resp_store = 0;
-imp_resp_n_draws = n_draws;
-
-run('Main_imp_resp_Sept_2009.m');
-
-imp_resp_vec_R = imp_resp_vec;
+config.main.learning = false;
+[imp_resp_vec_R,~,~,~,re_draws] = run_impulse_responses(config);
 summary_R = summarize_ir_cells(imp_resp_vec_R);
 
 summary = struct();
@@ -58,7 +43,8 @@ summary.learning = summary_L;
 summary.rational_expectations = summary_R;
 
 save(fullfile(model_dir, output_file), ...
-    'imp_resp_vec_L', 'imp_resp_vec_R', 'summary', '-v7.3');
+    'imp_resp_vec_L', 'imp_resp_vec_R', 'learning_draws', 're_draws', ...
+    'summary', '-v7.3');
 
 end
 

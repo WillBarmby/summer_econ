@@ -3,7 +3,7 @@ if exist('skip_clear','var') ~= 1
 end
 
 model_dir = setup_ir_paths();
-config = ir_default_config();
+config = make_ir_config();
 
 if exist('imp_resp_n_draws','var') == 1
   config.main.n_draws = imp_resp_n_draws;

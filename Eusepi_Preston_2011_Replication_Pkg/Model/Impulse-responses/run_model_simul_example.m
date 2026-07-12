@@ -4,7 +4,7 @@
 % simulation function.
 
 setup_ir_paths();
-config = ir_default_config();
+config = make_ir_config();
 example = config.simulation_example;
 
 exp_gen = example.expectations_enabled;

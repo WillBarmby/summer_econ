@@ -3,7 +3,7 @@
 % These are the parameters E&P initially had in model file, commented out.
 
 setup_ir_paths();
-config = ir_default_config();
+config = make_ir_config();
 
 param = config.model.param;
 
