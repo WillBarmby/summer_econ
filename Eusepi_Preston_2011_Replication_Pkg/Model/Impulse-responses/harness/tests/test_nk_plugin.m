@@ -7,7 +7,9 @@ config=nk3_plugin_config();
 [plugin,state,fixed]=make_linear_ee_plugin(model,0.001);
 assert(fixed.converged);
 rng(73); shocks=randn(numel(model.shock_names),80)*0.01;
-run=simulate_learning_path(plugin,shocks,zeros(numel(model.variable_names),1),state);
+policy=struct('magnitude_limit',1000,'reject_nonfinite',true, ...
+    'variable_indices',1:numel(model.variable_names));
+run=simulate_learning_path(plugin,shocks,zeros(numel(model.variable_names),1),state,policy);
 assert(~run.invalid);
 formulation=struct('name',config.formulation);
 results=build_research_results(model,formulation,run,config.observables, ...

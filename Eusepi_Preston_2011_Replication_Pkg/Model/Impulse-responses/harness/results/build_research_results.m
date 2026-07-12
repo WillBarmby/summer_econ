@@ -17,8 +17,13 @@ for k = 1:numel(keys)
     end
 end
 results.diagnostics = struct();
-results.diagnostics.invalid_run_share = mean(cellfun(@(r) r.invalid,runs));
-results.diagnostics.invalid_flags = cellfun(@(r) r.invalid,runs);
+statuses = cellfun(@(r) string(r.status),runs);
+results.diagnostics.statuses = statuses;
+results.diagnostics.completed_run_share = mean(statuses=="completed");
+results.diagnostics.explosive_run_share = mean(statuses=="explosive");
+results.diagnostics.invalid_run_share = mean(statuses=="invalid");
+results.diagnostics.invalid_flags = statuses=="invalid";
+results.diagnostics.explosion_periods = cellfun(@explosion_period,runs);
 results.diagnostics.expectation_errors = cellfun(@collect_errors,runs,'UniformOutput',false);
 results.diagnostics.belief_distance_from_re = cellfun(@(r) r.belief_distance_from_re,runs,'UniformOutput',false);
 results.diagnostics.plm_stability_roots = cellfun(@(r) r.plm_stability_root,runs,'UniformOutput',false);
@@ -27,6 +32,10 @@ results.diagnostics.projection_events = cellfun(@(r) r.learning_state.projection
 results.diagnostics.observations_processed = cellfun(@(r) r.learning_state.observations,runs);
 results.diagnostics.terminal_belief_distance = cellfun(@terminal_distance,runs);
 results.metadata = metadata;
+end
+
+function value=explosion_period(run)
+if run.status=="explosive", value=run.termination.period; else, value=NaN; end
 end
 
 function values=collect_errors(run)
