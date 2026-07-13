@@ -14,7 +14,6 @@ test_ep_learning_path();
 test_dynare_expectation_reference();
 verify_ep10_structural_re();
 verify_ep13_ih_re();
-test_benchmark_irfs();
 verify_ir_baseline('baseline_ir_smoke_artifacts.mat',1e-10);
 if include_full_fixture
     verify_ir_baseline('baseline_ir_artifacts.mat',1e-10);

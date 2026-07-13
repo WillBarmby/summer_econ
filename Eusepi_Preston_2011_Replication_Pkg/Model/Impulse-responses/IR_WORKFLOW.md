@@ -108,11 +108,10 @@ The generic harness remains capable of accepting another explicitly linear
 model automatically has the E&P IH economics: a different expectation
 formulation must be supplied explicitly.
 
-`make_ir_config`, `run_benchmark_irfs`, and `run_impulse_responses` remain
-temporarily available
-for numerical characterization and the older multi-panel artifact. They are
-not the primary graph path. The non-regenerable `path_impulses.mat` forecast
-panel is not used.
+`make_ir_config` and `run_impulse_responses` remain only for numerical
+characterization of the frozen MATLAB oracle. The non-regenerable historical
+forecast-path panel and the superseded multi-panel workflow have been removed;
+they remain recoverable from Git history.
 
 ## Verification
 
