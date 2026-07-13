@@ -30,7 +30,6 @@ reference implementation in tests.
 
 - `EP_RE_REDS_SOLDS_compare_sanitized.mod`: 10-variable structural RE/EE benchmark.
 - `models/ep13_ih_re_linear.mod`: separate 13-variable IH RE representation.
-- `models/nk3_linear.mod`: reusable three-equation NK demonstration.
 - `models/var_expectation_poc.mod`: one-step and infinite-sum Dynare oracle.
 
 The tests record structural Dynare RE, canonical PLM-to-ALM fixed points, and
