@@ -31,13 +31,17 @@ model(linear);
  [name='capital_accumulation'] capital=ik_ratio*investment+delta_s*capital(-1)-delta_s*gamma_x;
  [name='labor_supply'] wage=consumption+(eps_H-psi*(sigma-1)/sigma)*hours;
  [name='bond_return'] bond=beta_tilda*R_tilda*rk(+1);
+ // E&P Appendix consumption rule uses
+ //   F_t(price)=sum_(h=1)^Inf beta_tilda^(h-1) E_t price_(t+h).
+ // To match the original MATLAB matrices, the Dynare auxiliaries store
+ // beta_tilda*F_t. They are derived present values, not learned PLMs.
  [name='capital_pv'] rk_sum=beta_tilda*(rk(+1)+rk_sum(+1));
  [name='wage_pv'] w_sum=beta_tilda*(wage(+1)+w_sum(+1));
  [name='ih_consumption']
  consumption+psi*(1-sigma)/sigma*hours-c_c*R_tilda*rk
    +c_c/beta_tilda*gamma_x-c_c*(eps_w+chi*eps_c/(1-chi))*wage
- =(-beta_tilda*R_tilda*(beta_tilda/sigma-c_c)/beta_tilda)*rk_sum
-   +(c_c*beta_tilda*(eps_w+eps_c*chi/(1-chi))/beta_tilda)*w_sum
+ =(-R_tilda*(beta_tilda/sigma-c_c))*rk_sum
+   +(c_c*(eps_w+eps_c*chi/(1-chi)))*w_sum
    +(c_c/beta_tilda)*capital(-1);
 end;
 

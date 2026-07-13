@@ -8,6 +8,7 @@ verify_fixture_manifest();
 test_expectation_evaluator();
 test_ep_ee_alm();
 test_ep_ih_alm();
+test_dynare_ih_learning_adapter();
 test_ep_learning_path();
 test_dynare_expectation_reference();
 root=fileparts(fileparts(fileparts(fileparts(fileparts(fileparts(mfilename('fullpath')))))));
