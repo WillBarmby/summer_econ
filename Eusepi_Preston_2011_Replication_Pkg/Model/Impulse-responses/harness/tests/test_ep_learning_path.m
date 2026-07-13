@@ -12,5 +12,11 @@ generic=simulate_learning_path(plugin,cfg.main.shock_scale*eps(:,1:end-1), ...
 assert(~invalid && ~generic.invalid);
 assert(max(abs(generic.native_path-legacy),[],'all')<1e-10, ...
     'Generic E&P learning path differs from legacy simulation.');
+try
+    make_ep_learning_plugin();
+    error('Test:ExpectedFailure','Legacy adapter accepted omitted inputs.');
+catch exception
+    assert(strcmp(exception.identifier,'LegacyEP:RequiredArguments'));
+end
 fprintf('Complete E&P learning-path parity test passed.\n');
 end
