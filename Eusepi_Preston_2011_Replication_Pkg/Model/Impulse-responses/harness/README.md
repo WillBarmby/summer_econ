@@ -29,9 +29,10 @@ reference implementation in tests.
 
 ## Models and validations
 
-- `EP_RE_REDS_SOLDS_compare_sanitized.mod`: 10-variable structural RE/EE benchmark.
 - `models/ep13_ih_re_linear.mod`: separate 13-variable IH RE representation.
 - `models/var_expectation_poc.mod`: one-step and infinite-sum Dynare oracle.
+- `tests/models/ep10_euler_re_verification.mod`: verification-only 10-variable
+  Euler/RE benchmark; never used by the production learning workflow.
 
 The tests record structural Dynare RE, canonical PLM-to-ALM fixed points, and
 legacy E&P solutions separately. Shared-variable comparisons are aligned by

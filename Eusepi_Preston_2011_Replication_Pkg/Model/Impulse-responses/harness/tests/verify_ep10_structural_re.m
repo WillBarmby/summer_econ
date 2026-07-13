@@ -1,10 +1,13 @@
-function report = verify_ep10_structural_re(root)
+function report = verify_ep10_structural_re()
 %% VERIFY_EP10_STRUCTURAL_RE Independent 10-variable structural RE benchmark.
 
-if nargin<1
-    root=fileparts(fileparts(fileparts(fileparts(fileparts(fileparts(mfilename('fullpath')))))));
+if nargin~=0
+    error('Verification:UnexpectedInput', ...
+        'The verification model path is fixed inside the test boundary.');
 end
-dyn=load_dynare_71_linear_model(fullfile(root,'EP_RE_REDS_SOLDS_compare_sanitized.mod'));
+model_path=fullfile(fileparts(mfilename('fullpath')),'models', ...
+    'ep10_euler_re_verification.mod');
+dyn=load_dynare_71_linear_model(model_path);
 cfg=ir_default_config(); param=cfg.main.model_param; param(1)=0;
 legacy=load_legacy_ep_model(param);
 names={'rk','wage','output','hours','consumption','investment','capital','gamma_x'};

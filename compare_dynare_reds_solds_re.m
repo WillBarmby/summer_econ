@@ -28,7 +28,9 @@ H = 40;  % number of impulse-response periods to pull from each solution
 %% Dynare
 outdir = fullfile(root, 'comparison_outputs', 'minimal_dynare_run');
 if ~isfolder(outdir), mkdir(outdir); end
-mod_src = fullfile(root, 'EP_RE_REDS_SOLDS_compare_sanitized.mod');
+mod_src = fullfile(root, 'Eusepi_Preston_2011_Replication_Pkg', 'Model', ...
+    'Impulse-responses', 'harness', 'tests', 'models', ...
+    'ep10_euler_re_verification.mod');
 [~, mod_name, mod_ext] = fileparts(mod_src);
 copyfile(mod_src, fullfile(outdir, [mod_name, mod_ext]));
 
@@ -101,4 +103,3 @@ fprintf('  x_used       = [%s]\n', num2str(x, ' %.8g'));
 fprintf('  Dynare eps_H = %.8g\n', dynare_eps_H);
 fprintf('\nMax abs Dynare vs REDS/SOLDS differences, using reds_impact timing:\n');
 disp(comparison);
-

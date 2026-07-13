@@ -98,6 +98,7 @@ harness/expectations/            IH subjective forecast / PLM-to-ALM mapping
 harness/learning/                generic RLS and paired-path engine
 harness/models/                  current .mod and its thin learning compiler
 harness/tests/                   fidelity, fail-fast, and workflow tests
+harness/tests/models/            verification-only structural fixtures
 model/ + generation/             original MATLAB implementation (parity oracle)
 legacy_irf/                      isolated historical compatibility renderer
 ```

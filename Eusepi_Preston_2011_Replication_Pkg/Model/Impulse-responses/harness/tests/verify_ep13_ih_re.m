@@ -2,9 +2,9 @@ function report=verify_ep13_ih_re()
 %% VERIFY_EP13_IH_RE Validate IH RE and align it with the Euler benchmark.
 
 model_dir=fullfile(fileparts(fileparts(mfilename('fullpath'))),'models');
-root=fileparts(fileparts(fileparts(fileparts(fileparts(fileparts(mfilename('fullpath')))))));
 ih=load_dynare_71_linear_model(fullfile(model_dir,'ep13_ih_re_linear.mod'));
-ee=load_dynare_71_linear_model(fullfile(root,'EP_RE_REDS_SOLDS_compare_sanitized.mod'));
+ee=load_dynare_71_linear_model(fullfile(fileparts(mfilename('fullpath')), ...
+    'models','ep10_euler_re_verification.mod'));
 cfg=ir_default_config(); legacy=load_legacy_ep_model(cfg.main.model_param);
 names={'rk','wage','output','hours','consumption','investment','capital','gamma_x'};
 H=40; ih_ee=zeros(numel(names),1); ih_legacy=zeros(numel(names),1);
