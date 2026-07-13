@@ -8,7 +8,9 @@ function config = ep_ih_learning_config()
 
 config = struct();
 config.formulation = "infinite_horizon";
-config.learned_outcomes = {'rk','wage','bond','output','hours','caput','capital'};
+% Paper equations (8)-(10): agents estimate only the capital return,
+% efficiency wage, and next-period capital equations.
+config.learned_outcomes = {'rk','wage','capital'};
 config.regressors = {'constant','capital_lag'};
 config.state_variable = 'capital';
 config.observed_but_excluded = {'eps_x'};
