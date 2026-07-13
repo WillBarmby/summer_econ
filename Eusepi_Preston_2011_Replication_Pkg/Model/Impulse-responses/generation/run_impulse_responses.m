@@ -8,6 +8,24 @@ if nargin ~= 1
     error('IRConfig:Required','run_impulse_responses requires one complete configuration.');
 end
 
+function [medians,low_band,up_band] = summarize_ir_bands(values,main_config,idx)
+horizon = main_config.impulse_horizon-1;
+medians = cell(1,idx.ir_series_count);
+low_band = cell(1,idx.ir_series_count);
+up_band = cell(1,idx.ir_series_count);
+for series = 1:idx.ir_series_count
+    medians{series} = median(values{series},1);
+    sorted = sort(values{series},1);
+    low_band{series} = sorted(main_config.band_lower_order_stat,1:horizon);
+    up_band{series} = sorted(main_config.band_upper_order_stat,1:horizon);
+end
+end
+
+function save_ir_output(main_config,imp_resp_vec)
+output.(main_config.output_var) = imp_resp_vec;
+save(fullfile(main_config.output_dir,main_config.output_file),'-struct','output');
+end
+
 setup_ir_paths();
 validate_ir_config(config);
 

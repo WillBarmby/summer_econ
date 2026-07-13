@@ -7,7 +7,6 @@ pkg_dir = fileparts(fileparts(model_dir));
 addpath(fullfile(model_dir, 'config'), '-end');
 addpath(fullfile(model_dir, 'model'), '-end');
 addpath(fullfile(model_dir, 'generation'), '-end');
-addpath(fullfile(model_dir, 'io'), '-end');
 addpath(fullfile(model_dir, 'legacy_irf'), '-end');
 addpath(fullfile(model_dir, 'Plot_imp_resp_Bench'), '-end');
 addpath(fullfile(model_dir, 'harness'), '-end');
