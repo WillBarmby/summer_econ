@@ -37,7 +37,7 @@ for draw_index=1:main.n_draws
     impulse(1)=main.normalized_shock_size;
     paired=simulate_paired_irf(plugin,training,ir_shocks,impulse, ...
         zeros(numel(model.variable_names),1),initial_learning,main.explosion_policy);
-    draws{draw_index}=paired;
+    draws{draw_index}=compact_draw_report(paired);
     if paired.status=="completed"
         raw(draw_index,:,:)=quantities_from_native_irf( ...
             paired.native_irf,model.variable_names);
@@ -60,6 +60,21 @@ artifact.plot_data=summarize_quantities(raw(completed,:,:),artifact.re_quantitie
 artifact.figure_files=render_quantities(artifact.plot_data,artifact.quantity_names, ...
     status,output_dir,min(40,horizon));
 save(fullfile(output_dir,'dynare_quantities_results.mat'),'-struct','artifact','-v7.3');
+end
+
+function report=compact_draw_report(paired)
+report=struct('status',paired.status, ...
+    'training',compact_path_report(paired.training), ...
+    'baseline',compact_path_report(paired.baseline), ...
+    'shocked',compact_path_report(paired.shocked));
+end
+
+function report=compact_path_report(path)
+if isempty(path)
+    report=struct('status',"not_run",'termination',struct());
+else
+    report=struct('status',path.status,'termination',path.termination);
+end
 end
 
 function quantities=quantities_from_native_irf(native,names)
