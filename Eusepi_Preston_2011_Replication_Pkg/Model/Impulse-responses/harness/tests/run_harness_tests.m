@@ -14,6 +14,7 @@ root=fileparts(fileparts(fileparts(fileparts(fileparts(fileparts(mfilename('full
 verify_ep10_structural_re(root);
 verify_ep13_ih_re();
 test_nk_plugin();
+test_benchmark_irfs();
 verify_ir_baseline('baseline_ir_smoke_artifacts.mat',1e-10);
 if include_full_fixture
     verify_ir_baseline('baseline_ir_artifacts.mat',1e-10);

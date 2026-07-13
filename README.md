@@ -1,5 +1,8 @@
 # Eusepi-Preston IR Regression Tests
 
+For the current simulation, graph, and verification entrypoints, start with
+[`IR_WORKFLOW.md`](Eusepi_Preston_2011_Replication_Pkg/Model/Impulse-responses/IR_WORKFLOW.md).
+
 This repository contains legacy MATLAB replication code. The current test
 workflow focuses on the impulse-response generator and its local model files in:
 
