@@ -41,7 +41,8 @@ ini1 = 0; ini2 = 0; ini3 = 0; ini4 = 0; ini5 = 0;
 
 if baseline_status.status ~= "completed"
     imp_resp_draw = struct('status',"baseline_"+baseline_status.status, ...
-        'ir_series',[],'baseline',baseline_status,'shocked',[],'path',Y_var);
+        'ir_series',[],'expected_sums',[],'baseline',baseline_status, ...
+        'shocked',[],'path',Y_var);
     return
 end
 
@@ -54,6 +55,7 @@ expectations = pack_expectations(Exp_R_1Q, Exp_R_3Q, Exp_w_1Q, Exp_w_2Q, ...
 %% is the impact response of the shock. Thus, the growth rate is defined
 %% as impact response (sim_L+2) less initial state (sim_L+1).
 impresp1 = build_ir_series(Y_var, expectations, idx, sim_L+2:size(Y_var,2), sim_L+1:size(Y_var,2)-1);
+expected_sums1 = Y_var([idx.rk_sum idx.w_sum],sim_L+2:size(Y_var,2));
 
 %% Add 1 std shock...
 full = 0;
@@ -81,7 +83,8 @@ epsZ_imp1 = mat_imp;
 
 if shocked_status.status ~= "completed"
     imp_resp_draw = struct('status',"shocked_"+shocked_status.status, ...
-        'ir_series',[],'baseline',baseline_status,'shocked',shocked_status,'path',Y_var);
+        'ir_series',[],'expected_sums',[],'baseline',baseline_status, ...
+        'shocked',shocked_status,'path',Y_var);
     return
 end
 
@@ -90,8 +93,10 @@ expectations = pack_expectations(Exp_R_1Q, Exp_R_3Q, Exp_w_1Q, Exp_w_2Q, ...
 
 %% NOTE: the imp-resp shock impacts at sim_L+2
 impresp2 = build_ir_series(Y_var, expectations, idx, 2:size(Y_var,2), 1:size(Y_var,2)-1);
+expected_sums2 = Y_var([idx.rk_sum idx.w_sum],2:size(Y_var,2));
 
 imp_resp_draw = struct('status',"completed",'ir_series',impresp2-impresp1, ...
+    'expected_sums',expected_sums2-expected_sums1, ...
     'baseline',baseline_status,'shocked',shocked_status,'path',[]);
 
 end
