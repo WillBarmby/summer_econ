@@ -7,6 +7,12 @@ experiment=make_ir_config();
 legacy=load_legacy_ep_model(experiment.main.model_param);
 [plugin,~]=make_dynare_ih_learning_plugin(dynare_model,ep_ih_learning_config(), ...
     experiment.main.shock_scale^2);
+assert_contract_rejected(dynare_model,experiment.main.shock_scale^2, ...
+    'feedback',false,'EPIH:InvalidFeedback');
+assert_contract_rejected(dynare_model,experiment.main.shock_scale^2, ...
+    'update_timing',"update_then_decide",'EPIH:InvalidUpdateTiming');
+assert_contract_rejected(dynare_model,experiment.main.shock_scale^2, ...
+    'observed_but_excluded',{'missing_shock'},'EPIH:MissingName');
 
 % Matching only the RE solution is insufficient: an omitted subjective
 % forecast can vanish under RE and still change adaptive-learning dynamics.
@@ -35,4 +41,14 @@ generic=simulate_learning_path(plugin,experiment.main.shock_scale*innovations(1:
 assert(~invalid && generic.status=="completed");
 assert(max(abs(generic.native_path-legacy_path),[],'all')<1e-10);
 fprintf('Dynare-driven E&P IH arbitrary-belief parity tests passed.\n');
+end
+
+function assert_contract_rejected(model,variance,field,value,identifier)
+config=ep_ih_learning_config(); config.(field)=value;
+try
+    make_dynare_ih_learning_plugin(model,config,variance);
+    error('Test:ExpectedFailure','Invalid IH contract was accepted.');
+catch exception
+    assert(strcmp(exception.identifier,identifier));
+end
 end

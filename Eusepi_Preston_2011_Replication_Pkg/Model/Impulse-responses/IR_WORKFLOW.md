@@ -8,15 +8,14 @@ The primary workflow has three explicit inputs and one entrypoint:
   model and is solved by Dynare 7.1.
 - `ep_ih_learning_config()` names the restricted perceived law of motion,
   information set, gain, update timing, forecast targets, and projection rule.
-- `make_ir_config()` supplies Monte Carlo timing, shock scale, draw count,
+- `make_dynare_ir_config()` supplies Monte Carlo timing, a named shock, draw count,
   seed, and explosion policy.
 - `run_dynare_quantities_irfs(...)` runs the experiment and writes the data and
   the single quantities figure.
 
 ```matlab
 setup_ir_paths
-experiment = make_ir_config();
-experiment.main.n_draws = 100;
+experiment = make_dynare_ir_config();
 artifact = run_dynare_quantities_irfs( ...
     fullfile('harness', 'models', 'ep13_ih_re_linear.mod'), ...
     ep_ih_learning_config(), experiment, ...
@@ -108,7 +107,8 @@ The generic harness remains capable of accepting another explicitly linear
 model automatically has the E&P IH economics: a different expectation
 formulation must be supplied explicitly.
 
-`run_benchmark_irfs` and `run_impulse_responses` remain temporarily available
+`make_ir_config`, `run_benchmark_irfs`, and `run_impulse_responses` remain
+temporarily available
 for numerical characterization and the older multi-panel artifact. They are
 not the primary graph path. The non-regenerable `path_impulses.mat` forecast
 panel is not used.

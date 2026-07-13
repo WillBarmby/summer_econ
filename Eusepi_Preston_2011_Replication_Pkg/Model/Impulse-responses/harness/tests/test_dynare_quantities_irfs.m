@@ -1,22 +1,35 @@
 function test_dynare_quantities_irfs()
 %% TEST_DYNARE_QUANTITIES_IRFS Compare public workflow with legacy draws.
 
-experiment=make_ir_config();
-experiment.main.n_draws=2;
-experiment.main.training_sample_length=80;
-experiment.main.impulse_horizon=41;
+experiment=make_dynare_ir_config();
+experiment.draw_count=2;
+experiment.training_periods=80;
+experiment.ir_periods=40;
 output_dir=tempname; cleanup=onCleanup(@() remove_output(output_dir));
 model_dir=fileparts(fileparts(mfilename('fullpath')));
+try
+    run_dynare_quantities_irfs(fullfile(model_dir,'models','ep13_ih_re_linear.mod'), ...
+        ep_ih_learning_config(),make_ir_config(),output_dir);
+    error('Test:ExpectedFailure','Legacy-shaped experiment config was accepted.');
+catch exception
+    assert(strcmp(exception.identifier,'DynareIR:InvalidExperiment'));
+end
 artifact=run_dynare_quantities_irfs( ...
     fullfile(model_dir,'models','ep13_ih_re_linear.mod'), ...
     ep_ih_learning_config(),experiment,output_dir);
 
-rng(experiment.baseline_seed,'twister');
+rng(experiment.random_seed,'twister');
 indices=ir_variable_indices();
-for draw_index=1:experiment.main.n_draws
-    innovations=randn(1,experiment.main.training_sample_length+ ...
-        experiment.main.impulse_horizon);
-    legacy=simulate_ir_draw(experiment.main,innovations,indices);
+legacy_config=make_ir_config();
+legacy_config.main.n_draws=experiment.draw_count;
+legacy_config.main.training_sample_length=experiment.training_periods;
+legacy_config.main.impulse_horizon=experiment.ir_periods+1;
+legacy_config.main.shock_scale=experiment.shock.simulation_scale;
+legacy_config.main.normalized_shock_size=experiment.shock.impulse_size;
+legacy_config.main.explosion_policy=experiment.explosion_policy;
+for draw_index=1:experiment.draw_count
+    innovations=randn(1,experiment.training_periods+experiment.ir_periods+1);
+    legacy=simulate_ir_draw(legacy_config.main,innovations,indices);
     expected=legacy.ir_series([2 4 3 6],:);
     actual=squeeze(artifact.raw_quantities(draw_index,:,:));
     assert(max(abs(actual-expected),[],'all')<1e-10);
