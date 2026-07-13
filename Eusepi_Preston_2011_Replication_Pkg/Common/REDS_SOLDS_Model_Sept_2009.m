@@ -2,9 +2,9 @@
 %%% THIS FILE COMPUTES THE REE SOLUTION OF THE MODEL USING REDS-SOLDS
 
 
-     function [OMEGA_0_RE OMEGA_c_RE ct1] = REDS_SOLDS_Model_Sept_2009(param)
- 
- 
+function [OMEGA_0_RE OMEGA_c_RE ct1] = REDS_SOLDS_Model_Sept_2009(param)
+
+
 
 
 %% Control on bounds for calibrated coefficients
@@ -85,419 +85,419 @@ eps_delta = 0.404;
 
 %% [c] ESTIMATED PARAMETERS
 
-  eta = param(2); %% external effects
-  
-  sigma = param(3); %% parameter in the utility function
-  
-  beta = 0.99*gamma^(sigma-1); %% adjusted discount rate
+eta = param(2); %% external effects
 
-    
-  %% Verify parameters' bounds
-  
-  if eta > 1 
-      
-      ct1 = 1;
-  
-    
-  end
-  
-  
+sigma = param(3); %% parameter in the utility function
 
+beta = 0.99*gamma^(sigma-1); %% adjusted discount rate
 
-  if ct1 == 0  
-      
-  
-%% [3] STEADY STATE
- 
 
-%% Paramters of the capital production function
+%% Verify parameters' bounds
 
+if eta > 1
 
-delta_tilda = 1-(1-delta)/gamma; %% investment to capital ratio
+  ct1 = 1;
 
-beta_tilda = beta*gamma^(1-sigma); %% modified discount rate
 
-%% Steady State values of main variables
+end
 
-%% NOTE: this version has variable capital utilization
 
 
-theta = (gamma*beta_tilda^(-1)-(1-delta))/delta;
 
+if ct1 == 0
 
-yk_ratio = delta*theta/(alpha*gamma);
 
-ik_ratio = delta_tilda;
+  %% [3] STEADY STATE
 
-ck_ratio = yk_ratio-ik_ratio;
 
-cy_ratio = ck_ratio/yk_ratio;
+  %% Paramters of the capital production function
 
-R_bar = beta^(-1)-(1-delta)/gamma^(sigma);
 
-delta_s = (1-delta)/gamma;
+  delta_tilda = 1-(1-delta)/gamma; %% investment to capital ratio
 
-R_tilda = beta_tilda^(-1)-delta_s;
+  beta_tilda = beta*gamma^(1-sigma); %% modified discount rate
 
-psi = cy_ratio^(-1)*(1-alpha);
+  %% Steady State values of main variables
 
+  %% NOTE: this version has variable capital utilization
 
 
+  theta = (gamma*beta_tilda^(-1)-(1-delta))/delta;
 
 
+  yk_ratio = delta*theta/(alpha*gamma);
 
+  ik_ratio = delta_tilda;
 
-%% [4] DEFINE MATRICES (model in learning format)
+  ck_ratio = yk_ratio-ik_ratio;
 
-%% constant
+  cy_ratio = ck_ratio/yk_ratio;
 
-Ac = zeros(n_var-n_exos,1);
+  R_bar = beta^(-1)-(1-delta)/gamma^(sigma);
 
-A{1} = [Ac;zeros(n_exos,1)];
+  delta_s = (1-delta)/gamma;
 
+  R_tilda = beta_tilda^(-1)-delta_s;
 
-%% contemporaneous variables
+  psi = cy_ratio^(-1)*(1-alpha);
 
-A0 = zeros(n_var-n_exos,n_var);
 
 
- 
-A0(wage,hours) = -(eps_H-psi*(sigma-1)/sigma); %% eps_H defines elasticity
 
 
-A0(wage,cons) = -1;
 
-A0(wage,wage) = 1;
 
+  %% [4] DEFINE MATRICES (model in learning format)
 
-A0(hours,hours) = -1;
+  %% constant
 
-A0(hours,output) = 1;
+  Ac = zeros(n_var-n_exos,1);
 
-A0(hours,wage) = -1;
+  A{1} = [Ac;zeros(n_exos,1)];
 
 
-A0(rk,rk) = -1;
+  %% contemporaneous variables
 
-A0(rk,gamma_x) = 1;
+  A0 = zeros(n_var-n_exos,n_var);
 
-A0(rk,output) = 1;
 
-A0(rk,caput) =RBC_dummy*(-1);
 
+  A0(wage,hours) = -(eps_H-psi*(sigma-1)/sigma); %% eps_H defines elasticity
 
-A0(invst,invst) = (1-cy_ratio);
 
-A0(invst,cons) = (cy_ratio);
+  A0(wage,cons) = -1;
 
-A0(invst,output) = -1;
+  A0(wage,wage) = 1;
 
 
-A0(output,output) = -1;
+  A0(hours,hours) = -1;
 
-A0(output,mp) = 1;
+  A0(hours,output) = 1;
 
-A0(output,hours) = 1-alpha;
+  A0(hours,wage) = -1;
 
-A0(output,gamma_x) = -alpha;
 
-A0(output,caput) = RBC_dummy*alpha;
+  A0(rk,rk) = -1;
 
+  A0(rk,gamma_x) = 1;
 
+  A0(rk,output) = 1;
 
-A0(mp,mp) = -1;
+  A0(rk,caput) =RBC_dummy*(-1);
 
-A0(mp,hours) = (1-alpha)*eta;
 
-A0(mp,gamma_x) = -eta*alpha;
+  A0(invst,invst) = (1-cy_ratio);
 
-A0(mp,caput) = RBC_dummy*eta*alpha;
+  A0(invst,cons) = (cy_ratio);
 
+  A0(invst,output) = -1;
 
-A0(cap,cap) = -1;
 
-A0(cap,invst) = ik_ratio;
+  A0(output,output) = -1;
 
-A0(cap,gamma_x) = -((1-delta)/gamma);
+  A0(output,mp) = 1;
 
-A0(cap,caput) = RBC_dummy*(-delta*theta/gamma);
-%A0(cap,caput) = RBC_dummy*(-delta*((gamma*beta_tilda^(-1)-(1-delta))/delta)/gamma);
+  A0(output,hours) = 1-alpha;
 
+  A0(output,gamma_x) = -alpha;
 
+  A0(output,caput) = RBC_dummy*alpha;
 
-A0(caput,caput) = 1;
 
-A0(caput,rk) = RBC_dummy*(-1/(theta-1));
-%A0(caput,rk) = RBC_dummy*(-eps_delta^-1);
 
+  A0(mp,mp) = -1;
 
-%% Consumption Equation
+  A0(mp,hours) = (1-alpha)*eta;
 
+  A0(mp,gamma_x) = -eta*alpha;
 
-     
-A0(cons,cons) = sigma;
+  A0(mp,caput) = RBC_dummy*eta*alpha;
 
-A0(cons,hours) = psi*(1-sigma);
 
-     
-     
+  A0(cap,cap) = -1;
 
+  A0(cap,invst) = ik_ratio;
 
+  A0(cap,gamma_x) = -((1-delta)/gamma);
 
-invA0 = inv([A0 ,
-        zeros(n_exos,n_var-n_exos) eye(n_exos)]);
-  
-        
- %% lag expectaions       
+  A0(cap,caput) = RBC_dummy*(-delta*theta/gamma);
+  %A0(cap,caput) = RBC_dummy*(-delta*((gamma*beta_tilda^(-1)-(1-delta))/delta)/gamma);
 
-A{2} = zeros(n_var,n_var);
 
 
+  A0(caput,caput) = 1;
 
-%% forward looking (finite)
+  A0(caput,rk) = RBC_dummy*(-1/(theta-1));
+  %A0(caput,rk) = RBC_dummy*(-eps_delta^-1);
 
-A{3} = zeros(n_var,n_var);
 
+  %% Consumption Equation
 
 
-    
-    
- A{3}(cons,rk) = -beta_tilda*R_tilda;
- 
- A{3}(cons,cons) = sigma;
- 
- A{3}(cons,hours) = psi*(1-sigma);
- 
- A{3}(cons,gamma_x) = sigma;
 
-  
- 
- 
-    
+  A0(cons,cons) = sigma;
 
+  A0(cons,hours) = psi*(1-sigma);
 
 
 
 
 
 
-%% lagged variables
+  invA0 = inv([A0 ,
+    zeros(n_exos,n_var-n_exos) eye(n_exos)]);
 
-A{5} = zeros(n_var,n_var);
 
- 
- A{5}(rk,cap) = 1;
+  %% lag expectaions
 
- A{5}(gamma_x,gamma_x) = rho_x;
+  A{2} = zeros(n_var,n_var);
 
- A{5}(cap,cap) = -(1-delta)/gamma;
- 
- A{5}(output,cap) = -alpha;
- 
+
+
+  %% forward looking (finite)
+
+  A{3} = zeros(n_var,n_var);
+
+
+
+
+
+  A{3}(cons,rk) = -beta_tilda*R_tilda;
+
+  A{3}(cons,cons) = sigma;
+
+  A{3}(cons,hours) = psi*(1-sigma);
+
+  A{3}(cons,gamma_x) = sigma;
+
+
+
+
+
+
+
+
+
+
+
+
+  %% lagged variables
+
+  A{5} = zeros(n_var,n_var);
+
+
+  A{5}(rk,cap) = 1;
+
+  A{5}(gamma_x,gamma_x) = rho_x;
+
+  A{5}(cap,cap) = -(1-delta)/gamma;
+
+  A{5}(output,cap) = -alpha;
+
   A{5}(mp,cap) = -eta*alpha;
-  
- 
- 
- 
- %% Shocks (i.i.d.)
- 
-C = zeros(n_var,n_shocks);
- 
-
- C(gamma_x,eps_x) = 1;
- 
- 
-
- 
- 
- %% [1] TRANSFORM MATRICES TO ADAPT TO REDS/SOLDS NOTATION
- 
- 
- %% Matrix A_rs
- 
-A0 = [A0,
-        zeros(n_exos,n_var-n_exos) eye(n_exos)];
- 
- A_rs = zeros(n_var,n_var);
- 
- A_rs(cons,cons) = sigma;
- 
- A_rs(cons,hours) = psi*(1-sigma);
- 
- A_rs(cons,rk) =  -beta_tilda*R_tilda; 
- 
- A_rs(cons,gamma_x) = sigma*rho_x;
-
- 
- A_rs(output,gamma_x) = -A0(output,gamma_x);
-
- 
- A_rs(rk,gamma_x) = -A0(rk,gamma_x);
-
- A_rs(mp,gamma_x) = -A0(mp,gamma_x);
- 
- A_rs(cap,gamma_x) = -A0(cap,gamma_x);
-
- 
- A_rs(cap,cap) = 1;
- 
- 
- A_rs(gamma_x,gamma_x) = 1;
-
- 
- 
- %% eliminate consumption in raws other than euler equation
- 
- cs_coeff = A_rs(cons,cons);
- 
- hs_coeff = A_rs(cons,hours);
- 
- A_rs(:,cons) = zeros(n_var,1);
- 
- A_rs(cons,cons) = cs_coeff;
- 
- A_rs(cons,hours) = hs_coeff;
- 
-
- 
- %% Matrix B_rs
- 
- B_rs = zeros(n_var,n_var);
- 
- B_rs(cons,cons) = sigma;
- 
- B_rs(cons,hours) = psi*(1-sigma);
- 
-
- 
- A0(:,gamma_x) = zeros(n_var,1);
- 
-
- 
- cs_vec_coeff = B_rs(cons,:);
- 
- 
- B_rs = A0;
-
- B_rs(cons,:) = cs_vec_coeff;
- 
- 
- 
- 
-
- B_rs(rk,cap) = -A{5}(rk,cap);
 
 
- 
- B_rs(gamma_x,gamma_x) = rho_x;
 
 
- 
- B_rs(cap,cap) = -A{5}(cap,cap);
- 
- B_rs(output,cap) = -A{5}(output,cap);
- 
- B_rs(mp,cap) = -A{5}(mp,cap);
- 
- 
- %% Matrix C_rs
- 
- C_rs = zeros(n_var,n_exos);
- 
+  %% Shocks (i.i.d.)
 
- C_rs(gamma_x,eps_x) = 1;
+  C = zeros(n_var,n_shocks);
 
- 
- 
- %% define states
- 
- NY = n_var; NK = 2; NX = 1;
- 
- %disp(param)
- 
- [Br,Cr,Lr,NF] = redsf(A_rs,B_rs,C_rs,NY,NX,NK);
- 
- [D,F,G,H] = soldsf(Br,Cr,Lr,NY,NX,NK,NF);
- 
- 
-   D(size(D,1)-NK+1:end,:) = G;
-      
-   D = [zeros(n_var,n_var-NK) real(D)]; 
- 
- 
- %% We are assuming zero constant (easily fixed...)
- OMEGA_0_RE = zeros(n_var+3,1);
- 
- %% including discounted sums and riskless bond!
- OMEGA_c_RE1 = zeros(n_var+3,n_var+3); 
- %% including discounted sums and riskless bond!
- 
- OMEGA_c_RE1(1:n_var,1:n_var) = D; 
- 
 
-  
-  OMEGA_c_RE = zeros(n_var+3,n_var+3); 
-  
+  C(gamma_x,eps_x) = 1;
+
+
+
+
+
+  %% [1] TRANSFORM MATRICES TO ADAPT TO REDS/SOLDS NOTATION
+
+
+  %% Matrix A_rs
+
+  A0 = [A0,
+    zeros(n_exos,n_var-n_exos) eye(n_exos)];
+
+  A_rs = zeros(n_var,n_var);
+
+  A_rs(cons,cons) = sigma;
+
+  A_rs(cons,hours) = psi*(1-sigma);
+
+  A_rs(cons,rk) =  -beta_tilda*R_tilda;
+
+  A_rs(cons,gamma_x) = sigma*rho_x;
+
+
+  A_rs(output,gamma_x) = -A0(output,gamma_x);
+
+
+  A_rs(rk,gamma_x) = -A0(rk,gamma_x);
+
+  A_rs(mp,gamma_x) = -A0(mp,gamma_x);
+
+  A_rs(cap,gamma_x) = -A0(cap,gamma_x);
+
+
+  A_rs(cap,cap) = 1;
+
+
+  A_rs(gamma_x,gamma_x) = 1;
+
+
+
+  %% eliminate consumption in raws other than euler equation
+
+  cs_coeff = A_rs(cons,cons);
+
+  hs_coeff = A_rs(cons,hours);
+
+  A_rs(:,cons) = zeros(n_var,1);
+
+  A_rs(cons,cons) = cs_coeff;
+
+  A_rs(cons,hours) = hs_coeff;
+
+
+
+  %% Matrix B_rs
+
+  B_rs = zeros(n_var,n_var);
+
+  B_rs(cons,cons) = sigma;
+
+  B_rs(cons,hours) = psi*(1-sigma);
+
+
+
+  A0(:,gamma_x) = zeros(n_var,1);
+
+
+
+  cs_vec_coeff = B_rs(cons,:);
+
+
+  B_rs = A0;
+
+  B_rs(cons,:) = cs_vec_coeff;
+
+
+
+
+
+  B_rs(rk,cap) = -A{5}(rk,cap);
+
+
+
+  B_rs(gamma_x,gamma_x) = rho_x;
+
+
+
+  B_rs(cap,cap) = -A{5}(cap,cap);
+
+  B_rs(output,cap) = -A{5}(output,cap);
+
+  B_rs(mp,cap) = -A{5}(mp,cap);
+
+
+  %% Matrix C_rs
+
+  C_rs = zeros(n_var,n_exos);
+
+
+  C_rs(gamma_x,eps_x) = 1;
+
+
+
+  %% define states
+
+  NY = n_var; NK = 2; NX = 1;
+
+  %disp(param)
+
+  [Br,Cr,Lr,NF] = redsf(A_rs,B_rs,C_rs,NY,NX,NK);
+
+  [D,F,G,H] = soldsf(Br,Cr,Lr,NY,NX,NK,NF);
+
+
+  D(size(D,1)-NK+1:end,:) = G;
+
+  D = [zeros(n_var,n_var-NK) real(D)];
+
+
+  %% We are assuming zero constant (easily fixed...)
+  OMEGA_0_RE = zeros(n_var+3,1);
+
+  %% including discounted sums and riskless bond!
+  OMEGA_c_RE1 = zeros(n_var+3,n_var+3);
+  %% including discounted sums and riskless bond!
+
+  OMEGA_c_RE1(1:n_var,1:n_var) = D;
+
+
+
+  OMEGA_c_RE = zeros(n_var+3,n_var+3);
+
   % jump
 
-rk = 1;
-wage = 2;
-output = 3;
-hours = 5;
-cons = 6;
-invst = 7;
-mp = 4; %% externality
-caput = 8;
+  rk = 1;
+  wage = 2;
+  output = 3;
+  hours = 5;
+  cons = 6;
+  invst = 7;
+  mp = 4; %% externality
+  caput = 8;
 
-% state
-cap = 9;
-
-
-%% exogenous variables
-gamma_x = 10;
-
-%% Ordering in the learning model
-
-% jump
-
-rkl = 1;
-wagel = 2;
-outputl = 4;
-hoursl = 5;
-consl = 12;
-invstl = 9;
-mpl = 8; %% externality
-caputl = 6;
-rk_suml = 10;
-w_suml = 11;
-bondl = 3;
-
-% state
-capl = 7;
+  % state
+  cap = 9;
 
 
-%% exogenous variables
-gamma_xl = 13;
+  %% exogenous variables
+  gamma_x = 10;
 
-  
+  %% Ordering in the learning model
+
+  % jump
+
+  rkl = 1;
+  wagel = 2;
+  outputl = 4;
+  hoursl = 5;
+  consl = 12;
+  invstl = 9;
+  mpl = 8; %% externality
+  caputl = 6;
+  rk_suml = 10;
+  w_suml = 11;
+  bondl = 3;
+
+  % state
+  capl = 7;
+
+
+  %% exogenous variables
+  gamma_xl = 13;
+
+
   OMEGA_c_RE(rkl,capl) = OMEGA_c_RE1(rk,cap);
-  
+
   OMEGA_c_RE(wagel,capl) = OMEGA_c_RE1(wage,cap);
-  
+
   OMEGA_c_RE(outputl,capl) = OMEGA_c_RE1(output,cap);
-  
+
   OMEGA_c_RE(hoursl,capl) = OMEGA_c_RE1(hours,cap);
-  
+
   OMEGA_c_RE(consl,capl) = OMEGA_c_RE1(cons,cap);
-  
+
   OMEGA_c_RE(invstl,capl) = OMEGA_c_RE1(invst,cap);
-  
+
   OMEGA_c_RE(mpl,capl) = OMEGA_c_RE1(mp,cap);
-  
+
   OMEGA_c_RE(caputl,capl) = OMEGA_c_RE1(caput,cap);
-  
+
   OMEGA_c_RE(capl,capl) = OMEGA_c_RE1(cap,cap);
-  
+
   OMEGA_c_RE(gamma_xl,capl) = OMEGA_c_RE1(gamma_x,cap);
-  
-  end %% ends ct1 loop
+
+end %% ends ct1 loop
