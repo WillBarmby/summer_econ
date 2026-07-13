@@ -1,84 +1,122 @@
-# Impulse-Response Workflow
+# Dynare-Driven Eusepi–Preston IRFs
 
 ## Start here
 
-The public workflow has four concepts:
+The primary workflow has three explicit inputs and one entrypoint:
 
-1. `make_ir_config()` constructs the explicit reference experiment.
-2. `run_impulse_responses(config)` runs one learning or RE experiment.
-3. `run_benchmark_irfs(config, plot_spec, output_dir)` runs both cases and
-   writes the benchmark data plus PDF and PNG figures.
-4. `verify_ir_workflow(include_full_fixture, tolerance)` runs structural,
-   characterization, graph-workflow, and legacy-parity checks.
-
-Generate the 100-draw benchmark from this directory:
+- `harness/models/ep13_ih_re_linear.mod` contains the linearized structural
+  model and is solved by Dynare 7.1.
+- `ep_ih_learning_config()` names the restricted perceived law of motion,
+  information set, gain, update timing, forecast targets, and projection rule.
+- `make_ir_config()` supplies Monte Carlo timing, shock scale, draw count,
+  seed, and explosion policy.
+- `run_dynare_quantities_irfs(...)` runs the experiment and writes the data and
+  the single quantities figure.
 
 ```matlab
 setup_ir_paths
-config = make_ir_config();
-config.main.n_draws = 100;
-config.main.store_output = false;
-spec = benchmark_plot_spec(0, 0);
-artifact = run_benchmark_irfs(config, spec, fullfile(pwd, 'artifacts', 'benchmark_irfs'));
+experiment = make_ir_config();
+experiment.main.n_draws = 100;
+artifact = run_dynare_quantities_irfs( ...
+    fullfile('harness', 'models', 'ep13_ih_re_linear.mod'), ...
+    ep_ih_learning_config(), experiment, ...
+    fullfile(pwd, 'artifacts', 'dynare_quantities'));
 ```
 
-The output directory contains `benchmark_irf_results.mat` and four figures in
-both PDF and PNG format: quantities, expected sums, forecast errors, and the
-long-horizon return forecast.
+The output is `dynare_quantities_results.mat`, `dynare_quantities.pdf`, and
+`dynare_quantities.png`. The figure contains consumption, output, investment,
+and hours over 40 quarters, with the learning median, RE response, and the
+paper's 25th/75th percentile learning band.
 
-## Data flow
+## What Dynare does—and what MATLAB does
 
 ```text
-make_ir_config
-      |
-      v
-run_benchmark_irfs
-      |
-      +--> run_impulse_responses (learning)
-      |         `--> simulate_ir_draw --> simulate_model_paths
-      |
-      +--> run_impulse_responses (rational expectations)
-      |         `--> simulate_ir_draw --> simulate_model_paths
-      |
-      `--> completed draws --> medians / 15th-85th bands --> PDF + PNG
+linear deviation-form .mod
+        |
+        v
+Dynare 7.1: parse equations, solve RE, return equation and decision-rule matrices
+        |
+        v
+named IH adapter: restricted PLM -> E&P subjective present values -> ALM
+        |
+        v
+generic MATLAB RLS loop: train -> paired baseline/shocked paths
+        |
+        v
+completed draws -> quantities -> median / 25th-75th bands -> PDF + PNG
 ```
 
-Each IR draw trains the model once, restarts the same saved state for baseline
-and shocked paths, and reports `shocked - baseline`. The first reported period
-is the impact response at training period `sim_L + 2`.
+Dynare is loaded once per workflow, not once per date or draw. The `.mod` is
+the structural driver; MATLAB is the wrapper for subjective forecasts and RLS
+belief updates that Dynare's standard RE solution does not perform.
 
-## Explosions and invalid runs
+The code does **not** estimate a full VAR. Agents learn seven outcomes using
+only a constant and lagged aggregate capital, matching Eusepi–Preston's
+restricted PLM. The technology innovation is observed but deliberately absent
+from the regressors. Capital-return, wage, and technology-growth forecast sums
+are derived from that PLM rather than independently estimated.
 
-The explicit explosion policy is part of the configuration. A magnitude or
-non-finite trigger stops the affected path and preserves its prefix, trigger
-period, variable, value, and criterion. It is never converted to a zero IRF.
+## Fidelity boundary
 
-Graphs use completed draws only. Every saved artifact records completed,
-explosive, and invalid counts. Graph generation fails if either learning or RE
-has no completed draws.
+The `.mod` is already written as a linear deviation system. The loader fails
+unless it sees `model(linear)`; it never asks Dynare to silently linearize a
+nonlinear replacement model. This preserves the paper's sequence: normalize
+and log-linearize around the non-stochastic balanced-growth path, then impose
+subjective expectations in the infinite-horizon consumption rule.
 
-## Directory map
+RE agreement alone is not accepted as evidence of fidelity. An expectation
+term can vanish under RE yet matter under learning. Tests therefore compare
+the Dynare-driven adapter with the original MATLAB mapping under arbitrary
+stable beliefs, and compare complete adaptive-learning paths and quantities
+draws at `1e-10`.
+
+One internal normalization is worth making explicit: `rk_sum` and `w_sum` in
+the `.mod` store beta times the appendix's discounted sum. The decision
+equation compensates by dividing their coefficients by beta. The adapter also
+includes expected technology growth, even though its RE forecast is zero for
+the benchmark i.i.d. shock.
+
+## Explosions are results
+
+The explosion policy is required data. A magnitude or non-finite trigger stops
+the affected path and records the prefix, trigger period, variable, value, and
+criterion. Explosive and invalid draws are never replaced by zeros or silently
+dropped. The MAT artifact records every status and the figure title reports
+completed, explosive, and invalid counts. Plotting fails after saving
+diagnostics if no draw completed.
+
+Random-number behavior is unchanged: each replication draws one innovation
+vector, then partitions it into training and IR segments. Baseline and shocked
+paths restart from identical trained states.
+
+## Code map
 
 ```text
-config/                 explicit reference configuration and variable schema
-generation/             Monte Carlo IR engine and reported-series mapping
-model/                  Eusepi-Preston matrices and path simulator
-Plot_imp_resp_Bench/    explicit plot specification and parity renderer
-harness/                general Dynare/learning research harness and tests
-legacy_irf/              isolated compatibility adapter
-notes/                   inactive historical equation alternatives
-*.mat                    checked characterization fixtures
+run_dynare_quantities_irfs.m     primary public experiment and graph workflow
+config/                          explicit experiment, learning, and name schema
+harness/structural/              Dynare 7.1 loading and canonical matrices
+harness/expectations/            IH subjective forecast / PLM-to-ALM mapping
+harness/learning/                generic RLS and paired-path engine
+harness/models/                  current .mod and its thin learning compiler
+harness/tests/                   fidelity, fail-fast, and workflow tests
+model/ + generation/             original MATLAB implementation (parity oracle)
+legacy_irf/                      isolated historical compatibility renderer
 ```
 
-Production code does not call the legacy adapter. Only verification uses it.
-The historical `path_impulses.mat` file is not used because the code that
-generated it is absent; consequently the old forecast-path panel is omitted.
+The generic harness remains capable of accepting another explicitly linear
+`.mod` plus a compatible named configuration. It does not pretend that a new
+model automatically has the E&P IH economics: a different expectation
+formulation must be supplied explicitly.
 
-## Reported series
+`run_benchmark_irfs` and `run_impulse_responses` remain temporarily available
+for numerical characterization and the older multi-panel artifact. They are
+not the primary graph path. The non-regenerable `path_impulses.mat` forecast
+panel is not used.
 
-`ir_variable_indices` names the model positions. `build_ir_series` maps paths
-to fourteen reported IRs: four cumulative quantity responses, four direct
-asset/labor responses, and six subjective forecast responses. The benchmark
-workflow additionally carries discounted capital- and labor-income sums in
-draw metadata for the expected-sums figure without changing the characterized
-fourteen-series output contract.
+## Verification
+
+```matlab
+setup_ir_paths
+run_harness_tests(false)  % smoke, structural, arbitrary-belief, path, graph parity
+verify_ir_workflow(true, 1e-10)  % include the full historical fixture
+```

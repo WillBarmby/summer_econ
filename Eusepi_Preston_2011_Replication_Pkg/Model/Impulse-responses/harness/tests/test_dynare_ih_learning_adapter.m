@@ -22,5 +22,17 @@ for draw=1:8
     assert(max(abs(actual.transition-expectedL),[],'all')<1e-11);
     assert(max(abs(actual.shock_impact-expectedS),[],'all')<1e-11);
 end
+
+% The complete recursive-learning path must also preserve legacy timing,
+% initialization, and RLS feedback—not just the one-period ALM mapping.
+rng(31); innovations=randn(1,300);
+generic=simulate_learning_path(plugin,experiment.main.shock_scale*innovations(1:end-1), ...
+    zeros(13,1),initialize_learning_state(plugin.learning), ...
+    experiment.main.explosion_policy);
+[legacy_path,~,~,~,~,~,~,~,~,~,~,~,~,~,~,invalid]=simulate_model_paths( ...
+    experiment.main.model_param,experiment.main.shock_scale,true,true,false,false, ...
+    true,1,0,0,0,0,0,1,innovations,experiment.main.explosion_policy);
+assert(~invalid && generic.status=="completed");
+assert(max(abs(generic.native_path-legacy_path),[],'all')<1e-10);
 fprintf('Dynare-driven E&P IH arbitrary-belief parity tests passed.\n');
 end

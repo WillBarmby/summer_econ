@@ -4,7 +4,7 @@ The harness separates a model experiment into three contracts:
 
 1. A structural model supplies explicitly linear deviation equations, names,
    shocks, calibration, and an independently computed RE solution.
-2. An expectations formulation declares the subjective VAR targets, horizons,
+2. An expectations formulation declares the subjective PLM targets, horizons,
    discounts, and mappings used to turn a PLM into decision-relevant forecasts.
 3. The learning engine owns RLS updates, gain timing, simulation state, paired
    baseline/shocked paths, diagnostics, and IRFs.
@@ -22,7 +22,8 @@ generated functions, dense dynamic-vector layout, and `horizon=0:Inf` parser
 syntax are isolated in `load_dynare_71_linear_model`.
 
 The loader rejects models that are not explicitly declared `model(linear)`.
-The direct expectation evaluator is used inside learning loops. Dynare's
+The E&P benchmark uses a restricted constant-plus-lagged-capital PLM, not a
+full VAR. The direct expectation evaluator is used inside learning loops. Dynare's
 `var_expectation.initialize` and `var_expectation.update` serve as an independent
 reference implementation in tests.
 
