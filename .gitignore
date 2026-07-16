@@ -24,11 +24,12 @@ diff.txt
 # Generated figures
 *.fig
 *.png
-*.pdf — 
+*.pdf
 
 # Dynare-generated code and local installation overrides
 comparison_outputs/
 dynare_generated/
 local_dynare_config.m
 
-comparison_outputs/
+# Editable experiment output; canonical artifacts remain tracked explicitly.
+Eusepi_Preston_2011_Replication_Pkg/Model/Impulse-responses/artifacts/dynare_quantities_custom/

@@ -27,6 +27,30 @@ The output is `dynare_quantities_results.mat`, `dynare_quantities.pdf`, and
 and hours over 40 quarters, with the learning median, RE response, and the
 paper's 25th/75th percentile learning band.
 
+## Canonical verification and editable experiments
+
+The tracked files under `artifacts/dynare_quantities/` are the canonical
+replication artifact. Generate and verify them only with the fixed benchmark
+configuration described above. The structural model, learning adapter,
+historical fixtures, and canonical configuration are frozen except for
+documented bug fixes.
+
+For local exploration, edit and run:
+
+```matlab
+run_default_dynare_experiment
+```
+
+This runner starts from the validated benchmark configuration, exposes the
+experiment choices in one place, and writes only to
+`artifacts/dynare_quantities_custom/`. That directory is intentionally ignored;
+custom results must not replace the canonical artifact.
+
+Dynare reports several parameters in the linear model as unused. They are
+retained deliberately as calibration and steady-state metadata shared with the
+original implementation. Removing them is outside the replication freeze and
+is not required for numerical verification.
+
 ## What Dynare does—and what MATLAB does
 
 ```text
@@ -120,3 +144,8 @@ setup_ir_paths
 run_harness_tests(false)  % smoke, structural, arbitrary-belief, path, graph parity
 verify_ir_workflow(true, 1e-10)  % include the full historical fixture
 ```
+
+The second command is the Phase 1 acceptance check: it verifies fixture hashes,
+structural RE solutions, arbitrary-belief mappings, complete adaptive-learning
+paths, the full 100-draw historical fixture, and explicit-versus-legacy IR
+parity. Run it from a clean checkout before changing the canonical artifact.
