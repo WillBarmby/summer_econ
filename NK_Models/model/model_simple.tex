@@ -1,0 +1,201 @@
+\documentclass[12pt,final]{article}
+\usepackage{color}
+\usepackage{times}
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage[labelsep=colon,footnotesize,singlelinecheck=off]{caption}
+\usepackage[font+=scriptsize]{subcaption}
+\usepackage[paperwidth=8.5in,left=1.0in,right=1.0in,top=1.0in,bottom=1.0in,paperheight=11.0in]{geometry}
+\usepackage{float}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage[flushleft]{threeparttable}
+\usepackage{multirow}
+\usepackage{abstract}
+\usepackage{enumitem}
+\usepackage{psfrag}
+\usepackage{siunitx}
+\usepackage{tikz}
+\usepackage[sort&compress]{natbib}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[breaklinks]{hyperref}
+\hypersetup{pdfdisplaydoctitle=true,bookmarksnumbered=true,colorlinks=true,citecolor=black,linkcolor=darkblue,urlcolor=darkred,pdfstartview=FitH,pdfpagemode=UseNone}
+\usepackage[hyphenbreaks]{breakurl}
+
+%Redefine Auto references
+\let\orgautoref\autoref
+\providecommand{\Autoref}
+        {\def\figureautorefname{Figure}%
+         \def\subfigureautorefname{Panel}%
+         \def\tableautorefname{Table}%
+         \def\sectionautorefname{Section}%
+         \def\subsectionautorefname{Section}%
+         \def\subsubsectionautorefname{Section}%
+         \orgautoref}
+\renewcommand{\autoref}
+        {\def\figureautorefname{figure}%
+         \def\subfigureautorefname{panel}%
+         \def\tableautorefname{table}%
+         \def\sectionautorefname{section}%
+         \def\subsectionautorefname{section}%
+         \def\subsubsectionautorefname{section}%
+         \orgautoref}
+\providecommand{\Autorefs}
+        {\def\figureautorefname{Figures}%
+         \def\tableautorefname{Tables}%
+         \def\sectionautorefname{Sections}%
+         \def\subsectionautorefname{Sections}%
+         \def\subsubsectionautorefname{Sections}%
+         \orgautoref}
+\providecommand{\autorefs}
+        {\def\figureautorefname{figures}%
+         \def\tableautorefname{tables}%
+         \def\sectionautorefname{sections}%
+         \def\subsectionautorefname{sections}%
+         \def\subsubsectionautorefname{sections}%
+         \orgautoref}
+
+%Define Color Names
+\definecolor{Gray}{rgb}{0.65,0.65,0.65}
+\definecolor{darkblue}{rgb}{0,0,0.55}
+\definecolor{darkred}{rgb}{0.5,0,0}
+
+%Define New Font Sizes
+\def\Tiny{\fontsize{5pt}{5pt}\selectfont}
+
+%Section Headings
+\newcommand\Bheadfont{\fontsize{14pt}{\baselineskip}\selectfont}
+\titleformat{\section}[hang]{\normalfont\sc\color{darkblue}\Bheadfont}{\thesection\hskip0.618em}{0em}{}
+\titlespacing*{\section}{0pt}{15pt plus 2pt minus 2pt}{9pt plus 2pt minus 2pt}
+\titleformat{\subsection}[runin]{\normalfont\sc\color{darkblue}} {\thesubsection\hskip0.618em}{0em}{}
+\titlespacing*{\subsection}{0pt}{13pt plus 2pt minus 2pt}{13pt plus 2pt minus 2pt}
+\titleformat{\subsubsection}[runin]{\normalfont\sc\color{darkblue}} {\thesubsubsection\hskip0.618em}{0em}{}
+\titlespacing*{\subsubsection}{0pt}{13pt plus 2pt minus 2pt}{13pt plus 2pt minus 2pt}
+\titleformat{\paragraph}[runin]{\bfseries}{\theparagraph\hskip0.618em}{0em}{}
+\titlespacing*{\paragraph}{0pt}{13pt plus 2pt minus 2pt}{13pt plus 2pt minus 2pt}
+
+%Header and Footer
+\setlength{\headheight}{15pt}
+\pagestyle{fancy} \fancyhf{}
+\fancyhead[C]{\textsc{\color{Gray} Gavin et al: The ZLB, the Dual Mandate, and Unconventional Dynamics}}
+\fancyfoot[C]{\thepage} %Put pagination in Footer
+\renewcommand{\headrulewidth}{\iffloatpage{0pt}{0pt}} %No underline in header
+
+%Change Abstract Header
+\renewcommand{\abstractnamefont}{\large\textsc}
+
+%Imported File Type
+\DeclareGraphicsExtensions{.eps}
+
+%Table mid rule width
+\newcommand{\otoprule}{\midrule[\heavyrulewidth]}
+
+\def\signed #1{{\leavevmode\unskip\nobreak\hfil\penalty50\hskip2em
+  \hbox{}\nobreak\hfil\small{(#1)}%
+  \parfillskip=0pt \finalhyphendemerits=0 \endgraf}}
+
+\newsavebox\mybox
+\newenvironment{aquote}[1]
+  {\savebox\mybox{\small{#1}}\begin{quote}}
+  {\signed{\usebox\mybox}\end{quote}}
+
+% Possessives in citation
+\def\citeapos#1{\citeauthor{#1}'s (\citeyear{#1})}
+
+\sisetup{
+    group-digits=true,
+    group-separator={,},
+    group-four-digits=true,
+}
+
+\begin{document}
+
+\section{Economic Models} \label{sec:models}
+
+This section presents two New Keynesian models with \citet{Rotemberg1982} price adjustment costs. Both models assume stochastic processes for the discount factor and technology, but they differ in their treatment of capital. Model 1 does not include capital while Model 2 does.
+
+\subsection{Model 1: Baseline}\label{sec:model1}
+
+A representative household chooses $\{c_t,n_t,b_t\}_{t=0}^\infty$ to maximize expected lifetime utility given by $E_0\sum_{t=0}^\infty\beta[\log c_t-\chi n_t^{1+\eta}/(1+\eta)]$, where $1/\eta$ is the Frisch elasticity of labor supply, $c_t$ is consumption, $n_t$ is labor hours, $b_t$ is the real value of a $1$-period nominal bond, $E_0$ is an expectation operator conditional on information available in period $0$. Those choices are constrained by $c_t+b_t=w_tn_t+r_{t-1}b_{t-1}/\pi_t+d_t$, where $\pi_t=p_t/p_{t-1}$ is the gross inflation rate, $w_t$ is the real wage rate, $r_t$ is the gross nominal interest rate set by the central bank, and $d_t$ are profits from intermediate firms. The optimality conditions to the household's problem imply
+\begin{gather}
+w_t=\chi n_t^\eta c_t,  \label{FOC labor} \\
+1= r_tE_t[\beta (c_t/c_{t+1})/\pi_{t+1}]. \label{bond euler1}
+\end{gather}
+
+The production sector consists of monopolistically competitive intermediate goods firms who produce a continuum of differentiated inputs and a representative final goods firm. Each firm $f\in[0,1]$ in the intermediate goods sector produces a differentiated good, $y_t(f)$, with identical technologies given by $y_t(f)=z_tn_t(f)$, where $n_t(f)$ is the level of employment used by firm $f$. $z_t$ represents the level of technology, which is common across firms and follows
+\begin{equation}
+  z_t=\bar{z}(z_{t-1}/\bar{z})^{\rho_z}\exp(\upsilon_t), \label{technology process}
+\end{equation}
+where $\bar{z}$ is steady-state technology, $0\leq\rho_z<1$, and $\upsilon\sim\mathbb{N}(0,\sigma_\upsilon^2)$. Each intermediate firm chooses its labor supply to minimize its operating costs, $w_tn_t(f)$, subject to its production function. The final goods firm purchases $y_t(f)$ units from each intermediate goods firm to produce the final good, $y_t\equiv[\int_0^1y_t(f)^{(\theta-1)/\theta}df]^{\theta/(\theta-1)}$ according to a \citet{DixitStiglitz1977} aggregator, where $\theta>1$ measures the elasticity of substitution between the intermediate goods. The optimality condition to the firm's profit maximization problem then yields the demand function for intermediate inputs given by $y_t(f)=(p_t(f)/p_t)^{-\theta}y_t$, where $p_t=[\int_0^1p_t(f)^{1-\theta}df]^{1/(1-\theta)}$ is the price of the final good.
+
+Following \citet{Rotemberg1982}, each firm faces a cost to adjusting its price, $adj_t(f)$, which emphasizes the negative effect that price changes can have on customer-firm relationships. Using the functional form in \citet{Ireland1997}, $adj_t(f) = \varphi[p_t(f)/(\bar{\pi} p_{t-1}(f))-1]^2y_t/2$, the real profits of firm $f$ are $d_t(f)=(p_t(f)/p_t)y_t(f)-w_tn_t(f)-adj_t(f)$, where $\varphi\geq0$ scales the size of the adjustment costs and $\bar{\pi}$ is the steady-state gross inflation rate. Firm $f$ chooses its price, $p_t(f)$, to maximize the expected discounted present value of real profits $E_t\sum_{k=t}^{\infty}\lambda_{t,k}d_k(f)$, where $\lambda_{t,t}\equiv1$, $\lambda_{t,t+1}=\beta(c_t/c_{t+1})$ is the pricing kernel between periods $t$ and $t+1$ and $\lambda_{t,k}\equiv\prod_{j=t+1}^{k}\lambda_{j-1,j}$. In a symmetric equilibrium, all firms make identical decisions and the optimality condition implies
+\begin{gather}
+  \varphi\left(\frac{\pi_t}{\bar{\pi}}-1\right)\frac{\pi_t}{\bar{\pi}} = (1-\theta) + \theta \Psi_t + \varphi E_t\left[\lambda_{t,t+1}\left(\frac{\pi_{t+1}}{\bar{\pi}}-1\right)\frac{\pi_{t+1}}{\bar{\pi}}\frac{y_{t+1}}{y_t}\right], \label{firm pricing}
+\end{gather}
+where $\Psi_t=w_t/z_t$ is the real marginal cost. In the absence of price adjustment costs (i.e., $\varphi=0$), $\Psi_t=(\theta-1)/\theta $, which is the inverse of a firm's markup of price over marginal cost.
+
+Each period, the central bank sets the gross nominal interest rate according to
+\begin{equation}
+  r_t=\max\{1,r^*(\pi_t/\pi^*)^{\phi_\pi}(y_t/y_t^*)^{\phi_y}\}, \label{MP rule}
+\end{equation}
+where $\pi^*=\bar{\pi}$ is the inflation rate target and $\phi_\pi$ and $\phi_y$ are the policy responses to inflation and output. The output target is either steady-state output, $y_t^*=\bar{y}$, or potential output, $y_t^*=y_t^n=(\chi\mu)^{-1/(1+\eta)}z_t$, which is the level of output when $\varphi=0$. We also examine the case where $\phi_{y}=0$.
+
+The resource constraint is given by $c_t=y_t-adj_t\equiv y_t^{adj}$, where $y_t^{adj}$ includes the value added by intermediate firms, which is their output minus quadratic price adjustment costs. A competitive equilibrium consists of sequences of quantities, $\{c_t,n_t,b_t,y_t,y_t^{adj}\}_{t=0}^\infty$, prices, $\{w_t,r_t,\pi_t\}_{t=0}^\infty$, and exogenous variables, $\{z_t\}_{t=0}^\infty$ that satisfy the household's and firm's optimality conditions, \eqref{FOC labor}, \eqref{bond euler1}, and \eqref{firm pricing}, the production function, $y_t=z_tn_t$, the monetary policy rule, \eqref{MP rule}, the technology process, \eqref{technology process}, the bond market clearing condition, $b_t=0$, the resource constraint, and the definition of adjusted output.
+
+\subsection{Model 2: Baseline with Capital}\label{sec:model2}
+
+Model 2 adds capital accumulation to Model 1. The household chooses sequences $\{c_t,i_t,n_t,b_t\}_{t=0}^{\infty}$ to maximize the preferences in Model 1 subject to
+\begin{gather}
+  c_t+i_t+k_{t-1}+b_t=w_tn_t+r_t^kk_{t-1}+r_{t-1}b_{t-1}/\pi_t+d_t, \label{bc2}\\
+  k_t=(1-\delta)k_{t-1}+i_t,  \label{inv2}
+\end{gather}
+where $i_t$ is investment, $k_t$ is capital, and $r_t^k$ is the real rental rate of capital. Optimality yields a consumption Euler equation given by
+\begin{gather}
+  \frac{1}{c_t}\ =E_t\left[\beta \frac{1}{c_{t+1}}\left(r_{t+1}^k  + 1-\delta \right)\right]. \label{FOC k}
+\end{gather}
+
+Intermediate firm $f\in[0,1]$ produces a differentiated good, $y_t(f)$, according to $y_t(f)=z_tk_{t-1}(f)^{\alpha}n_t(f)^{1-\alpha}$, where $k_t(f)$ and $n_t(f)$ are the levels of capital and employment used by firm $f$. Each intermediate firm then chooses its inputs to minimize operating costs, $r_t^kk_{t-1}(f)+w_tn_t(f)$, subject to its production function, which yields a consolidated optimality conditions given by
+\begin{gather}
+  r_t^k = \alpha \Psi_t y_t/k_{t-1}, \label{Firm capital FOC} \\
+  w_t = (1 - \alpha)  \Psi_t y_t/n_t. \label{Firm labor FOC}
+\end{gather}
+
+The resource constraint includes the output lost due to price and capital adjustment costs and is given by $c_t+i_t =y_t^{adj}$. A competitive equilibrium consists of sequences of quantities, $\{c_t,n_t,i_t,k_t,b_t,y_t,y_t^{adj}\}_{t=0}^\infty$, prices, $\{w_t,r_t^k,r_t,\pi_t\}_{t=0}^\infty$, and exogenous variables, $\{z_t\}_{t=0}^\infty$ that satisfy the household's and firm's optimality conditions, \eqref{FOC labor}, \eqref{bond euler1}, \eqref{firm pricing}, \eqref{FOC k}, \eqref{Firm capital FOC}, \eqref{Firm labor FOC}, the production function, $y_t=z_tk_{t-1}^\alpha n_t^{1-\alpha}$, the monetary policy rule, \eqref{MP rule}, the technology process, \eqref{technology process}, the capital law of motion, \eqref{inv2}, bond market clearing, $b_t=0$, the resource constraint, and the definition of adjusted output.
+
+\section{Calibration, Solution Method, and Simulation Procedure}\label{sec:calibration}
+
+\subsection{Calibration}
+
+\begin{table}[t]\scriptsize
+  \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}cclcc}
+  \toprule
+  Frisch Elasticity of Labor Supply       &$1/\eta$   & $3$    & Inflation Coefficient: MP Rule            &$\phi_\pi$    &$1.5$   \\
+  Elasticity of Substitution between Goods&$\theta$   & $6$    & Output Coefficient: MP Rule               &$\phi_y$      &$0.1$   \\
+  Rotemberg Adjustment Cost Coefficient   &$\varphi$  & $59.11$& Steady-State Technology                   &$\bar{z}$     &$1$     \\
+  Steady-State Labor                      &$\bar{n}$  & $0.33$ & Technology Persistence                    &$\rho_z$      &$0.9$   \\
+  Capital Depreciation Rate$^\dag$        &$\delta$   & $0.025$& Technology Shock Standard Deviation       &$\sigma_\upsilon$&$0.0025$\\
+  Cost Share of Capital$^\dag$            &$\alpha$   & $0.33$ & Steady-State Discount Factor              &$\bar{\beta}$ &$0.995$ \\
+  Capital Adjustment Cost$^\dag$          &$\phi$     & $5.6$  & Discount Factor Persistence               &$\rho_\beta$  &$0.8$   \\
+  Steady-State Inflation                  &$\bar{\pi}$& $1.006$& Discount Factor Standard Deviation        &$\sigma_\varepsilon$&$0.0025$\\
+  \bottomrule
+  \end{tabular*}
+  \caption{Baseline calibration. A $\dag$ denotes a parameter that only applies to Model 2.}
+  \label{tab:calibration}
+\end{table}\normalsize
+
+We calibrate the models in \autoref{sec:models} at a quarterly frequency using common values in the monetary policy literature. The parameters are shown in \autoref{tab:calibration}. The annual real interest rate is set to $2\%$, which implies a steady-state quarterly discount factor, $\bar{\beta}$, equal to $0.995$. Those values correspond to the ratio of the federal funds rate to the percent change in the GDP deflator from 1983-2007. The Frisch elasticity of labor supply, $1/\eta$, is set to $3$, which is consistent with \citet{Peterman2012}. The leisure preference parameter, $\chi$, is calibrated so that steady-state labor equals $1/3$ of the available time. Capital's share of output, $\alpha$, is set to $0.33$ and the quarterly depreciation rate, $\delta$, equals $2.5\%$. The capital adjustment cost parameter, $\phi$, is set to $5.6$, which follows \citet{Eberly1997} and \citet{ErcegLevin2003}. The elasticity of substitution between intermediate goods, $\theta$, is set to $6$, which corresponds to an average markup of price over marginal cost equal to $20\%$. The price adjustment cost parameter, $\varphi$, is set to $59.11$, which is consistent with a \citet{Calvo1983} price-setting specification where prices change on average once every four quarters.
+
+The steady-state gross inflation rate, $\bar{\pi}$, is set to $1.006$, which implies an annual inflation rate target of $2.4\%$. That value equals the average growth rate of the U.S. PCE chain-type price index from 1983-2007. In our baseline calibration, we set the coefficients on inflation and output in the monetary policy rule to $1.5$ and $0.1$, respectively, but we also consider several other values.
+
+The likelihood that the nominal interest rate falls to and remains at zero depends on both the parameters of the discount factor and technology processes. \citet{RichterThrockmorton2015} show a clear tradeoff exists between the persistence and the standard deviation of the stochastic shock processes. As the persistence of a process increases, the standard deviation of that shock must decline, otherwise our numerical algorithm will not converge to a minimum state variable (MSV) solution. The failure to converge occurs because the economy either remains at the ZLB too long when the shocks are very persistent or falls to the ZLB too frequently when the processes are highly volatile. We chose the discount factor and technology parameters so (1) They are constant across all models; (2) They generate ZLB events when simulating the model; and (3) They match the data as closely as possible. Specifically, we set the persistence of the discount factor, $\rho_\beta$, equal to $0.8$ and the standard deviation of the shock, $\sigma_\varepsilon$, equal to $0.0025$. Those values follow \citet{FernandezVillaverdeEtAl2012} who assume that a discount factor shock has a half life of about $3$ quarters. Steady-state technology, $\bar{z}$, is normalized to $1$, the persistence of the technology shock, $\rho_z$, is $0.9$, and the standard deviation of the shock, $\sigma_\upsilon$, equals $0.0025$. In the data, deviations of log real GDP from trend are $1.85\%$ per quarter and deviations of the log difference in the PCE price index are $0.29\%$ from 1983-2007. The equivalent values in our models are smaller than is observed since additional real world shocks and sources of persistence are needed to match the data.
+
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------
+% Bibliography
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------
+%\pagebreak
+\bibliographystyle{ecta}
+\bibliography{RefLib}
+
+\end{document} 
