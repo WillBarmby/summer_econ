@@ -1,0 +1,50 @@
+This is BibTeX, Version 0.99e (TeX Live 2026)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: model.aux
+The style file: ecta.bst
+Database file #1: RefLib.bib
+Warning--I didn't find a database entry for "Peterman2012"
+Warning--I didn't find a database entry for "RichterThrockmorton2015"
+Warning--I didn't find a database entry for "FernandezVillaverdeEtAl2012"
+You've used 6 entries,
+            2849 wiz_defined-function locations,
+            652 strings with 5605 characters,
+and the built_in function-call counts, 3340 in all, are:
+= -- 288
+> -- 94
+< -- 12
++ -- 32
+- -- 24
+* -- 269
+:= -- 521
+add.period$ -- 12
+call.type$ -- 6
+change.case$ -- 32
+chr.to.int$ -- 6
+cite$ -- 6
+duplicate$ -- 244
+empty$ -- 276
+format.name$ -- 48
+if$ -- 678
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 44
+newline$ -- 23
+num.names$ -- 30
+pop$ -- 62
+preamble$ -- 1
+purify$ -- 32
+quote$ -- 0
+skip$ -- 97
+stack$ -- 0
+substring$ -- 209
+swap$ -- 120
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 72
+warning$ -- 0
+while$ -- 24
+width$ -- 0
+write$ -- 76
+(There were 3 warnings)

@@ -1,0 +1,34 @@
+\begin{thebibliography}{6}
+\newcommand{\enquote}[1]{``#1''}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[\protect\citeauthoryear{Calvo}{Calvo}{1983}]{Calvo1983}
+\textsc{Calvo, G.~A.} (1983): \enquote{Staggered Prices in a Utility-Maximizing
+  Framework,} \emph{Journal of Monetary Economics}, 12, 383--398.
+
+\bibitem[\protect\citeauthoryear{Dixit and Stiglitz}{Dixit and
+  Stiglitz}{1977}]{DixitStiglitz1977}
+\textsc{Dixit, A.~K. and J.~E. Stiglitz} (1977): \enquote{Monopolistic
+  Competition and Optimum Product Diversity,} \emph{American Economic Review},
+  67, 297--308.
+
+\bibitem[\protect\citeauthoryear{Eberly}{Eberly}{1997}]{Eberly1997}
+\textsc{Eberly, J.~C.} (1997): \enquote{International Evidence on Investment
+  and Fundamentals,} \emph{European Economic Review}, 41, 1055--1078.
+
+\bibitem[\protect\citeauthoryear{Erceg and Levin}{Erceg and
+  Levin}{2003}]{ErcegLevin2003}
+\textsc{Erceg, C.~J. and A.~T. Levin} (2003): \enquote{Imperfect Credibility
+  and Inflation Persistence,} \emph{Journal of Monetary Economics}, 50,
+  915--944.
+
+\bibitem[\protect\citeauthoryear{Ireland}{Ireland}{1997}]{Ireland1997}
+\textsc{Ireland, P.~N.} (1997): \enquote{A Small, Structural, Quarterly Model
+  for Monetary Policy Evaluation,} \emph{Carnegie-Rochester Conference Series
+  on Public Policy}, 47, 83--108.
+
+\bibitem[\protect\citeauthoryear{Rotemberg}{Rotemberg}{1982}]{Rotemberg1982}
+\textsc{Rotemberg, J.~J.} (1982): \enquote{Sticky Prices in the United States,}
+  \emph{Journal of Political Economy}, 90, 1187--1211.
+
+\end{thebibliography}
