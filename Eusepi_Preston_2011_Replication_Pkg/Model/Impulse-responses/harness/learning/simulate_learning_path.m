@@ -12,6 +12,7 @@ diagnostics = cell(1,T-1);
 belief_distance = NaN(1,T-1);
 plm_roots = NaN(1,T-1);
 alm_roots = NaN(1,T-1);
+one_step_forecasts = NaN(n,T);
 status = "completed";
 termination = empty_termination();
 last_period = T;
@@ -36,6 +37,9 @@ for t = 2:T
         last_period = t;
         break
     end
+    % Match the archive's timing: form the t+1 forecast using beliefs held
+    % in t, before the observation at t is incorporated by RLS.
+    one_step_forecasts(:,t) = plm.intercept+plm.transition*y(:,t);
     x = plugin.regressor(y,t);
     target = plugin.outcome(y,t);
     [beliefs,diagnostics{t-1}] = update_rls(beliefs,x,target,plugin.learning);
@@ -55,6 +59,7 @@ run = struct('native_path',y(:,1:last_period),'learning_state',beliefs, ...
     'diagnostics',{diagnostics(1:max(0,last_period-1))}, ...
     'belief_distance_from_re',belief_distance,'plm_stability_root',plm_roots, ...
     'alm_stability_root',alm_roots,'status',status,'termination',termination, ...
+    'one_step_forecasts',one_step_forecasts(:,1:last_period), ...
     'invalid',status=="invalid",'explosive',status=="explosive");
 end
 

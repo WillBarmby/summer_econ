@@ -149,3 +149,61 @@ The second command is the Phase 1 acceptance check: it verifies fixture hashes,
 structural RE solutions, arbitrary-belief mappings, complete adaptive-learning
 paths, the full 100-draw historical fixture, and explicit-versus-legacy IR
 parity. Run it from a clean checkout before changing the canonical artifact.
+
+## Euler-equation learning moments
+
+The archive-compatible EE workflow is a separate results layer; it does not
+change the frozen model equations. It uses the archived EE switch, shock scale,
+restricted PLM, RLS timing, data transformations, sample window, and HP filter:
+
+```matlab
+setup_ir_paths
+cfg = ep_ee_archive_config();
+cfg.n_draws = 10;       % quick development run
+small_gain = run_ep_ee_archive_moments(cfg);
+
+cfg.gain = 0.04;        % archived large-gain comparison
+large_gain = run_ep_ee_archive_moments(cfg);
+```
+
+For the project-facing, paper-faithful Dynare 7.1 version, use:
+
+```matlab
+cfg = ep_ee_paper_config();
+dynare_small_gain = run_ep_ee_dynare_moments(cfg);
+test_ep_ee_paper_specification   % consumption is directly forecast
+```
+
+`run_ep_ee_archive_moments` remains the historical MATLAB oracle.
+`run_ep_ee_dynare_moments` loads the linear Euler-equation `.mod`, obtains the
+structural matrices and RE initialization from Dynare 7.1, and then performs
+the period-by-period subjective-expectations and RLS loop in MATLAB. Dynare's
+standard RE solver alone cannot perform that adaptive-learning recursion.
+
+The two EE variants are deliberately not conflated:
+
+- `ep_ee_learning_config("paper",gain)` learns capital return, consumption,
+  and capital. This implements the paper's statement following equation (17)
+  that households directly forecast their own future consumption.
+- `ep_ee_learning_config("archive",gain)` reproduces the released EE code's
+  effective forecasting setup. The archive continues updating its first seven
+  rows and does not replace the consumption PLM. The reduced Dynare equivalent
+  omits the redundant bond row.
+
+Use `test_ep_ee_dynare_learning_path` only as archive-replication evidence. Use
+the paper variant for the substantive EE-versus-IH and later NK comparison, and
+report the archive discrepancy as a documented robustness/replication finding.
+
+Set `cfg.n_draws = 5000` only for the historical Monte Carlo scale. The old
+archive did not record an RNG seed, so exact individual draws cannot be
+recovered; this workflow records an explicit seed and reports every draw's
+completion status. Its eight reported columns are the principal Table 5
+moments: output volatility, relative consumption/investment/hours volatility,
+growth autocorrelations for consumption/output/investment, and the one-quarter
+wage forecast-error autocorrelation.
+
+This EE result is the benchmark for a later NK comparison: first establish how
+one-period Euler-equation learning behaves inside E&P's RBC environment, then
+apply a clearly matched EE information set, gain, shock experiment, and moment
+definition in the NK model. It is not evidence that the two structural models
+are otherwise identical.
