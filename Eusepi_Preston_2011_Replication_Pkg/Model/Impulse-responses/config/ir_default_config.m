@@ -28,15 +28,6 @@ config.main.explosion_policy = struct( ...
     'reject_nonfinite', true, ...
     'variable_indices', 1:13);
 
-config.model = struct();
-config.model.param = zeros(6, 1);
-config.model.param(1) = 1;
-config.model.param(2) = 0;
-config.model.param(3) = 1;
-config.model.param(4) = 1;
-config.model.param(5) = 0.0001;
-config.model.param(6) = 0;
-
 config.simulation_example = struct();
 config.simulation_example.expectations_enabled = true;
 config.simulation_example.impulse_response_enabled = false;
