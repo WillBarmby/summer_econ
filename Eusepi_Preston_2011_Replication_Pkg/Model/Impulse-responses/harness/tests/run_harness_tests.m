@@ -11,6 +11,7 @@ test_ep_ih_alm();
 test_dynare_ih_learning_adapter();
 test_dynare_quantities_irfs();
 test_ep_learning_path();
+test_ep_ee_learning_path();
 test_dynare_expectation_reference();
 verify_ep10_structural_re();
 verify_ep13_ih_re();
