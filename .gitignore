@@ -38,7 +38,9 @@ Eusepi_Preston_2011_Replication_Pkg/Model/Impulse-responses/artifacts/dynare_qua
 *.aux
 *.bbl
 *.blg
-*.local_dynare_config
+*.log
 *.out
 *.gz
+*.fls
+*.fdb*
 
