@@ -33,3 +33,12 @@ local_dynare_config.m
 
 # Editable experiment output; canonical artifacts remain tracked explicitly.
 Eusepi_Preston_2011_Replication_Pkg/Model/Impulse-responses/artifacts/dynare_quantities_custom/
+
+# Latex cruft
+*.aux
+*.bbl
+*.blg
+*.local_dynare_config
+*.out
+*.gz
+
