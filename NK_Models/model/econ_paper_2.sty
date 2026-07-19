@@ -1,0 +1,197 @@
+% econ_paper_2.sty
+% Reusable formatting for economics papers.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{econ_paper_2}[2026/07/19 Economics paper style]
+
+% -----------------------------------------------------------------------------
+% Core packages
+% -----------------------------------------------------------------------------
+\RequirePackage{xcolor}
+\RequirePackage{times}
+\RequirePackage{amsmath,amssymb,amsthm}
+\RequirePackage{graphicx}
+\RequirePackage[labelsep=colon,footnotesize,singlelinecheck=off]{caption}
+\RequirePackage[font+=scriptsize]{subcaption}
+\RequirePackage[
+  paperwidth=8.5in,
+  paperheight=11in,
+  left=1in,
+  right=1in,
+  top=1in,
+  bottom=1in
+]{geometry}
+\RequirePackage{float}
+\RequirePackage{setspace}
+\RequirePackage{booktabs}
+\RequirePackage[flushleft]{threeparttable}
+\RequirePackage{multirow}
+\RequirePackage{abstract}
+\RequirePackage{enumitem}
+\RequirePackage{siunitx}
+\RequirePackage{tikz}
+\RequirePackage[sort&compress]{natbib}
+\RequirePackage{fancyhdr}
+\RequirePackage{titlesec}
+
+% -----------------------------------------------------------------------------
+% Colors
+% -----------------------------------------------------------------------------
+% Original names retained for compatibility.
+\definecolor{Gray}{rgb}{0.65,0.65,0.65}
+\definecolor{darkblue}{rgb}{0,0,0.55}
+\definecolor{darkred}{rgb}{0.5,0,0}
+
+% More descriptive aliases used by cleaned documents.
+\colorlet{econGray}{Gray}
+\colorlet{econDarkBlue}{darkblue}
+\colorlet{econDarkRed}{darkred}
+
+% Hyperref should come late, after most other packages and color definitions.
+\RequirePackage[breaklinks]{hyperref}
+\hypersetup{
+  pdfdisplaydoctitle=true,
+  bookmarksnumbered=true,
+  colorlinks=true,
+  citecolor=black,
+  linkcolor=econDarkBlue,
+  urlcolor=econDarkRed,
+  pdfstartview=FitH,
+  pdfpagemode=UseNone
+}
+
+% -----------------------------------------------------------------------------
+% Automatic reference names
+% -----------------------------------------------------------------------------
+\let\econ@originalautoref\autoref
+
+\providecommand{\Autoref}{%
+  \def\figureautorefname{Figure}%
+  \def\subfigureautorefname{Panel}%
+  \def\tableautorefname{Table}%
+  \def\sectionautorefname{Section}%
+  \def\subsectionautorefname{Section}%
+  \def\subsubsectionautorefname{Section}%
+  \econ@originalautoref
+}
+
+\renewcommand{\autoref}{%
+  \def\figureautorefname{figure}%
+  \def\subfigureautorefname{panel}%
+  \def\tableautorefname{table}%
+  \def\sectionautorefname{section}%
+  \def\subsectionautorefname{section}%
+  \def\subsubsectionautorefname{section}%
+  \econ@originalautoref
+}
+
+\providecommand{\Autorefs}{%
+  \def\figureautorefname{Figures}%
+  \def\subfigureautorefname{Panels}%
+  \def\tableautorefname{Tables}%
+  \def\sectionautorefname{Sections}%
+  \def\subsectionautorefname{Sections}%
+  \def\subsubsectionautorefname{Sections}%
+  \econ@originalautoref
+}
+
+\providecommand{\autorefs}{%
+  \def\figureautorefname{figures}%
+  \def\subfigureautorefname{panels}%
+  \def\tableautorefname{tables}%
+  \def\sectionautorefname{sections}%
+  \def\subsectionautorefname{sections}%
+  \def\subsubsectionautorefname{sections}%
+  \econ@originalautoref
+}
+
+% -----------------------------------------------------------------------------
+% Font sizes and section headings
+% -----------------------------------------------------------------------------
+\newcommand{\Tiny}{\fontsize{5pt}{5pt}\selectfont}
+\newcommand{\Bheadfont}{\fontsize{14pt}{\baselineskip}\selectfont}
+
+\titleformat{\section}[hang]
+{\normalfont\scshape\color{econDarkBlue}\Bheadfont}
+{\thesection\hspace{0.618em}}
+{0em}
+{}
+\titlespacing*{\section}
+{0pt}{15pt plus 2pt minus 2pt}{9pt plus 2pt minus 2pt}
+
+\titleformat{\subsection}[runin]
+{\normalfont\scshape\color{econDarkBlue}}
+{\thesubsection\hspace{0.618em}}
+{0em}
+{}
+\titlespacing*{\subsection}
+{0pt}{13pt plus 2pt minus 2pt}{13pt plus 2pt minus 2pt}
+
+\titleformat{\subsubsection}[runin]
+{\normalfont\scshape\color{econDarkBlue}}
+{\thesubsubsection\hspace{0.618em}}
+{0em}
+{}
+\titlespacing*{\subsubsection}
+{0pt}{13pt plus 2pt minus 2pt}{13pt plus 2pt minus 2pt}
+
+\titleformat{\paragraph}[runin]
+{\normalfont\bfseries}
+{\theparagraph\hspace{0.618em}}
+{0em}
+{}
+\titlespacing*{\paragraph}
+{0pt}{13pt plus 2pt minus 2pt}{13pt plus 2pt minus 2pt}
+
+% -----------------------------------------------------------------------------
+% Header and footer
+% -----------------------------------------------------------------------------
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+% Set a paper-specific running header from the main .tex file:
+%   \setpaperheader{Author: Short Paper Title}
+\newcommand{\setpaperheader}[1]{%
+  \fancyhead[C]{\textsc{\color{econGray}#1}}%
+}
+
+% No paper-specific header is imposed by default.
+\setpaperheader{}
+
+% -----------------------------------------------------------------------------
+% Abstract, graphics, tables, and quotations
+% -----------------------------------------------------------------------------
+\renewcommand{\abstractnamefont}{\large\scshape}
+
+% Modern graphics formats are preferred; EPS remains available when supported.
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.jpeg,.eps}
+
+\newcommand{\otoprule}{\midrule[\heavyrulewidth]}
+
+\newcommand{\signed}[1]{%
+  \leavevmode\unskip\nobreak\hfil\penalty50\hskip2em
+  \hbox{}\nobreak\hfil\small(#1)%
+  \parfillskip=0pt
+  \finalhyphendemerits=0
+  \endgraf
+}
+
+\newsavebox{\econquotebox}
+\newenvironment{aquote}[1]
+{\savebox{\econquotebox}{\small #1}\begin{quote}}
+    {\signed{\usebox{\econquotebox}}\end{quote}}
+
+% Possessive author citation: \citeapos{Smith2020} -> Smith's (2020)
+\newcommand{\citeapos}[1]{\citeauthor{#1}'s (\citeyear{#1})}
+
+% -----------------------------------------------------------------------------
+% Number formatting
+% -----------------------------------------------------------------------------
+\sisetup{
+  group-digits=integer,
+  group-separator={,},
+  group-minimum-digits=4
+}

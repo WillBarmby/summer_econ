@@ -1,117 +1,7 @@
 \documentclass[12pt,final]{article}
-\usepackage{color}
-\usepackage{times}
-\usepackage{amssymb,amsmath,amsthm}
-\usepackage{graphicx}
-\usepackage{enumerate}
-\usepackage[labelsep=colon,footnotesize,singlelinecheck=off]{caption}
-\usepackage[font+=scriptsize]{subcaption}
-\usepackage[paperwidth=8.5in,left=1.0in,right=1.0in,top=1.0in,bottom=1.0in,paperheight=11.0in]{geometry}
-\usepackage{float}
-\usepackage{setspace}
-\usepackage{booktabs}
-\usepackage[flushleft]{threeparttable}
-\usepackage{multirow}
-\usepackage{abstract}
-\usepackage{enumitem}
-\usepackage{psfrag}
-\usepackage{siunitx}
-\usepackage{tikz}
-\usepackage[sort&compress]{natbib}
-\usepackage{fancyhdr}
-\usepackage{titlesec}
-\usepackage[breaklinks]{hyperref}
-\hypersetup{pdfdisplaydoctitle=true,bookmarksnumbered=true,colorlinks=true,citecolor=black,linkcolor=darkblue,urlcolor=darkred,pdfstartview=FitH,pdfpagemode=UseNone}
-\usepackage[hyphenbreaks]{breakurl}
-
-%Redefine Auto references
-\let\orgautoref\autoref
-\providecommand{\Autoref}
-        {\def\figureautorefname{Figure}%
-         \def\subfigureautorefname{Panel}%
-         \def\tableautorefname{Table}%
-         \def\sectionautorefname{Section}%
-         \def\subsectionautorefname{Section}%
-         \def\subsubsectionautorefname{Section}%
-         \orgautoref}
-\renewcommand{\autoref}
-        {\def\figureautorefname{figure}%
-         \def\subfigureautorefname{panel}%
-         \def\tableautorefname{table}%
-         \def\sectionautorefname{section}%
-         \def\subsectionautorefname{section}%
-         \def\subsubsectionautorefname{section}%
-         \orgautoref}
-\providecommand{\Autorefs}
-        {\def\figureautorefname{Figures}%
-         \def\tableautorefname{Tables}%
-         \def\sectionautorefname{Sections}%
-         \def\subsectionautorefname{Sections}%
-         \def\subsubsectionautorefname{Sections}%
-         \orgautoref}
-\providecommand{\autorefs}
-        {\def\figureautorefname{figures}%
-         \def\tableautorefname{tables}%
-         \def\sectionautorefname{sections}%
-         \def\subsectionautorefname{sections}%
-         \def\subsubsectionautorefname{sections}%
-         \orgautoref}
-
-%Define Color Names
-\definecolor{Gray}{rgb}{0.65,0.65,0.65}
-\definecolor{darkblue}{rgb}{0,0,0.55}
-\definecolor{darkred}{rgb}{0.5,0,0}
-
-%Define New Font Sizes
-\def\Tiny{\fontsize{5pt}{5pt}\selectfont}
-
-%Section Headings
-\newcommand\Bheadfont{\fontsize{14pt}{\baselineskip}\selectfont}
-\titleformat{\section}[hang]{\normalfont\sc\color{darkblue}\Bheadfont}{\thesection\hskip0.618em}{0em}{}
-\titlespacing*{\section}{0pt}{15pt plus 2pt minus 2pt}{9pt plus 2pt minus 2pt}
-\titleformat{\subsection}[runin]{\normalfont\sc\color{darkblue}} {\thesubsection\hskip0.618em}{0em}{}
-\titlespacing*{\subsection}{0pt}{13pt plus 2pt minus 2pt}{13pt plus 2pt minus 2pt}
-\titleformat{\subsubsection}[runin]{\normalfont\sc\color{darkblue}} {\thesubsubsection\hskip0.618em}{0em}{}
-\titlespacing*{\subsubsection}{0pt}{13pt plus 2pt minus 2pt}{13pt plus 2pt minus 2pt}
-\titleformat{\paragraph}[runin]{\bfseries}{\theparagraph\hskip0.618em}{0em}{}
-\titlespacing*{\paragraph}{0pt}{13pt plus 2pt minus 2pt}{13pt plus 2pt minus 2pt}
-
-%Header and Footer
-\setlength{\headheight}{15pt}
-\pagestyle{fancy} \fancyhf{}
-\fancyhead[C]{\textsc{\color{Gray} Gavin et al: The ZLB, the Dual Mandate, and Unconventional Dynamics}}
-\fancyfoot[C]{\thepage} %Put pagination in Footer
-\renewcommand{\headrulewidth}{\iffloatpage{0pt}{0pt}} %No underline in header
-
-%Change Abstract Header
-\renewcommand{\abstractnamefont}{\large\textsc}
-
-%Imported File Type
-\DeclareGraphicsExtensions{.eps}
-
-%Table mid rule width
-\newcommand{\otoprule}{\midrule[\heavyrulewidth]}
-
-\def\signed #1{{\leavevmode\unskip\nobreak\hfil\penalty50\hskip2em
-  \hbox{}\nobreak\hfil\small{(#1)}%
-  \parfillskip=0pt \finalhyphendemerits=0 \endgraf}}
-
-\newsavebox\mybox
-\newenvironment{aquote}[1]
-  {\savebox\mybox{\small{#1}}\begin{quote}}
-  {\signed{\usebox\mybox}\end{quote}}
-
-% Possessives in citation
-\def\citeapos#1{\citeauthor{#1}'s (\citeyear{#1})}
-
-\sisetup{
-    group-digits=true,
-    group-separator={,},
-    group-four-digits=true,
-}
-
+\usepackage{econ_paper_2}
 \begin{document}
-
+\setpaperheader{Gavin et al: The ZLB, the Dual Mandate, and Unconventional Dynamics}
 \section{Economic Models} \label{sec:models}
 
 This section presents two New Keynesian models with \citet{Rotemberg1982} price adjustment costs. Both models assume stochastic processes for the discount factor and technology, but they differ in their treatment of capital. Model 1 does not include capital while Model 2 does.
@@ -120,12 +10,12 @@ This section presents two New Keynesian models with \citet{Rotemberg1982} price 
 
 A representative household chooses $\{c_t,n_t,b_t\}_{t=0}^\infty$ to maximize expected lifetime utility given by $E_0\sum_{t=0}^\infty\tilde{\beta}_t[\log c_t-\chi n_t^{1+\eta}/(1+\eta)]$, where $1/\eta$ is the Frisch elasticity of labor supply, $c_t$ is consumption, $n_t$ is labor hours, $b_t$ is the real value of a $1$-period nominal bond, $E_0$ is an expectation operator conditional on information available in period $0$, $\tilde{\beta}_0\equiv1$, and $\tilde{\beta}_t=\prod_{j=1}^t \beta_j$ for $t>0$. $\beta$ is a time-varying subjective discount factor that evolves according to
 \begin{equation}
-\beta_t=\bar{\beta}(\beta_{t-1}/\bar{\beta})^{\rho_{\beta}}\exp(\varepsilon_t), \label{discount factor process}
+  \beta_t=\bar{\beta}(\beta_{t-1}/\bar{\beta})^{\rho_{\beta}}\exp(\varepsilon_t), \label{discount factor process}
 \end{equation}
 where $\bar{\beta}$ is the steady-state discount factor, $0\leq\rho_\beta<1$, and $\varepsilon\sim\mathbb{N}(0,\sigma_\varepsilon^2)$. Those choices are constrained by $c_t+b_t=w_tn_t+r_{t-1}b_{t-1}/\pi_t+d_t$, where $\pi_t=p_t/p_{t-1}$ is the gross inflation rate, $w_t$ is the real wage rate, $r_t$ is the gross nominal interest rate set by the central bank, and $d_t$ are profits from intermediate firms. The optimality conditions to the household's problem imply
 \begin{gather}
-w_t=\chi n_t^\eta c_t,  \label{FOC labor} \\
-1= r_tE_t[\beta_{t+1}(c_t/c_{t+1})/\pi_{t+1}]. \label{bond euler1}
+  w_t=\chi n_t^\eta c_t,  \label{FOC labor} \\
+  1= r_tE_t[\beta_{t+1}(c_t/c_{t+1})/\pi_{t+1}]. \label{bond euler1}
 \end{gather}
 
 The production sector consists of monopolistically competitive intermediate goods firms who produce a continuum of differentiated inputs and a representative final goods firm. Each firm $f\in[0,1]$ in the intermediate goods sector produces a differentiated good, $y_t(f)$, with identical technologies given by $y_t(f)=z_tn_t(f)$, where $n_t(f)$ is the level of employment used by firm $f$. $z_t$ represents the level of technology, which is common across firms and follows
@@ -159,7 +49,7 @@ where $i_t$ is investment, $k_t$ is capital, $r_t^k$ is the real rental rate of 
 \begin{gather}
   q_t=1+\phi(i_t/k_{t-1}-\delta), \label{Tobins q}\\
   q_t=E_t\left[\beta_{t+1}\frac{c_t}{c_{t+1}}\left(r_{t+1}^k-\frac{\phi}{2}\left(\frac{i_{t+1}}{k_t}-\delta\right)^2
-  +\phi\left(\frac{i_{t+1}}{k_t}-\delta\right)\frac{i_{t+1}}{k_t}+(1-\delta)q_{t+1}\right)\right]. \label{FOC k}
+    +\phi\left(\frac{i_{t+1}}{k_t}-\delta\right)\frac{i_{t+1}}{k_t}+(1-\delta)q_{t+1}\right)\right]. \label{FOC k}
 \end{gather}
 
 Intermediate firm $f\in[0,1]$ produces a differentiated good, $y_t(f)$, according to $y_t(f)=z_tk_{t-1}(f)^{\alpha}n_t(f)^{1-\alpha}$, where $k_t(f)$ and $n_t(f)$ are the levels of capital and employment used by firm $f$. Each intermediate firm then chooses its inputs to minimize operating costs, $r_t^kk_{t-1}(f)+w_tn_t(f)$, subject to its production function, which yields a consolidated optimality condition given by
@@ -176,16 +66,16 @@ The resource constraint includes the output lost due to price and capital adjust
 
 \begin{table}[t]\scriptsize
   \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}cclcc}
-  \toprule
-  Frisch Elasticity of Labor Supply       &$1/\eta$   & $3$    & Inflation Coefficient: MP Rule            &$\phi_\pi$    &$1.5$   \\
-  Elasticity of Substitution between Goods&$\theta$   & $6$    & Output Coefficient: MP Rule               &$\phi_y$      &$0.1$   \\
-  Rotemberg Adjustment Cost Coefficient   &$\varphi$  & $59.11$& Steady-State Technology                   &$\bar{z}$     &$1$     \\
-  Steady-State Labor                      &$\bar{n}$  & $0.33$ & Technology Persistence                    &$\rho_z$      &$0.9$   \\
-  Capital Depreciation Rate$^\dag$        &$\delta$   & $0.025$& Technology Shock Standard Deviation       &$\sigma_\upsilon$&$0.0025$\\
-  Cost Share of Capital$^\dag$            &$\alpha$   & $0.33$ & Steady-State Discount Factor              &$\bar{\beta}$ &$0.995$ \\
-  Capital Adjustment Cost$^\dag$          &$\phi$     & $5.6$  & Discount Factor Persistence               &$\rho_\beta$  &$0.8$   \\
-  Steady-State Inflation                  &$\bar{\pi}$& $1.006$& Discount Factor Standard Deviation        &$\sigma_\varepsilon$&$0.0025$\\
-  \bottomrule
+    \toprule
+    Frisch Elasticity of Labor Supply       &$1/\eta$   & $3$    & Inflation Coefficient: MP Rule            &$\phi_\pi$    &$1.5$   \\
+    Elasticity of Substitution between Goods&$\theta$   & $6$    & Output Coefficient: MP Rule               &$\phi_y$      &$0.1$   \\
+    Rotemberg Adjustment Cost Coefficient   &$\varphi$  & $59.11$& Steady-State Technology                   &$\bar{z}$     &$1$     \\
+    Steady-State Labor                      &$\bar{n}$  & $0.33$ & Technology Persistence                    &$\rho_z$      &$0.9$   \\
+    Capital Depreciation Rate$^\dag$        &$\delta$   & $0.025$& Technology Shock Standard Deviation       &$\sigma_\upsilon$&$0.0025$\\
+    Cost Share of Capital$^\dag$            &$\alpha$   & $0.33$ & Steady-State Discount Factor              &$\bar{\beta}$ &$0.995$ \\
+    Capital Adjustment Cost$^\dag$          &$\phi$     & $5.6$  & Discount Factor Persistence               &$\rho_\beta$  &$0.8$   \\
+    Steady-State Inflation                  &$\bar{\pi}$& $1.006$& Discount Factor Standard Deviation        &$\sigma_\varepsilon$&$0.0025$\\
+    \bottomrule
   \end{tabular*}
   \caption{Baseline calibration. A $\dag$ denotes a parameter that only applies to Model 2.}
   \label{tab:calibration}
@@ -204,4 +94,4 @@ The likelihood that the nominal interest rate falls to and remains at zero depen
 \bibliographystyle{ecta}
 \bibliography{RefLib}
 
-\end{document} 
+\end{document}
