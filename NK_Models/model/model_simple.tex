@@ -5,7 +5,7 @@
 \setpaperheader{Gavin et al: The ZLB, the Dual Mandate, and Unconventional Dynamics}
 \section{Economic Models} \label{sec:models}
 
-This section presents two New Keynesian models with \citet{Rotemberg1982} price adjustment costs. Both models assume stochastic processes for the discount factor and technology, but they differ in their treatment of capital. Model 1 does not include capital while Model 2 does.
+This section presents two New Keynesian models with \citet{Rotemberg1982} price adjustment costs. Both models assume stochastic processes for technology, but they differ in their treatment of capital. Model 1 does not include capital while Model 2 does. The discount factor is constant.
 
 \subsection{Model 1: Baseline}\label{sec:model1}
 
@@ -39,7 +39,7 @@ The resource constraint is given by $c_t=y_t-adj_t\equiv y_t^{adj}$, where $y_t^
 
 Model 2 adds capital accumulation to Model 1. The household chooses sequences $\{c_t,i_t,n_t,b_t\}_{t=0}^{\infty}$ to maximize the preferences in Model 1 subject to
 \begin{gather}
-  c_t+i_t+k_{t-1}+b_t=w_tn_t+r_t^kk_{t-1}+r_{t-1}b_{t-1}/\pi_t+d_t, \label{bc2}\\
+  c_t+i_t+b_t=w_tn_t+r_t^kk_{t-1}+r_{t-1}b_{t-1}/\pi_t+d_t, \label{bc2}\\
   k_t=(1-\delta)k_{t-1}+i_t,  \label{inv2}
 \end{gather}
 where $i_t$ is investment, $k_t$ is capital, and $r_t^k$ is the real rental rate of capital. Optimality yields a consumption Euler equation given by
@@ -47,13 +47,13 @@ where $i_t$ is investment, $k_t$ is capital, and $r_t^k$ is the real rental rate
   \frac{1}{c_t}\ =E_t\left[\beta \frac{1}{c_{t+1}}\left(r_{t+1}^k  + 1-\delta \right)\right]. \label{FOC k}
 \end{gather}
 
-Intermediate firm $f\in[0,1]$ produces a differentiated good, $y_t(f)$, according to $y_t(f)=z_tk_{t-1}(f)^{\alpha}n_t(f)^{1-\alpha}$, where $k_t(f)$ and $n_t(f)$ are the levels of capital and employment used by firm $f$. Each intermediate firm then chooses its inputs to minimize operating costs, $r_t^kk_{t-1}(f)+w_tn_t(f)$, subject to its production function, which yields a consolidated optimality conditions given by
+Intermediate firm $f\in[0,1]$ produces a differentiated good, $y_t(f)$, according to $y_t(f)=z_tk_{t-1}(f)^{\alpha}n_t(f)^{1-\alpha}$, where $k_t(f)$ and $n_t(f)$ are the levels of capital and employment used by firm $f$. Each intermediate firm then chooses its inputs to minimize operating costs, $r_t^kk_{t-1}(f)+w_tn_t(f)$, subject to its production function, which yields the following optimality conditions:
 \begin{gather}
   r_t^k = \alpha \Psi_t y_t/k_{t-1}, \label{Firm capital FOC} \\
   w_t = (1 - \alpha)  \Psi_t y_t/n_t. \label{Firm labor FOC}
 \end{gather}
 
-The resource constraint includes the output lost due to price and capital adjustment costs and is given by $c_t+i_t =y_t^{adj}$. A competitive equilibrium consists of sequences of quantities, $\{c_t,n_t,i_t,k_t,b_t,y_t,y_t^{adj}\}_{t=0}^\infty$, prices, $\{w_t,r_t^k,r_t,\pi_t\}_{t=0}^\infty$, and exogenous variables, $\{z_t\}_{t=0}^\infty$ that satisfy the household's and firm's optimality conditions, \eqref{FOC labor}, \eqref{bond euler1}, \eqref{firm pricing}, \eqref{FOC k}, \eqref{Firm capital FOC}, \eqref{Firm labor FOC}, the production function, $y_t=z_tk_{t-1}^\alpha n_t^{1-\alpha}$, the monetary policy rule, \eqref{MP rule}, the technology process, \eqref{technology process}, the capital law of motion, \eqref{inv2}, bond market clearing, $b_t=0$, the resource constraint, and the definition of adjusted output.
+The resource constraint includes the output lost due to Rotemberg price adjustment costs and is given by $c_t+i_t =y_t^{adj}$. A competitive equilibrium consists of sequences of quantities, $\{c_t,n_t,i_t,k_t,b_t,y_t,y_t^{adj}\}_{t=0}^\infty$, prices, $\{w_t,r_t^k,r_t,\pi_t\}_{t=0}^\infty$, and exogenous variables, $\{z_t\}_{t=0}^\infty$ that satisfy the household's and firm's optimality conditions, \eqref{FOC labor}, \eqref{bond euler1}, \eqref{firm pricing}, \eqref{FOC k}, \eqref{Firm capital FOC}, \eqref{Firm labor FOC}, the production function, $y_t=z_tk_{t-1}^\alpha n_t^{1-\alpha}$, the monetary policy rule, \eqref{MP rule}, the technology process, \eqref{technology process}, the capital law of motion, \eqref{inv2}, bond market clearing, $b_t=0$, the resource constraint, and the definition of adjusted output.
 
 \section{Calibration, Solution Method, and Simulation Procedure}\label{sec:calibration}
 
