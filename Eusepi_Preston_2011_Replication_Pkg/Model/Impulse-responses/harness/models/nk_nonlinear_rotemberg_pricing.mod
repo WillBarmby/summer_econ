@@ -80,6 +80,12 @@ parameters
 // Calibration
 // -----------------------------------------------------------------------------
 
+// Macro defaults preserve the source calibration while allowing named
+// experiments to override selected parameters without rewriting this file.
+@#ifndef rho_technology
+    @#define rho_technology = 0.9
+@#endif
+
 beta             = 0.995;
 eta              = 1/3;
 delta            = 0.025;
@@ -91,7 +97,7 @@ inflation_bar    = 1.006;
 phi_pi           = 1.5;
 phi_y            = 0.1;
 
-rho_technology   = 0.9;
+rho_technology   = @{rho_technology};
 technology_bar   = 1;
 
 // -----------------------------------------------------------------------------
