@@ -8,6 +8,8 @@ verify_fixture_manifest();
 test_dynare_71_jacobian_unpacking();
 test_nk_first_order_model();
 test_nk_ee_learning_contract();
+test_nk_ee_irfs();
+test_learning_comparison_panels();
 test_expectation_evaluator();
 test_ep_ee_alm();
 test_ep_ih_alm();
