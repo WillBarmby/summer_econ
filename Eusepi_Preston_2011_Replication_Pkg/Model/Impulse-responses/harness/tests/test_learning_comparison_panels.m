@@ -10,6 +10,8 @@ output_dir=tempname;
 cleanup=onCleanup(@() remove_output(output_dir));
 artifact=run_learning_comparison_panels(config,output_dir);
 assert(isequal(artifact.specification_ids,{'ep_ee','ep_ih','nk_ee'}));
+nk=artifact.results{3};
+assert(nk.learning_specification.variant=="iid_comparison");
 for j=1:3
     result=artifact.results{j};
     assert(abs(result.summary.re(1,1)-config.impact_output_percent)<1e-10);
