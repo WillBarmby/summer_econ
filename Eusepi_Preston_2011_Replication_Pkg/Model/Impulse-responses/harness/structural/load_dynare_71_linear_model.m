@@ -1,5 +1,12 @@
-function model = load_dynare_71_linear_model(mod_path)
+function model = load_dynare_71_linear_model(mod_path,varargin)
 %% LOAD_DYNARE_71_LINEAR_MODEL Load an explicitly linear deviation-form model.
+
+parser=inputParser;
+addParameter(parser,'ParameterOverrides',struct(), ...
+    @(value) isstruct(value)&&isscalar(value));
+parse(parser,varargin{:});
+parameter_overrides=parser.Results.ParameterOverrides;
+validate_parameter_overrides(parameter_overrides);
 
 runtime = configure_dynare_71();
 reset_dynare_71_globals();
@@ -13,8 +20,8 @@ work = tempname; mkdir(work);
 copyfile(mod_path,fullfile(work,[fname ext]));
 old = pwd; cleanup = onCleanup(@() cd(old));
 cd(work);
-evalin('base',sprintf('dynare %s noclearall nolog',fname));
-global M_ oo_
+evalin('base',make_dynare_command(fname,parameter_overrides));
+global M_ oo_ %#ok<GVMIS>
 assert(strcmp(M_.fname,fname));
 n = M_.endo_nbr; q = M_.exo_nbr;
 incidence = M_.lead_lag_incidence;
@@ -53,6 +60,7 @@ calibration = struct();
 for j = 1:numel(M_.param_names)
     calibration.(M_.param_names{j}) = M_.params(j);
 end
+verify_parameter_overrides(calibration,parameter_overrides);
 model = struct('name',fname,'backend','dynare-7.1', ...
     'variable_names',{M_.endo_names(:).'},'shock_names',{M_.exo_names(:).'}, ...
     'equation_names',{eqnames},'current',phase{2},'lag',phase{1}, ...
@@ -61,10 +69,44 @@ model.re = struct('source','dynare','decision_rule',oo_.dr, ...
     'steady_state',oo_.steady_state,'irfs',getfield_default(oo_,'irfs',struct()));
 model.dynare = struct('version',runtime.version,'var',getfield_default(M_,'var',struct()), ...
     'var_expectation',getfield_default(M_,'var_expectation',struct()), ...
+    'parameter_overrides',parameter_overrides, ...
     'work_directory',work);
 validate_canonical_model(model);
 end
 
 function value = getfield_default(s,name,default)
 if isfield(s,name), value = s.(name); else, value = default; end
+end
+
+function validate_parameter_overrides(overrides)
+names=fieldnames(overrides);
+for j=1:numel(names)
+    value=overrides.(names{j});
+    assert(isvarname(names{j})&&isnumeric(value)&&isscalar(value)&& ...
+        isreal(value)&&isfinite(value),'DynareLinear:InvalidParameterOverride', ...
+        'Every parameter override must have a valid name and finite real scalar value.');
+end
+end
+
+function command=make_dynare_command(fname,overrides)
+options={'noclearall','nolog'};
+names=fieldnames(overrides);
+for j=1:numel(names)
+    options{end+1}=sprintf('-D%s=%.17g', ...
+        names{j},overrides.(names{j})); %#ok<AGROW>
+end
+command=sprintf('dynare %s %s',fname,strjoin(options,' '));
+end
+
+function verify_parameter_overrides(calibration,overrides)
+names=fieldnames(overrides);
+for j=1:numel(names)
+    name=names{j};
+    assert(isfield(calibration,name),'DynareLinear:UnknownParameterOverride', ...
+        'Dynare model has no parameter named %s.',name);
+    tolerance=1e-12*max(1,abs(overrides.(name)));
+    assert(abs(calibration.(name)-overrides.(name))<=tolerance, ...
+        'DynareLinear:UnusedParameterOverride', ...
+        'Parameter override %s was not applied by the Dynare model.',name);
+end
 end

@@ -14,7 +14,10 @@ nk=artifact.results{3};
 assert(nk.learning_specification.variant=="iid_comparison");
 for j=1:3
     result=artifact.results{j};
-    assert(abs(result.summary.re(1,1)-config.impact_output_percent)<1e-10);
+    expected_innovation=[1 1 0.01]*config.technology_shock_percent;
+    assert(abs(result.impact_innovation-expected_innovation(j))<1e-12);
+    assert(result.impact_shock.technology_percent== ...
+        config.technology_shock_percent);
     assert(result.status_counts.completed==config.draw_count);
     assert(isfile(fullfile(output_dir,result.id,'results.mat')));
 end

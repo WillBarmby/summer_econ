@@ -34,6 +34,10 @@ local_dynare_config.m
 # Editable experiment output; canonical artifacts remain tracked explicitly.
 Eusepi_Preston_2011_Replication_Pkg/Model/Impulse-responses/artifacts/dynare_quantities_custom/
 
+# Intermediate panels embedded in the canonical steady-growth test artifact.
+Eusepi_Preston_2011_Replication_Pkg/Model/Impulse-responses/artifacts/comparisons/ep_steady_growth_test/baseline_growth/
+Eusepi_Preston_2011_Replication_Pkg/Model/Impulse-responses/artifacts/comparisons/ep_steady_growth_test/zero_deterministic_growth/
+
 # Latex cruft
 *.aux
 *.bbl
@@ -43,4 +47,3 @@ Eusepi_Preston_2011_Replication_Pkg/Model/Impulse-responses/artifacts/dynare_qua
 *.gz
 *.fls
 *.fdb*
-

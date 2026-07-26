@@ -5,8 +5,8 @@ addpath(ir_dir);
 setup_ir_paths();
 
 % Keep the standard 100 draws, 2,000 training periods, gain, seed, horizon,
-% shock scales, and one-percent RE output-impact normalization. Change only
-% the persistence of the NK technology-level process.
+% shock scales, and one-percentage-point technology innovation. Change only
+% the persistence of the current NK technology-level process.
 config=learning_comparison_config();
 config.nk_technology_persistence=0.99;
 

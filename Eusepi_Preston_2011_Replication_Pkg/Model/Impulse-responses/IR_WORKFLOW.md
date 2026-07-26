@@ -1,5 +1,9 @@
 # Dynare-Driven Eusepi–Preston IRFs
 
+The current replication claims, Git milestones, and boundary between exact
+archive equivalence and paper-faithful EE interpretation are recorded in
+`REPLICATION_STATUS.md`.
+
 ## Start here
 
 The primary workflow has three explicit inputs and one entrypoint:

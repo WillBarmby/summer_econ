@@ -5,7 +5,11 @@ varexo eps_x;
 parameters delta alpha rho_x gamma_bar sigma eps_H beta beta_tilda;
 parameters delta_s R_tilda ik_ratio yk_ratio ck_ratio cy_ratio psi;
 parameters eps_c eps_w chi c_c;
-delta=0.025; alpha=0.34; rho_x=0; gamma_bar=exp(0.0053);
+@#ifndef gamma_bar
+    @#define gamma_bar = 1.0053140698457452
+@#endif
+
+delta=0.025; alpha=0.34; rho_x=0; gamma_bar=@{gamma_bar};
 sigma=1; eps_H=0.0001; beta=0.99*gamma_bar^(sigma-1);
 beta_tilda=beta*gamma_bar^(1-sigma);
 delta_s=(1-delta)/gamma_bar;

@@ -252,7 +252,8 @@ end;
 
 stoch_simul(
     order = 1,
-    irf = 40
+    irf = 40,
+    nograph
 )
     output
     consumption
