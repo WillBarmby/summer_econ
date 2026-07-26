@@ -20,3 +20,9 @@ The historical milestone commits and detailed test commands are documented in
 `Eusepi_Preston_2011_Replication_Pkg/Model/Impulse-responses/REPLICATION_STATUS.md`
 at the verification tag. New public commands must not add that tree to the
 MATLAB path or call its functions at runtime.
+
+The clean interface carries forward that evidence through compact numerical
+fixtures in `tests/fixtures/`. Run `run_acceptance_tests` to compare the active
+100-draw EE/IH baseline and deterministic-growth sensitivity with those saved
+references. The fixture-based test is a regression check against the tagged
+lineage; it does not execute the archived implementation.

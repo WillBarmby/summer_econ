@@ -48,5 +48,9 @@ will be activated in Phase 4.
 The existing `Eusepi_Preston_2011_Replication_Pkg/` tree remains the frozen,
 runnable verification implementation during this transition. The active E&P
 runners use only the new root-level models, configuration, and source tree.
+`setup_project` removes frozen-tree entries left by an earlier MATLAB session
+before adding the supported clean paths. See Git tag `ep-verification-v1` and
+[`docs/REPLICATION_LINEAGE.md`](docs/REPLICATION_LINEAGE.md) for the archived
+equivalence evidence.
 
 See [Documentation map](docs/README.md) for the intended reading order.

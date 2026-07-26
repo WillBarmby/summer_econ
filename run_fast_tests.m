@@ -1,7 +1,10 @@
 function run_fast_tests()
 %% RUN_FAST_TESTS Run the clean interface's short development checks.
+% Covers model loading, matrix extraction, RLS arithmetic, fixed short EE/IH
+% paths, paired shock timing, failure statuses, and a saved graph smoke test.
 
 setup_project();
-error('EPResearch:EngineNotInstalled', ...
-    'Fast tests become active after the minimal engine is installed.');
+test_minimal_engine();
+test_ep_smoke();
+fprintf('All fast tests passed.\n');
 end

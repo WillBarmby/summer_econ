@@ -26,6 +26,10 @@ diff.txt
 *.png
 *.pdf
 
+# Clean-interface experiment outputs; numerical fixtures are kept in tests/.
+results/*
+!results/.gitkeep
+
 # Dynare-generated code and local installation overrides
 comparison_outputs/
 dynare_generated/

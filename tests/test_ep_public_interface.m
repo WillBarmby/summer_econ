@@ -2,6 +2,7 @@ function test_ep_public_interface()
 %% TEST_EP_PUBLIC_INTERFACE Exercise saved metadata, pairing, and figures.
 
 setup_project();
+test_setup_path_independence();
 config = ep_experiment_config();
 config.draw_count = 2;
 config.training_periods = 20;

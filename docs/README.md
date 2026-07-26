@@ -10,7 +10,8 @@ Read the project documentation in this order:
 4. [`MODEL_DEVELOPMENT.md`](MODEL_DEVELOPMENT.md) - rules for the future
    balanced-growth New Keynesian rewrite.
 5. [`REPLICATION_LINEAGE.md`](REPLICATION_LINEAGE.md) - where the numerical
-   verification history is preserved.
+   verification history, Git tag `ep-verification-v1`, and frozen replication-
+   status document are preserved.
 
 Documentation should explain economic intent and the public workflow. Function
 headers should explain individual implementation contracts. Generated Dynare
