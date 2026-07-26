@@ -1,5 +1,8 @@
 # Tests
 
-Fast tests will cover individual mathematical and structural contracts.
-Acceptance tests will compare complete E&P EE/IH paths with compact fixtures
-created from the verified lineage.
+`test_minimal_engine` currently covers model loading, RE extraction, a
+hand-calculated RLS update, Jacobian layout, paired IRF timing, failure status
+reporting, and complete short E&P EE/IH paths against compact verified fixtures.
+
+Phase 3 will connect these checks to the public fast and acceptance runners and
+add experiment artifact and graph tests.

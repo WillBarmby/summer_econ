@@ -1,5 +1,6 @@
 # Numerical Fixtures
 
-Compact deterministic matrices and seeded E&P paths will be added during engine
-extraction. Tests will read these fixtures without executing the frozen legacy
-implementation.
+`ep_engine_reference.mat` contains structural matrices, RE laws, one fixed shock
+sequence, and short paper-EE/IH paths generated from the verified implementation
+at commit `ea47484`. Tests read this compact fixture without executing the
+frozen legacy implementation.

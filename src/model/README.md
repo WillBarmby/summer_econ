@@ -1,5 +1,6 @@
 # Model Engine
 
-This directory will contain the Dynare loader, canonical structural-model
-validation, and RE decision-rule extraction. It must not depend on the frozen
-replication tree.
+This directory contains the explicit-linear Dynare 7.1 loader, canonical
+structural-model validation, RE decision-rule extraction, Jacobian layout
+helper, and stationary covariance calculation. It has no dependency on the
+frozen replication tree.

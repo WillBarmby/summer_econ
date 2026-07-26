@@ -1,8 +1,12 @@
 # Active Models
 
-The verified E&P EE and IH Dynare models will be copied here when the minimal
-engine is installed. Each model file will identify its economic role and source
-provenance in its header.
+- `ep_rbc_ee.mod` is the verified structural representation used for the
+  paper-faithful one-period Euler-equation learning specification.
+- `ep_rbc_ih.mod` is the verified 13-equation representation used for the E&P
+  infinite-horizon learning specification.
+
+Both are explicit linear percentage-deviation systems copied from the verified
+lineage. Their learning assumptions live in MATLAB rather than inside Dynare.
 
 The temporary NK model is deliberately excluded. A nonlinear stationary,
 balanced-growth NK model will be added only after its transformation is derived

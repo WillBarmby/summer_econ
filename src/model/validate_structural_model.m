@@ -1,0 +1,26 @@
+function validate_structural_model(model)
+%% VALIDATE_STRUCTURAL_MODEL Enforce the clean linear-model data contract.
+% A canonical model is a square structural system, not yet a reduced-form
+% solution. Keeping all four residual matrices makes the expectations
+% assumptions replaceable without rewriting the underlying economics.
+
+required = {'name','variable_names','shock_names','equation_names', ...
+    'current','lag','lead','shock','calibration','re'};
+assert(isstruct(model) && isscalar(model), ...
+    'EPResearch:InvalidModel','Structural model must be a scalar struct.');
+for j = 1:numel(required)
+    assert(isfield(model,required{j}),'EPResearch:InvalidModel', ...
+        'Structural model lacks field "%s".',required{j});
+end
+n = numel(model.variable_names);
+q = numel(model.shock_names);
+assert(numel(unique(model.variable_names))==n, ...
+    'EPResearch:InvalidModel','Variable names must be unique.');
+assert(numel(model.equation_names)==n, ...
+    'EPResearch:InvalidModel','A square structural system is required.');
+assert(isequal(size(model.current),[n n]) && ...
+    isequal(size(model.lag),[n n]) && isequal(size(model.lead),[n n]), ...
+    'EPResearch:InvalidModel','Endogenous matrices must be n-by-n.');
+assert(isequal(size(model.shock),[n q]), ...
+    'EPResearch:InvalidModel','Shock matrix must be n-by-q.');
+end
