@@ -1,12 +1,19 @@
 function results = run_ep_comparison(varargin)
 %% RUN_EP_COMPARISON Run the public E&P RE/EE/IH comparison.
-% With no arguments, the completed runner will use the documented defaults.
-% With two arguments, it will require a complete configuration and output
-% directory. The minimal engine is intentionally not installed in Phase 1.
+% With no arguments, use the documented 100-draw defaults and save beneath
+% results/ep_comparison. Otherwise supply both a complete config and output
+% directory. EE and IH always receive the same standardized random draws.
 
-setup_project();
-results = struct(); %#ok<NASGU>
-error('EPResearch:EngineNotInstalled', ...
-    ['The clean E&P engine is not installed yet. This public runner becomes ' ...
-     'active after the engine-extraction and E&P-interface phases.']);
+root = setup_project();
+if nargin==0
+    config = ep_experiment_config();
+    output_dir = fullfile(root,'results','ep_comparison');
+elseif nargin==2
+    config = varargin{1};
+    output_dir = varargin{2};
+else
+    error('EPResearch:RequiredArguments', ...
+        'Supply both a complete config and output directory, or neither.');
+end
+results = run_ep_experiment(config,output_dir,'ep_comparison');
 end

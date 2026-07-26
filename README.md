@@ -28,9 +28,10 @@ run_fast_tests
 run_acceptance_tests
 ```
 
-During the skeleton phase, the experiment and test runners stop with the
-explicit identifier `EPResearch:EngineNotInstalled`. They will become active
-as the minimal engine and clean E&P interface are added in subsequent commits.
+The E&P experiment runners are active. With no arguments they use the documented
+100-draw defaults and save beneath `results/`; alternatively, pass both a
+complete configuration and an output directory. The public test-suite wrappers
+will be activated in Phase 4.
 
 ## Project map
 
@@ -45,7 +46,7 @@ as the minimal engine and clean E&P interface are added in subsequent commits.
 - `results/` - generated experiment artifacts and figures.
 
 The existing `Eusepi_Preston_2011_Replication_Pkg/` tree remains the frozen,
-runnable verification implementation during this transition. New public
-commands will not depend on it.
+runnable verification implementation during this transition. The active E&P
+runners use only the new root-level models, configuration, and source tree.
 
 See [Documentation map](docs/README.md) for the intended reading order.

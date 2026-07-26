@@ -4,5 +4,6 @@
 hand-calculated RLS update, Jacobian layout, paired IRF timing, failure status
 reporting, and complete short E&P EE/IH paths against compact verified fixtures.
 
-Phase 3 will connect these checks to the public fast and acceptance runners and
-add experiment artifact and graph tests.
+`test_ep_public_interface` checks seeded reproducibility, saved metadata,
+common shocks, growth sensitivity, and complete PDF/PNG output. Phase 4 will
+group these checks into the public fast and acceptance suites.

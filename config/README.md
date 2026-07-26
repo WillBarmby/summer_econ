@@ -1,5 +1,10 @@
 # Configuration
 
-This directory will contain separate functions for structural calibration,
-the common experiment, paper-faithful EE learning, and benchmark IH learning.
-No experiment should require editing a Dynare model file in multiple places.
+Configuration is separated by purpose:
+
+- `ep_calibration` records structural parameter overrides.
+- `ep_experiment_config` records simulation and reporting choices.
+- `ep_ee_specification` states what one-step EE agents estimate and observe.
+- `ep_ih_specification` states the verified infinite-horizon information set.
+
+No experiment requires editing a Dynare model file in multiple places.

@@ -1,5 +1,6 @@
 # Reporting
 
-This directory will summarize completed draws, record failures, save experiment
-artifacts, and create the common output, consumption, investment, and hours
-panels.
+This directory runs the model-independent E&P experiment, restores observable
+level responses from stationary variables, summarizes completed draws while
+retaining failures, and saves the common output, consumption, investment, and
+hours panels. Simulation, reporting, and file output remain separate functions.
