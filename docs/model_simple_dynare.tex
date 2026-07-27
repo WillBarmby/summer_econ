@@ -207,12 +207,21 @@ Consumption, investment, and bond purchases equal labor income, capital income, 
 \end{equation}
 
 \paragraph{Capital accumulation.}
-Next period's capital equals undepreciated beginning-of-period capital plus
-current investment:
+In levels, next period's capital equals undepreciated beginning-of-period
+capital plus current investment:
 \begin{equation}
-  k_{t+1}=(1-\delta)k_t+i_t.
+  K_{t+1}=(1-\delta)K_t+I_t.
+  \label{eq:capital-law-level}
+\end{equation}
+Divide by $X_t$ and use $k_{t+1}=K_{t+1}/X_t$,
+$k_t=K_t/X_{t-1}$, $i_t=I_t/X_t$, and
+$\Gamma_t=X_t/X_{t-1}$.  The stationary law of motion is therefore
+\begin{equation}
+  k_{t+1}=\frac{1-\delta}{\Gamma_t}k_t+i_t.
   \label{eq:capital-law}
 \end{equation}
+Technology growth divides the surviving stock because $k_t$ is normalized by
+$X_{t-1}$ whereas $k_{t+1}$ is normalized by $X_t$.
 
 \paragraph{Intermediate-goods production.}
 Each intermediate firm combines beginning-of-period capital and current labor
@@ -411,7 +420,7 @@ The paper also considers $\phi_y=0$.
 \paragraph{Capital law of motion.}
 Current investment determines next period's capital stock:
 \begin{equation}
-  k_{t+1}=(1-\delta)k_t+i_t.
+  k_{t+1}=\frac{1-\delta}{\Gamma_t}k_t+i_t.
   \label{eq:capital-block}
 \end{equation}
 
