@@ -23,6 +23,8 @@ assert(first.shock_metadata.training_standard_deviation==exp(-0.034));
 assert(first.calibration.gamma_bar==exp(0.0053));
 assert(first.results{1}.learning_specification.variant=="paper");
 assert(first.results{2}.learning_specification.formulation=="infinite_horizon");
+assert(isequal(size(first.results{1}.terminal_training_coefficients),[2 3 2]));
+assert(all(first.results{1}.training_projection_events>=0));
 for name = {'mat','pdf','png'}
     assert(isfile(first.output_files.(name{1})), ...
         'Missing public-interface output: %s.',name{1});
@@ -33,6 +35,8 @@ assert(isequal(saved.config,first.config));
 assert(isequal(saved.calibration,first.calibration));
 assert(isequal(saved.shock_metadata,first.shock_metadata));
 assert(isequal(saved.results{1}.statuses,first.results{1}.statuses));
+assert(isequal(saved.results{1}.terminal_training_coefficients, ...
+    first.results{1}.terminal_training_coefficients));
 assert(isequal(saved.output_files,first.output_files));
 
 growth_config = config;
