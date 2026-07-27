@@ -305,9 +305,12 @@ In a symmetric equilibrium,
 The original Model 2 section does not restate the profit equation after adding capital. For a Dynare implementation, profits need not be introduced as a separate equilibrium variable because bond-market clearing and the aggregate resource constraint eliminate them from the compact system.
 
 \paragraph{Pricing kernel.}
-The household's one-period real stochastic discount factor is
+With log utility, the household's one-period real stochastic discount factor in
+levels is $\beta C_t/C_{t+1}$.  Substituting $C_t=X_tc_t$ and
+$C_{t+1}=\Gamma_{t+1}X_tc_{t+1}$ gives
 \begin{equation}
-  \lambda_{t,t+1}=\beta\frac{c_t}{c_{t+1}},
+  \lambda_{t,t+1}
+  =\beta\frac{c_t}{\Gamma_{t+1}c_{t+1}},
   \label{eq:pricing-kernel-one}
 \end{equation}
 with
@@ -331,14 +334,19 @@ The real wage equals the household's marginal rate of substitution between consu
 \end{equation}
 
 \paragraph{Nominal-bond Euler equation.}
-The household is indifferent at the margin between current consumption and purchasing a one-period nominal bond:
+The household is indifferent at the margin between current consumption and
+purchasing a one-period nominal bond.  Using the stationary pricing kernel,
 \begin{equation}
   1
   =r_tE_t\left[
-    \beta\frac{c_t}{c_{t+1}}\frac{1}{\pi_{t+1}}
+    \beta\frac{c_t}{\Gamma_{t+1}c_{t+1}}
+    \frac{1}{\pi_{t+1}}
     \right].
   \label{eq:bond-euler}
 \end{equation}
+Equivalently, $1=r_tE_t[\lambda_{t,t+1}/\pi_{t+1}]$.  The growth factor is
+part of the stochastic discount factor; it is not an additional return on the
+bond.
 
 \paragraph{Capital Euler equation.}
 In levels, the marginal utility cost of saving through capital equals the
@@ -401,13 +409,17 @@ A price change today balances the current markup incentive against the expected 
   \frac{\pi_t}{\bar\pi}
   =(1-\theta)+\theta\Psi_t
   +\varphi E_t\left[
-    \lambda_{t,t+1}
+    \lambda_{t,t+1}\Gamma_{t+1}
     \left(\frac{\pi_{t+1}}{\bar\pi}-1\right)
     \frac{\pi_{t+1}}{\bar\pi}
     \frac{y_{t+1}}{y_t}
     \right].
   \label{eq:pricing-foc}
 \end{equation}
+Here $Y_{t+1}/Y_t=\Gamma_{t+1}y_{t+1}/y_t$.  Consequently, the displayed
+$\Gamma_{t+1}$ cancels the $1/\Gamma_{t+1}$ inside
+$\lambda_{t,t+1}$; keeping both factors visible records where that cancellation
+comes from.
 
 \paragraph{Monetary-policy rule.}
 The central bank sets the gross nominal interest rate in response to inflation and output, subject to the zero lower bound:
