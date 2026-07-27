@@ -26,7 +26,7 @@ The endogenous variables are itemized in the following order:
   \item $\Psi_t$: real marginal cost,
   \item $s_t$: gross risk-premium wedge on nominal-bond saving,
   \item $\widehat\gamma_t$: log deviation of gross technology growth from its
-  balanced-growth value.
+        balanced-growth value.
 \end{enumerate}
 
 Additional variables and objects appearing in the model are
@@ -36,7 +36,7 @@ Additional variables and objects appearing in the model are
   \item $p_t(f)$ and $y_t(f)$: the price and output of intermediate firm $f$,
   \item $E_t[\cdot]$: expectation conditional on information available in period $t$,
   \item $\lambda_{t,t+1}$: the household's one-period real stochastic discount
-    factor.
+        factor.
 \end{itemize}
 
 The exogenous innovations are
@@ -56,10 +56,10 @@ stochastic trend.  Uppercase letters will denote nonstationary levels and
 lowercase letters their stationary normalizations.  The growing real quantities
 are defined by
 \begin{align}
-  (Y_t,C_t,I_t,W_t)&=X_t(y_t,c_t,i_t,w_t), \notag\\
-  (Adj_t,D_t,B_t)&=X_t(adj_t,d_t,b_t),
-  \label{eq:growing-normalizations}\\
-  K_t&=X_{t-1}k_t.
+  (Y_t,C_t,I_t,W_t) & =X_t(y_t,c_t,i_t,w_t), \notag \\
+  (Adj_t,D_t,B_t)   & =X_t(adj_t,d_t,b_t),
+  \label{eq:growing-normalizations}                 \\
+  K_t               & =X_{t-1}k_t.
   \label{eq:capital-normalization}
 \end{align}
 Hours, the real capital rental rate, gross inflation, the gross nominal rate,
@@ -77,12 +77,12 @@ Let $\Gamma_t$ denote gross technology growth, $\gamma_t$ its logarithm, and
 $\widehat\gamma_t$ the log deviation of growth from its balanced-growth value.
 The stochastic trend and growth process will satisfy
 \begin{align}
-  X_t &= \Gamma_t X_{t-1},
+  X_t & = \Gamma_t X_{t-1},
   \qquad \gamma_t\equiv\log\Gamma_t,
-  \label{eq:trend-level} \\
+  \label{eq:trend-level}                 \\
   \widehat\gamma_t
   \equiv\gamma_t-\log\bar\Gamma
-  &=\rho_\Gamma\widehat\gamma_{t-1}
+      & =\rho_\Gamma\widehat\gamma_{t-1}
   +\sigma_\Gamma\varepsilon_t^\Gamma,
   \qquad
   \varepsilon_t^\Gamma\sim\mathcal N(0,1),
@@ -121,15 +121,15 @@ discount factor also varies with normalized consumption and technology growth.
   \item[$r^*$] intercept in the monetary-policy rule;
   \item[$\pi^*$] inflation target, with $\pi^*=\bar{\pi}$;
   \item[$y_t^*$] stationary output target, set to steady-state output $\bar y$
-    in the baseline;
+        in the baseline;
   \item[$\bar\Gamma$] balanced-growth value of gross technology growth;
   \item[$\rho_\Gamma$] persistence of the log deviation of technology growth,
-    with $0\leq\rho_\Gamma<1$;
+        with $0\leq\rho_\Gamma<1$;
   \item[$\sigma_\Gamma$] standard deviation of the log technology-growth
-    innovation;
+        innovation;
   \item[$\bar s$] steady-state gross risk-premium wedge;
   \item[$\rho_s$] persistence of the risk-premium wedge, with
-    $0\leq\rho_s<1$;
+        $0\leq\rho_s<1$;
   \item[$\sigma_s$] standard deviation of the risk-premium innovation.
 \end{description}
 
@@ -138,19 +138,19 @@ uses the Eusepi--Preston deterministic growth rate for the rewritten technology
 process:
 \begin{align*}
   \beta  & = 0.995,
-         & \frac{1}{\eta}  & = 3,
-         & \delta          & = 0.025,
-         & \alpha          & = 0.33,   \\
+         & \frac{1}{\eta} & = 3,
+         & \delta         & = 0.025,
+         & \alpha         & = 0.33,         \\
   \theta & = 6,
-         & \varphi         & = 59.11,
-         & \bar\pi         & = 1.006,
-         & \phi_\pi        & = 1.5,    \\
+         & \varphi        & = 59.11,
+         & \bar\pi        & = 1.006,
+         & \phi_\pi       & = 1.5,          \\
   \phi_y & = 0.1,
-         & \bar\Gamma      & = \exp(0.0053),
-         & \rho_\Gamma     & = 0,
-         & \bar s           & = 1,     \\
+         & \bar\Gamma     & = \exp(0.0053),
+         & \rho_\Gamma    & = 0,
+         & \bar s         & = 1,            \\
   \rho_s & = 0,
-         & \sigma_s         & = 0.
+         & \sigma_s       & = 0.
 \end{align*}
 The parameter $\chi$ is calibrated so that steady-state labor equals $1/3$.
 The value of $\sigma_\Gamma$ will be stated by the experiment configuration so
@@ -231,9 +231,9 @@ Using $y_t=Y_t/X_t$, $k_t=K_t/X_{t-1}$,
 $n_t=N_t$, and $\Gamma_t=X_t/X_{t-1}$ gives
 \begin{align}
   y_t
-  &=\frac{K_t^{\alpha}(X_tN_t)^{1-\alpha}}{X_t} \notag \\
-  &=\left(\frac{K_t}{X_t}\right)^{\alpha}N_t^{1-\alpha}
-   =\left(\frac{k_t}{\Gamma_t}\right)^{\alpha}n_t^{1-\alpha}.
+   & =\frac{K_t^{\alpha}(X_tN_t)^{1-\alpha}}{X_t} \notag  \\
+   & =\left(\frac{K_t}{X_t}\right)^{\alpha}N_t^{1-\alpha}
+  =\left(\frac{k_t}{\Gamma_t}\right)^{\alpha}n_t^{1-\alpha}.
   \label{eq:stationary-production}
 \end{align}
 
@@ -320,9 +320,9 @@ purchasing a one-period nominal bond.  Using the stationary pricing kernel,
 \begin{equation}
   1
   =s_tr_tE_t\left[
-    \beta\frac{c_t}{\Gamma_{t+1}c_{t+1}}
-    \frac{1}{\pi_{t+1}}
-    \right].
+  \beta\frac{c_t}{\Gamma_{t+1}c_{t+1}}
+  \frac{1}{\pi_{t+1}}
+  \right].
   \label{eq:bond-euler}
 \end{equation}
 Equivalently, $1=s_tr_tE_t[\lambda_{t,t+1}/\pi_{t+1}]$.  The growth factor is
@@ -509,22 +509,22 @@ Given the target $\bar n$, stationary production determines output as
 \begin{equation}
   \bar y
   =\left(
-    \frac{\bar k/\bar y}{\bar\Gamma}
-    \right)^{\alpha/(1-\alpha)}\bar n.
+  \frac{\bar k/\bar y}{\bar\Gamma}
+  \right)^{\alpha/(1-\alpha)}\bar n.
   \label{eq:ss-output}
 \end{equation}
 The remaining real allocation follows sequentially from capital accumulation,
 the resource constraint, and labor demand:
 \begin{align}
   \bar k
-  &=\left(\frac{\bar k}{\bar y}\right)\bar y,
-  \label{eq:ss-capital}\\
+         & =\left(\frac{\bar k}{\bar y}\right)\bar y,
+  \label{eq:ss-capital}                                       \\
   \bar i
-  &=\left[1-\frac{1-\delta}{\bar\Gamma}\right]\bar k,
-  \label{eq:ss-investment}\\
-  \bar c&=\bar y-\bar i,
-  \label{eq:ss-consumption}\\
-  \bar w&=(1-\alpha)\bar\Psi\frac{\bar y}{\bar n}.
+         & =\left[1-\frac{1-\delta}{\bar\Gamma}\right]\bar k,
+  \label{eq:ss-investment}                                    \\
+  \bar c & =\bar y-\bar i,
+  \label{eq:ss-consumption}                                   \\
+  \bar w & =(1-\alpha)\bar\Psi\frac{\bar y}{\bar n}.
   \label{eq:ss-wage}
 \end{align}
 Finally, if labor is calibrated to $\bar n=1/3$, the labor-supply condition
@@ -547,86 +547,86 @@ The twelve endogenous variables are then determined by the following twelve
 equations, in declaration order:
 \begin{enumerate}[label=\arabic*.,leftmargin=2.4em]
   \item Capital demand:
-  \begin{equation*}
-    r_t^k=\alpha\Psi_t\Gamma_t\frac{y_t}{k_t}.
-  \end{equation*}
+        \begin{equation*}
+          r_t^k=\alpha\Psi_t\Gamma_t\frac{y_t}{k_t}.
+        \end{equation*}
 
   \item Household labor supply:
-  \begin{equation*}
-    w_t=\chi n_t^\eta c_t.
-  \end{equation*}
+        \begin{equation*}
+          w_t=\chi n_t^\eta c_t.
+        \end{equation*}
 
   \item Aggregate production:
-  \begin{equation*}
-    y_t=\left(\frac{k_t}{\Gamma_t}\right)^\alpha n_t^{1-\alpha}.
-  \end{equation*}
+        \begin{equation*}
+          y_t=\left(\frac{k_t}{\Gamma_t}\right)^\alpha n_t^{1-\alpha}.
+        \end{equation*}
 
   \item Labor demand:
-  \begin{equation*}
-    w_t=(1-\alpha)\Psi_t\frac{y_t}{n_t}.
-  \end{equation*}
+        \begin{equation*}
+          w_t=(1-\alpha)\Psi_t\frac{y_t}{n_t}.
+        \end{equation*}
 
   \item Capital Euler equation:
-  \begin{equation*}
-    \frac{1}{c_t}
-    =E_t\left[
-      \frac{\beta}{\Gamma_{t+1}c_{t+1}}
-      \left(r_{t+1}^k+1-\delta\right)
-      \right].
-  \end{equation*}
+        \begin{equation*}
+          \frac{1}{c_t}
+          =E_t\left[
+          \frac{\beta}{\Gamma_{t+1}c_{t+1}}
+          \left(r_{t+1}^k+1-\delta\right)
+          \right].
+        \end{equation*}
 
   \item Resource constraint:
-  \begin{equation*}
-    c_t+i_t
-    =y_t-\frac{\varphi}{2}
-      \left(\frac{\pi_t}{\bar\pi}-1\right)^2y_t.
-  \end{equation*}
+        \begin{equation*}
+          c_t+i_t
+          =y_t-\frac{\varphi}{2}
+          \left(\frac{\pi_t}{\bar\pi}-1\right)^2y_t.
+        \end{equation*}
 
   \item Capital accumulation:
-  \begin{equation*}
-    k_{t+1}=\frac{1-\delta}{\Gamma_t}k_t+i_t.
-  \end{equation*}
+        \begin{equation*}
+          k_{t+1}=\frac{1-\delta}{\Gamma_t}k_t+i_t.
+        \end{equation*}
 
   \item Rotemberg pricing:
-  \begin{align*}
-    \varphi\left(\frac{\pi_t}{\bar\pi}-1\right)
-      \frac{\pi_t}{\bar\pi}
-    &=(1-\theta)+\theta\Psi_t \\
-    &\quad+\varphi E_t\left[
-      \beta\frac{c_t}{c_{t+1}}
-      \left(\frac{\pi_{t+1}}{\bar\pi}-1\right)
-      \frac{\pi_{t+1}}{\bar\pi}
-      \frac{y_{t+1}}{y_t}
-      \right].
-  \end{align*}
+        \begin{align*}
+          \varphi\left(\frac{\pi_t}{\bar\pi}-1\right)
+          \frac{\pi_t}{\bar\pi}
+           & =(1-\theta)+\theta\Psi_t \\
+           & \quad+\varphi E_t\left[
+            \beta\frac{c_t}{c_{t+1}}
+            \left(\frac{\pi_{t+1}}{\bar\pi}-1\right)
+            \frac{\pi_{t+1}}{\bar\pi}
+            \frac{y_{t+1}}{y_t}
+            \right].
+        \end{align*}
 
   \item Nominal-bond Euler equation:
-  \begin{equation*}
-    1=s_tr_tE_t\left[
-      \beta\frac{c_t}
-      {\Gamma_{t+1}c_{t+1}\pi_{t+1}}
-      \right].
-  \end{equation*}
+        \begin{equation*}
+          1=s_tr_tE_t\left[
+          \beta\frac{c_t}
+          {\Gamma_{t+1}c_{t+1}\pi_{t+1}}
+          \right].
+        \end{equation*}
 
   \item Monetary policy:
-  \begin{equation*}
-    r_t=r^*
-      \left(\frac{\pi_t}{\bar\pi}\right)^{\phi_\pi}
-      \left(\frac{y_t}{\bar y}\right)^{\phi_y}.
-  \end{equation*}
+        \begin{equation*}
+          r_t=r^*
+          \left(\frac{\pi_t}{\bar\pi}\right)^{\phi_\pi}
+          \left(\frac{y_t}{\bar y}\right)^{\phi_y}.
+        \end{equation*}
 
   \item Technology growth:
-  \begin{equation*}
-    \widehat\gamma_t
-    =\rho_\Gamma\widehat\gamma_{t-1}
-      +\sigma_\Gamma\varepsilon_t^\Gamma.
-  \end{equation*}
+        \begin{equation*}
+          \widehat\gamma_t
+          =\rho_\Gamma\widehat\gamma_{t-1}
+          +\sigma_\Gamma\varepsilon_t^\Gamma.
+        \end{equation*}
 
   \item Risk premium:
-  \begin{equation*}
-    s_t=(1-\rho_s)\bar s+\rho_s s_{t-1}
-      +\sigma_s\varepsilon_t^s.
-  \end{equation*}
+        \begin{equation*}
+          s_t=(1-\rho_s)\bar s+\rho_s s_{t-1}
+          +\sigma_s\varepsilon_t^s.
+        \end{equation*}
 \end{enumerate}
 
 \end{document}
