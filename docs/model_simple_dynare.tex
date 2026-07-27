@@ -156,7 +156,8 @@ marginal utility.
   \item[$\phi_y$] monetary-policy response to output;
   \item[$r^*$] intercept in the monetary-policy rule;
   \item[$\pi^*$] inflation target, with $\pi^*=\bar{\pi}$;
-  \item[$y_t^*$] output target, equal either to steady-state output $\bar y$ or potential output $y_t^n$;
+  \item[$y_t^*$] stationary output target, set to steady-state output $\bar y$
+    in the baseline;
   \item[$\bar\Gamma$] balanced-growth value of gross technology growth;
   \item[$\rho_\Gamma$] persistence of the log deviation of technology growth,
     with $0\leq\rho_\Gamma<1$;
@@ -165,8 +166,7 @@ marginal utility.
   \item[$\bar s$] steady-state gross risk-premium wedge;
   \item[$\rho_s$] persistence of the risk-premium wedge, with
     $0\leq\rho_s<1$;
-  \item[$\sigma_s$] standard deviation of the risk-premium innovation;
-  \item[$\mu$] markup term appearing in the paper's expression for potential output.
+  \item[$\sigma_s$] standard deviation of the risk-premium innovation.
 \end{description}
 
 The calibration retains the original NK values where they remain applicable and
@@ -474,21 +474,18 @@ The central bank sets the gross nominal interest rate in response to inflation a
   \right\}.
   \label{eq:policy-rule}
 \end{equation}
-The inflation target is $\pi^*=\bar\pi$. The output target is either
+The inflation target is $\pi^*=\bar\pi$.  The baseline output target is the
+stationary balanced-growth steady state:
 \begin{equation}
   y_t^*=\bar y
   \label{eq:ss-output-target}
 \end{equation}
-or potential output,
-% TODO: Verify this potential-output target for Model 2. The expression below is
-% inherited from the labor-only Model 1 and does not depend on the predetermined
-% capital stock. Either derive flexible-price output for the capital model or
-% clarify that y_t^n is an externally specified policy benchmark rather than
-% Model 2's actual output when \varphi=0.
-\begin{equation}
-  y_t^*=y_t^n=(\chi\mu)^{-1/(1+\eta)}z_t.
-  \label{eq:potential-output-target}
-\end{equation}
+This makes the policy rule respond to stationary output relative to its constant
+steady-state benchmark.  A later output-gap specification could instead use the
+flexible-price allocation $y_t^n$, but that object must be derived from this
+full capital model.  The labor-only formula previously shown here omitted the
+predetermined capital state and referred to the now-removed technology level
+$z_t$, so it is not a valid target for the rewritten model.
 The paper also considers $\phi_y=0$.
 
 \paragraph{Capital law of motion.}
