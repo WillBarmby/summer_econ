@@ -7,7 +7,8 @@
 \section{Model 2: Baseline with Capital}
 \label{sec:model2-clean}
 
-This document collects the equations for Model 2 in a compact, Dynare-oriented order. It retains the equations and timing in the original model and includes the equations inherited from Model 1.
+This document defines the stationary nonlinear New Keynesian model with capital
+that will be implemented in Dynare.
 
 \subsection{Variables}
 
@@ -34,7 +35,8 @@ Additional variables and objects appearing in the model are
   \item $d_t$: real profits distributed by intermediate-goods firms,
   \item $p_t(f)$ and $y_t(f)$: the price and output of intermediate firm $f$,
   \item $E_t[\cdot]$: expectation conditional on information available in period $t$,
-  \item $\lambda_{t,k}$: the household's real stochastic discount factor from period $t$ to period $k$.
+  \item $\lambda_{t,t+1}$: the household's one-period real stochastic discount
+    factor.
 \end{itemize}
 
 The exogenous innovations are
@@ -47,7 +49,7 @@ which enter technology growth and the risk-premium process with standard
 deviations $\sigma_\Gamma$ and $\sigma_s$, respectively.
 
 \subsection{Balanced-Growth Normalization}
-\label{sec:bgp-variable-classification}
+\label{sec:bgp-normalization}
 
 Following Eusepi and Preston (2011), let $X_t$ denote the labor-augmenting
 stochastic trend.  Uppercase letters will denote nonstationary levels and
@@ -99,14 +101,9 @@ $\Gamma_t$.  Observability does not require including $\Gamma_t$ in every
 perceived-law-of-motion regression; that information-set choice will be stated
 separately when the learning specification is introduced.
 
-Objects involving output targets inherit the classification of their underlying
-quantity: both steady-state and flexible-price output targets must be expressed
-in stationary units before entering the policy rule.  The stochastic discount
-factor is stationary because it depends on consumption growth, although its
-stationary expression will contain technology growth $\Gamma_{t+1}$.  This does
-not make the preference discount factor $\beta$ time varying: $\beta$ remains a
-constant parameter, while the stochastic discount factor also reflects changing
-marginal utility.
+Output targets must be expressed in stationary units before entering the policy
+rule.  The preference discount factor $\beta$ is constant; the stochastic
+discount factor also varies with normalized consumption and technology growth.
 
 \subsection{Parameters}
 
@@ -155,21 +152,18 @@ process:
   \rho_s & = 0,
          & \sigma_s         & = 0.
 \end{align*}
-The parameter $\chi$ is calibrated so that steady-state labor equals approximately $1/3$.
+The parameter $\chi$ is calibrated so that steady-state labor equals $1/3$.
 The value of $\sigma_\Gamma$ will be stated by the experiment configuration so
 that the NK and Eusepi--Preston models receive the same technology-growth
-innovation in the same units.  For provenance, the pre-rewrite NK model instead
-used stationary level technology with $\bar z=1$, $\rho_z=0.9$, and innovation
-standard deviation $0.0025$; those values are not the active balanced-growth
-specification.
+innovation in the same units.
 Thus the default has $s_t=1$ in every period and no risk-premium shock.  A
-demand-shock experiment must explicitly override $\rho_s$ and $\sigma_s$, and
-must report both values with its results.
+demand-shock experiment must explicitly override $\rho_s$ and $\sigma_s$.
 
 \section{Economic Primitives}
 
 \paragraph{Household objective.}
-The representative household chooses $\{c_t,i_t,n_t,b_t\}_{t=0}^{\infty}$ to maximize the preferences inherited from Model 1:
+The representative household chooses $\{c_t,i_t,n_t,b_t\}_{t=0}^{\infty}$ to
+maximize
 \begin{equation}
   E_0\sum_{t=0}^{\infty}\beta^t
   \left[
@@ -177,6 +171,8 @@ The representative household chooses $\{c_t,i_t,n_t,b_t\}_{t=0}^{\infty}$ to max
   \right].
   \label{eq:utility}
 \end{equation}
+This stationary objective differs from level utility by the exogenous term
+$\log X_t$, which does not affect the household's choices.
 
 \paragraph{Household budget constraint.}
 In levels, consumption, investment, and bond purchases equal labor income,
@@ -297,9 +293,6 @@ In a symmetric equilibrium,
   \label{eq:adjustment-cost}
 \end{equation}
 
-\paragraph{Intermediate-firm profits.}
-The original Model 2 section does not restate the profit equation after adding capital. For a Dynare implementation, profits need not be introduced as a separate equilibrium variable because bond-market clearing and the aggregate resource constraint eliminate them from the compact system.
-
 \paragraph{Pricing kernel.}
 With log utility, the household's one-period real stochastic discount factor in
 levels is $\beta C_t/C_{t+1}$.  Substituting $C_t=X_tc_t$ and
@@ -308,14 +301,6 @@ $C_{t+1}=\Gamma_{t+1}X_tc_{t+1}$ gives
   \lambda_{t,t+1}
   =\beta\frac{c_t}{\Gamma_{t+1}c_{t+1}},
   \label{eq:pricing-kernel-one}
-\end{equation}
-with
-\begin{equation}
-  \lambda_{t,t}\equiv1,
-  \qquad
-  \lambda_{t,k}\equiv
-  \prod_{j=t+1}^{k}\lambda_{j-1,j}.
-  \label{eq:pricing-kernel-many}
 \end{equation}
 
 \section{Equilibrium Equation Block}
@@ -403,8 +388,7 @@ trend $X_t$ leaves no technology-growth factor in the stationary condition:
 \end{equation}
 
 \paragraph{Aggregate production.}
-Symmetric intermediate firms produce aggregate output using beginning-of-period
-capital, current labor, and labor-augmenting technology.  In stationary units:
+In a symmetric equilibrium, stationary aggregate production is
 \begin{equation}
   y_t=\left(\frac{k_t}{\Gamma_t}\right)^{\alpha}n_t^{1-\alpha}.
   \label{eq:production-block}
@@ -448,12 +432,8 @@ stationary balanced-growth steady state:
   \label{eq:ss-output-target}
 \end{equation}
 This makes the policy rule respond to stationary output relative to its constant
-steady-state benchmark.  A later output-gap specification could instead use the
-flexible-price allocation $y_t^n$, but that object must be derived from this
-full capital model.  The labor-only formula previously shown here omitted the
-predetermined capital state and referred to the now-removed technology level
-$z_t$, so it is not a valid target for the rewritten model.
-The paper also considers $\phi_y=0$.
+steady-state benchmark.  An output-gap extension would require deriving the
+flexible-price allocation of this capital model.
 
 \paragraph{Capital law of motion.}
 Current investment determines next period's capital stock:
@@ -574,7 +554,5 @@ Using the twelve endogenous variables listed above, a compact equation order is:
   \item technology process, \eqref{eq:technology-block};
   \item risk-premium process, \eqref{eq:risk-premium-block}.
 \end{enumerate}
-
-This ordering is only organizational: it does not alter the model's equilibrium conditions.
 
 \end{document}
