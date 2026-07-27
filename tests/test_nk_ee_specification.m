@@ -23,6 +23,14 @@ assert(isequal(size(learning_model.initial_beliefs.coefficients),[5 2]));
 assert(strcmp(learning_model.name, ...
     'nk_balanced_growth nk_one_step EE'));
 
+% The naive-prior treatment zeros only perceived-law coefficients. It retains
+% the same positive RLS moment matrix, structural model, and shock covariance.
+zero_initialization = set_initial_beliefs(learning_model,"zero_coefficients");
+assert(all(zero_initialization.initial_beliefs.coefficients==0,'all'));
+assert(isequal(zero_initialization.initial_beliefs.moment_matrix, ...
+    learning_model.initial_beliefs.moment_matrix));
+assert(zero_initialization.specification.initialization=="zero_coefficients");
+
 % At the RE beliefs, subjective one-step forecasts must reproduce Dynare's
 % transition and shock matrices. This directly tests the PLM-to-ALM algebra,
 % rather than merely checking that the resulting path is finite.
