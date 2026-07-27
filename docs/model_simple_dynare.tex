@@ -502,6 +502,75 @@ Because the representative household's bond position is in zero net supply,
   \label{eq:bond-clearing}
 \end{equation}
 
+\section{Balanced-Growth Steady State}
+
+At the deterministic balanced-growth steady state,
+$\widehat\gamma=0$, $\Gamma=\bar\Gamma$, $s=\bar s$,
+$\pi=\bar\pi$, and every normalized real variable is constant.  The capital
+Euler equation then implies
+\begin{equation}
+  \bar r^k=\frac{\bar\Gamma}{\beta}-(1-\delta).
+  \label{eq:ss-capital-return}
+\end{equation}
+The stationary capital law gives the investment--capital ratio
+\begin{equation}
+  \frac{\bar i}{\bar k}
+  =1-\frac{1-\delta}{\bar\Gamma}.
+  \label{eq:ss-investment-capital-ratio}
+\end{equation}
+Finally, the nominal-bond Euler equation gives
+\begin{equation}
+  \bar r=\frac{\bar\Gamma\bar\pi}{\beta\bar s}.
+  \label{eq:ss-nominal-rate}
+\end{equation}
+Because the policy targets are met in steady state, the smooth Taylor rule also
+requires $r^*=\bar r$.  With the baseline $\bar s=1$, this reduces to
+$r^*=\bar\Gamma\bar\pi/\beta$.
+
+At $\bar\pi=\pi^*$, both Rotemberg adjustment terms are zero.  The pricing
+condition therefore reduces to
+\begin{equation}
+  \bar\Psi=\frac{\theta-1}{\theta}.
+  \label{eq:ss-marginal-cost}
+\end{equation}
+Capital demand then determines the capital--output ratio:
+\begin{equation}
+  \frac{\bar k}{\bar y}
+  =\frac{\alpha\bar\Psi\bar\Gamma}{\bar r^k}.
+  \label{eq:ss-capital-output-ratio}
+\end{equation}
+Given the target $\bar n$, stationary production determines output as
+\begin{equation}
+  \bar y
+  =\left(
+    \frac{\bar k/\bar y}{\bar\Gamma}
+    \right)^{\alpha/(1-\alpha)}\bar n.
+  \label{eq:ss-output}
+\end{equation}
+The remaining real allocation follows sequentially from capital accumulation,
+the resource constraint, and labor demand:
+\begin{align}
+  \bar k
+  &=\left(\frac{\bar k}{\bar y}\right)\bar y,
+  \label{eq:ss-capital}\\
+  \bar i
+  &=\left[1-\frac{1-\delta}{\bar\Gamma}\right]\bar k,
+  \label{eq:ss-investment}\\
+  \bar c&=\bar y-\bar i,
+  \label{eq:ss-consumption}\\
+  \bar w&=(1-\alpha)\bar\Psi\frac{\bar y}{\bar n}.
+  \label{eq:ss-wage}
+\end{align}
+Finally, if labor is calibrated to $\bar n=1/3$, the labor-supply condition
+determines the preference scale rather than requiring a nonlinear solve:
+\begin{equation}
+  \chi=\frac{\bar w}{\bar n^{\eta}\bar c}.
+  \label{eq:ss-labor-disutility-scale}
+\end{equation}
+These relationships are algebraic evaluations of the stationary equilibrium
+conditions.  Dynare can calculate their numerical values and then verify the
+residuals of the full nonlinear model.
+
 \section{Compact Dynare Ordering}
 
 Using the twelve endogenous variables listed above, a compact equation order is:
