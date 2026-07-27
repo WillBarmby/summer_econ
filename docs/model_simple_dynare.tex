@@ -99,6 +99,28 @@ beginning of period $t$, and $k_t=K_t/X_{t-1}$.  Investment chosen in period $t$
 determines $K_{t+1}$.  This is a reindexing of the original document's
 end-of-period convention, not a change in the underlying accumulation technology.
 
+Let $\Gamma_t$ denote gross technology growth, $\gamma_t$ its logarithm, and
+$\widehat\gamma_t$ the log deviation of growth from its balanced-growth value.
+The stochastic trend and growth process will satisfy
+\begin{align}
+  X_t &= \Gamma_t X_{t-1},
+  \qquad \gamma_t\equiv\log\Gamma_t,
+  \label{eq:planned-trend-level} \\
+  \widehat\gamma_t
+  \equiv\gamma_t-\log\bar\Gamma
+  &=\rho_\Gamma\widehat\gamma_{t-1}
+  +\sigma_\Gamma\varepsilon_t^\Gamma,
+  \qquad
+  \varepsilon_t^\Gamma\sim\mathcal N(0,1),
+  \quad 0\leq\rho_\Gamma<1.
+  \label{eq:planned-trend-growth}
+\end{align}
+The Eusepi--Preston-comparable baseline sets $\rho_\Gamma=0$, so deviations of
+technology growth from $\bar\Gamma$ are i.i.d.  Retaining $\rho_\Gamma$ as an
+explicit parameter permits a later sensitivity exercise without changing the
+model equations.  The level $X_t$ nevertheless has a stochastic trend because
+each growth realization permanently changes its path.
+
 \subsection{Parameters}
 
 \begin{description}[style=multiline,leftmargin=3.2cm,font=\normalfont]
