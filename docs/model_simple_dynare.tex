@@ -464,16 +464,16 @@ $\lambda_{t,t+1}$; keeping both factors visible records where that cancellation
 comes from.
 
 \paragraph{Monetary-policy rule.}
-The central bank sets the gross nominal interest rate in response to inflation and output, subject to the zero lower bound:
+The central bank sets the gross nominal interest rate in response to inflation
+and output:
 \begin{equation}
   r_t
-  =\max\left\{
-  1,
-  r^*\left(\frac{\pi_t}{\pi^*}\right)^{\phi_\pi}
-  \left(\frac{y_t}{y_t^*}\right)^{\phi_y}
-  \right\}.
+  =r^*\left(\frac{\pi_t}{\pi^*}\right)^{\phi_\pi}
+  \left(\frac{y_t}{y_t^*}\right)^{\phi_y}.
   \label{eq:policy-rule}
 \end{equation}
+The baseline abstracts from the zero lower bound and therefore keeps the policy
+equation smooth around the balanced-growth steady state.
 The inflation target is $\pi^*=\bar\pi$.  The baseline output target is the
 stationary balanced-growth steady state:
 \begin{equation}
