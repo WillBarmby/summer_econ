@@ -1,0 +1,53 @@
+function comparison = run_gain_sensitivity_comparison(varargin)
+%% RUN_GAIN_SENSITIVITY_COMPARISON Compare E&P EE, E&P IH, and NK EE gains.
+% All three rows use the same technology-growth shock, gain grid, standardized
+% histories, training length, impulse size, and common-variable reporting. The
+% NK risk-premium gain experiment remains separate because mixing shock types in
+% this heatmap would confound learning formulation with shock transmission.
+
+root = setup_project();
+default_gains = [0 0.002 0.005 0.01 0.02];
+if nargin==0
+    config = ep_experiment_config();
+    output_dir = fullfile(root,'results','gain_sensitivity_comparison');
+    gains = default_gains;
+elseif nargin==2 || nargin==3
+    config = varargin{1};
+    output_dir = varargin{2};
+    if nargin==3, gains = varargin{3}; else, gains = default_gains; end
+else
+    error('EPResearch:RequiredArguments', ...
+        'Supply neither, config and output directory, or those plus gains.');
+end
+validate_ep_experiment_config(config);
+if ~isfolder(output_dir), mkdir(output_dir); end
+
+%% Run E&P first and reuse its exact innovations for NK.
+ep = run_ep_gain_sensitivity(config,fullfile(output_dir,'ep'),gains);
+nk_model = load_nonlinear_dynare_model( ...
+    fullfile(root,'models','nk_balanced_growth.mod'), ...
+    'DeviationScales',struct('gamma_x',0.01));
+nk_results = cell(1,numel(gains));
+for j = 1:numel(gains)
+    gain = gains(j);
+    learning_model = build_ee_learning_model(nk_model, ...
+        nk_ee_specification(gain), ...
+        diag([config.training_shock_standard_deviation^2,0]));
+    nk_results{j} = run_learning_specification(learning_model, ...
+        sprintf('nk_technology_gain_%g',gain),'NK one-step EE', ...
+        ep.standardized_innovations,config,config.technology_growth_impulse, ...
+        @report_common_quantities,'eps_x');
+end
+
+comparison = struct('experiment','gain_sensitivity_comparison', ...
+    'config',config,'gains',gains,'default_gains',default_gains, ...
+    'specification_names',{{'E&P EE','E&P IH','NK EE'}}, ...
+    'quantity_names',{{'output','consumption','investment','hours'}}, ...
+    'metric_description',['maximum over plotted periods of the absolute ' ...
+    'median learning-minus-own-RE response to the common technology shock'], ...
+    'standardized_innovations',ep.standardized_innovations, ...
+    'ep_ee_results',{ep.ee_results},'ep_ih_results',{ep.ih_results}, ...
+    'nk_ee_results',{nk_results},'output_files',struct());
+comparison.output_files = save_gain_comparison_heatmap(comparison,output_dir);
+save(comparison.output_files.mat,'-struct','comparison','-v7.3');
+end
