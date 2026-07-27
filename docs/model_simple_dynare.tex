@@ -42,6 +42,63 @@ The exogenous innovation is
 \end{equation*}
 which drives the technology process.
 
+\subsection{Balanced-Growth Variable Classification}
+\label{sec:bgp-variable-classification}
+
+This subsection records the notation and trend classification that will govern
+the balanced-growth rewrite.  It does not yet alter any equilibrium equation
+below.  Until those equations are rewritten one block at a time, their lowercase
+symbols retain the level meanings stated in the preceding variable list.
+
+Following Eusepi and Preston (2011), let $X_t$ denote the labor-augmenting
+stochastic trend.  Uppercase letters will denote nonstationary levels and
+lowercase letters their stationary normalizations.  The intended classification
+is:
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabular}{llll}
+    \toprule
+    Economic object & Level notation & Balanced-growth behavior
+      & Planned stationary object \\
+    \midrule
+    Output & $Y_t$ & grows with $X_t$ & $y_t=Y_t/X_t$ \\
+    Consumption & $C_t$ & grows with $X_t$ & $c_t=C_t/X_t$ \\
+    Investment & $I_t$ & grows with $X_t$ & $i_t=I_t/X_t$ \\
+    Real wage & $W_t$ & grows with $X_t$ & $w_t=W_t/X_t$ \\
+    Capital stock & $K_t$ & predetermined at the start of $t$
+      & $k_t=K_t/X_{t-1}$ \\
+    Adjusted output & $Y_t^{adj}$ & grows with $X_t$
+      & $y_t^{adj}=Y_t^{adj}/X_t$ \\
+    Price-adjustment cost & $Adj_t$ & grows with $X_t$
+      & $adj_t=Adj_t/X_t$ \\
+    Real profits & $D_t$ & grows with $X_t$ & $d_t=D_t/X_t$ \\
+    Real bond position & $B_t$ & grows with $X_t$ if nonzero
+      & $b_t=B_t/X_t$ \\
+    Hours & $N_t$ & stationary & $n_t=N_t$ \\
+    Real capital rental rate & $R_t^k$ & stationary & $r_t^k=R_t^k$ \\
+    Gross inflation & $\Pi_t$ & stationary & $\pi_t=\Pi_t$ \\
+    Gross nominal rate & $R_t$ & stationary & $r_t=R_t$ \\
+    Real marginal cost & $\Psi_t$ & stationary & $\psi_t=\Psi_t$ \\
+    Relative firm price & $P_t(f)/P_t$ & stationary
+      & $p_t(f)/p_t=P_t(f)/P_t$ \\
+    Technology level & $X_t$ & stochastic trend & not stationary \\
+    Gross technology growth & $\Gamma_t=X_t/X_{t-1}$ & stationary
+      & $\gamma_t=\log\Gamma_t$ \\
+    \bottomrule
+  \end{tabular}
+  \caption{Planned balanced-growth classification.  ``Stationary'' here means
+  stationary around a constant balanced-growth steady state, not necessarily
+  constant period by period.}
+  \label{tab:bgp-variable-classification}
+\end{table}
+
+As in Eusepi and Preston, $K_t$ is predetermined capital available at the
+beginning of period $t$, and $k_t=K_t/X_{t-1}$.  Investment chosen in period $t$
+determines $K_{t+1}$.  This is a reindexing of the original document's
+end-of-period convention, not a change in the underlying accumulation technology.
+
 \subsection{Parameters}
 
 \begin{description}[style=multiline,leftmargin=3.2cm,font=\normalfont]
