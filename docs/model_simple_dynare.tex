@@ -341,15 +341,30 @@ The household is indifferent at the margin between current consumption and purch
 \end{equation}
 
 \paragraph{Capital Euler equation.}
-The marginal utility cost of saving through capital equals the expected discounted marginal utility of its rental return and undepreciated value:
+In levels, the marginal utility cost of saving through capital equals the
+expected discounted marginal utility of its rental return and undepreciated
+value:
+\begin{equation}
+  \frac{1}{C_t}
+  =E_t\left[
+    \beta\frac{1}{C_{t+1}}
+    \left(R_{t+1}^k+1-\delta\right)
+    \right].
+  \label{eq:capital-euler-level}
+\end{equation}
+Substituting $C_t=X_tc_t$,
+$C_{t+1}=X_{t+1}c_{t+1}=\Gamma_{t+1}X_tc_{t+1}$, and
+$r_{t+1}^k=R_{t+1}^k$ gives the stationary Euler equation
 \begin{equation}
   \frac{1}{c_t}
   =E_t\left[
-    \beta\frac{1}{c_{t+1}}
+    \frac{\beta}{\Gamma_{t+1}}\frac{1}{c_{t+1}}
     \left(r_{t+1}^k+1-\delta\right)
     \right].
   \label{eq:capital-euler}
 \end{equation}
+The factor $1/\Gamma_{t+1}$ converts next period's normalized marginal utility
+back into units comparable with period $t$.
 
 \paragraph{Capital-demand condition.}
 In levels, the real rental rate of capital equals capital's marginal revenue
