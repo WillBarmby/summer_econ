@@ -32,7 +32,6 @@ Additional variables and objects appearing in the model are
 \begin{itemize}[leftmargin=2em]
   \item $b_t$: real value of a one-period nominal bond,
   \item $d_t$: real profits distributed by intermediate-goods firms,
-  \item $y_t^{adj}$: output net of Rotemberg price-adjustment costs,
   \item $p_t(f)$ and $y_t(f)$: the price and output of intermediate firm $f$,
   \item $E_t[\cdot]$: expectation conditional on information available in period $t$,
   \item $\lambda_{t,k}$: the household's real stochastic discount factor from period $t$ to period $k$.
@@ -56,7 +55,7 @@ lowercase letters their stationary normalizations.  The growing real quantities
 are defined by
 \begin{align}
   (Y_t,C_t,I_t,W_t)&=X_t(y_t,c_t,i_t,w_t), \notag\\
-  (Y_t^{adj},Adj_t,D_t,B_t)&=X_t(y_t^{adj},adj_t,d_t,b_t),
+  (Adj_t,D_t,B_t)&=X_t(adj_t,d_t,b_t),
   \label{eq:growing-normalizations}\\
   K_t&=X_{t-1}k_t.
   \label{eq:capital-normalization}
@@ -465,19 +464,6 @@ Current investment determines next period's capital stock:
 
 \paragraph{Resource constraint.}
 Consumption and investment exhaust output net of Rotemberg price-adjustment costs:
-\begin{equation}
-  c_t+i_t=y_t^{adj}.
-  \label{eq:resource-adjusted}
-\end{equation}
-Adjusted output is defined by
-\begin{equation}
-  y_t^{adj}=y_t-adj_t
-  =y_t-
-  \frac{\varphi}{2}
-  \left(\frac{\pi_t}{\bar\pi}-1\right)^2y_t.
-  \label{eq:adjusted-output}
-\end{equation}
-Equivalently, without introducing $y_t^{adj}$ as a separate variable,
 \begin{equation}
   c_t+i_t
   =y_t-
