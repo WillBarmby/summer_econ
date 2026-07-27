@@ -20,7 +20,22 @@ termination = empty_termination();
 last_period = periods;
 for t = 2:periods
     plm = learning_model.beliefs_to_plm(beliefs);
-    alm = learning_model.plm_to_alm(plm);
+    try
+        alm = learning_model.plm_to_alm(plm);
+    catch exception
+        % Some beliefs make the contemporaneous structural system singular.
+        % This is an economically relevant invalid learning draw, not a reason
+        % to abort the remaining Monte Carlo histories. Unexpected programming
+        % errors are rethrown so they cannot be mislabeled as instability.
+        if strcmp(exception.identifier,'EPResearch:SingularAlm')
+            status = "invalid";
+            termination = make_termination(t,NaN,NaN, ...
+                "singular_alm",explosion_policy);
+            last_period = t-1;
+            break
+        end
+        rethrow(exception)
+    end
     values(:,t) = alm.intercept+alm.transition*values(:,t-1)+ ...
         alm.shock_impact*shocks(:,t-1);
     monitored = explosion_policy.variable_indices;

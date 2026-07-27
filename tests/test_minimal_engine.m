@@ -121,6 +121,17 @@ singular_model = struct('beliefs_to_plm',@(state) struct( ...
 invalid = simulate_learning(singular_model,0,0,initial,policy(1,1000));
 assert(invalid.status=="invalid" && ...
     invalid.termination.criterion=="singular_moment_matrix");
+
+singular_alm_model = singular_model;
+singular_alm_model.plm_to_alm = @(plm) raise_singular_alm(plm);
+invalid_alm = simulate_learning(singular_alm_model,0,0,initial,policy(1,1000));
+assert(invalid_alm.status=="invalid" && ...
+    invalid_alm.termination.criterion=="singular_alm");
+end
+
+function alm = raise_singular_alm(~)
+error('EPResearch:SingularAlm','Deliberate singular-ALM test fixture.');
+alm = struct(); %#ok<UNRCH>
 end
 
 function value = policy(n,limit)
