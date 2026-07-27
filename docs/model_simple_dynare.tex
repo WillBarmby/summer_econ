@@ -198,13 +198,28 @@ The representative household chooses $\{c_t,i_t,n_t,b_t\}_{t=0}^{\infty}$ to max
 \end{equation}
 
 \paragraph{Household budget constraint.}
-Consumption, investment, and bond purchases equal labor income, capital income, the real payoff from previously purchased bonds, and firm profits:
+In levels, consumption, investment, and bond purchases equal labor income,
+capital income, the real payoff from previously purchased nominal bonds, and
+firm profits:
+\begin{equation}
+  C_t+I_t+B_t
+  =W_tN_t+R_t^kK_t
+  +\frac{R_{t-1}B_{t-1}}{\Pi_t}+D_t.
+  \label{eq:budget-level}
+\end{equation}
+Here $B_t$ is the real value of the nominal bond purchased in period $t$, and
+$R_{t-1}B_{t-1}/\Pi_t$ is its realized real payoff.  Divide by $X_t$ and use
+$b_t=B_t/X_t$, $k_t=K_t/X_{t-1}$, and
+$b_{t-1}=B_{t-1}/X_{t-1}$.  The stationary budget constraint is
 \begin{equation}
   c_t+i_t+b_t
-  =w_tn_t+r_t^k k_t
-  +\frac{r_{t-1}b_{t-1}}{\pi_t}+d_t.
+  =w_tn_t+r_t^k\frac{k_t}{\Gamma_t}
+  +\frac{r_{t-1}b_{t-1}}{\pi_t\Gamma_t}+d_t.
   \label{eq:budget}
 \end{equation}
+Both predetermined stocks are divided by $\Gamma_t$ because they were chosen or
+measured relative to $X_{t-1}$ but the period-$t$ budget is normalized by
+$X_t$.
 
 \paragraph{Capital accumulation.}
 In levels, next period's capital equals undepreciated beginning-of-period
