@@ -206,16 +206,25 @@ current investment:
 
 \paragraph{Intermediate-goods production.}
 Each intermediate firm combines beginning-of-period capital and current labor
-using a Cobb--Douglas technology:
+with labor-augmenting technology:
 \begin{equation}
-  y_t(f)=z_t k_t(f)^{\alpha}n_t(f)^{1-\alpha}.
+  Y_t(f)=K_t(f)^{\alpha}\left[X_tN_t(f)\right]^{1-\alpha}.
   \label{eq:firm-production}
 \end{equation}
 In a symmetric equilibrium, this becomes
 \begin{equation}
-  y_t=z_t k_t^{\alpha}n_t^{1-\alpha}.
+  Y_t=K_t^{\alpha}(X_tN_t)^{1-\alpha}.
   \label{eq:aggregate-production}
 \end{equation}
+Using $y_t=Y_t/X_t$, $k_t=K_t/X_{t-1}$,
+$n_t=N_t$, and $\Gamma_t=X_t/X_{t-1}$ gives
+\begin{align}
+  y_t
+  &=\frac{K_t^{\alpha}(X_tN_t)^{1-\alpha}}{X_t} \notag \\
+  &=\left(\frac{K_t}{X_t}\right)^{\alpha}N_t^{1-\alpha}
+   =\left(\frac{k_t}{\Gamma_t}\right)^{\alpha}n_t^{1-\alpha}.
+  \label{eq:stationary-production}
+\end{align}
 
 \paragraph{Technology process.}
 Technology follows the stationary stochastic process specified in the original model:
@@ -337,9 +346,9 @@ The real wage equals labor's marginal revenue product:
 
 \paragraph{Aggregate production.}
 Symmetric intermediate firms produce aggregate output using beginning-of-period
-capital, current labor, and current technology:
+capital, current labor, and labor-augmenting technology.  In stationary units:
 \begin{equation}
-  y_t=z_t k_t^{\alpha}n_t^{1-\alpha}.
+  y_t=\left(\frac{k_t}{\Gamma_t}\right)^{\alpha}n_t^{1-\alpha}.
   \label{eq:production-block}
 \end{equation}
 
