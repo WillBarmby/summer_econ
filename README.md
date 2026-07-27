@@ -25,6 +25,7 @@ setup_project
 results = run_ep_comparison();
 growth = run_ep_growth_sensitivity();
 comparison = run_cross_model_comparison();
+risk = run_nk_risk_premium_comparison();
 run_fast_tests
 run_acceptance_tests
 ```
