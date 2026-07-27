@@ -1,0 +1,632 @@
+\documentclass[12pt,final]{article}
+\usepackage{econ_paper_2}
+
+\begin{document}
+\setpaperheader{Model 2: Baseline New Keynesian Model with Capital}
+
+\section{Model 2: Baseline with Capital}
+\label{sec:model2-clean}
+
+This document defines the stationary nonlinear New Keynesian model with capital
+that will be implemented in Dynare.
+
+\subsection{Variables}
+
+The endogenous variables are itemized in the following order:
+\begin{enumerate}[label=\arabic*.,leftmargin=2.4em]
+  \item $r_t^k$: real rental rate of capital,
+  \item $w_t$: real wage rate,
+  \item $y_t$: aggregate output before price-adjustment costs,
+  \item $n_t$: labor hours,
+  \item $c_t$: household consumption,
+  \item $i_t$: investment,
+  \item $k_t$: capital available at the beginning of period $t$,
+  \item $\pi_t=p_t/p_{t-1}$: gross inflation rate,
+  \item $r_t$: gross nominal interest rate,
+  \item $\Psi_t$: real marginal cost,
+  \item $s_t$: gross risk-premium wedge on nominal-bond saving,
+  \item $\widehat\gamma_t$: log deviation of gross technology growth from its
+  balanced-growth value.
+\end{enumerate}
+
+Additional variables and objects appearing in the model are
+\begin{itemize}[leftmargin=2em]
+  \item $b_t$: real value of a one-period nominal bond,
+  \item $d_t$: real profits distributed by intermediate-goods firms,
+  \item $p_t(f)$ and $y_t(f)$: the price and output of intermediate firm $f$,
+  \item $E_t[\cdot]$: expectation conditional on information available in period $t$,
+  \item $\lambda_{t,t+1}$: the household's one-period real stochastic discount
+    factor.
+\end{itemize}
+
+The exogenous innovations are
+\begin{equation*}
+  \varepsilon_t^\Gamma \sim \mathbb{N}(0,1),
+  \qquad
+  \varepsilon_t^s \sim \mathbb{N}(0,1),
+\end{equation*}
+which enter technology growth and the risk-premium process with standard
+deviations $\sigma_\Gamma$ and $\sigma_s$, respectively.
+
+\subsection{Balanced-Growth Normalization}
+\label{sec:bgp-normalization}
+
+Following Eusepi and Preston (2011), let $X_t$ denote the labor-augmenting
+stochastic trend.  Uppercase letters will denote nonstationary levels and
+lowercase letters their stationary normalizations.  The growing real quantities
+are defined by
+\begin{align}
+  (Y_t,C_t,I_t,W_t)&=X_t(y_t,c_t,i_t,w_t), \notag\\
+  (Adj_t,D_t,B_t)&=X_t(adj_t,d_t,b_t),
+  \label{eq:growing-normalizations}\\
+  K_t&=X_{t-1}k_t.
+  \label{eq:capital-normalization}
+\end{align}
+Hours, the real capital rental rate, gross inflation, the gross nominal rate,
+and real marginal cost are stationary without division by $X_t$:
+$n_t=N_t$, $r_t^k=R_t^k$, $\pi_t=\Pi_t$, $r_t=R_t$, and $\Psi_t$ retains its
+notation.  Here ``stationary'' means stationary around a constant
+balanced-growth steady state, not constant period by period.
+
+As in Eusepi and Preston, $K_t$ is predetermined capital available at the
+beginning of period $t$, and $k_t=K_t/X_{t-1}$.  Investment chosen in period $t$
+determines $K_{t+1}$.  This is a reindexing of the original document's
+end-of-period convention, not a change in the underlying accumulation technology.
+
+Let $\Gamma_t$ denote gross technology growth, $\gamma_t$ its logarithm, and
+$\widehat\gamma_t$ the log deviation of growth from its balanced-growth value.
+The stochastic trend and growth process will satisfy
+\begin{align}
+  X_t &= \Gamma_t X_{t-1},
+  \qquad \gamma_t\equiv\log\Gamma_t,
+  \label{eq:trend-level} \\
+  \widehat\gamma_t
+  \equiv\gamma_t-\log\bar\Gamma
+  &=\rho_\Gamma\widehat\gamma_{t-1}
+  +\sigma_\Gamma\varepsilon_t^\Gamma,
+  \qquad
+  \varepsilon_t^\Gamma\sim\mathcal N(0,1),
+  \quad 0\leq\rho_\Gamma<1.
+  \label{eq:trend-growth}
+\end{align}
+The Eusepi--Preston-comparable baseline sets $\rho_\Gamma=0$, so deviations of
+technology growth from $\bar\Gamma$ are i.i.d.  Retaining $\rho_\Gamma$ as an
+explicit parameter permits a later sensitivity exercise without changing the
+model equations.  The level $X_t$ nevertheless has a stochastic trend because
+each growth realization permanently changes its path.
+
+As in Eusepi and Preston, households observe $X_t$ and the distribution of its
+growth process.  Since $X_{t-1}$ is already known, they also observe the realized
+$\Gamma_t$.  Observability does not require including $\Gamma_t$ in every
+perceived-law-of-motion regression; that information-set choice will be stated
+separately when the learning specification is introduced.
+
+Output targets must be expressed in stationary units before entering the policy
+rule.  The preference discount factor $\beta$ is constant; the stochastic
+discount factor also varies with normalized consumption and technology growth.
+
+\subsection{Parameters}
+
+\begin{description}[style=multiline,leftmargin=3.2cm,font=\normalfont]
+  \item[$\beta$] household discount factor;
+  \item[$\chi$] scale parameter on the disutility of labor;
+  \item[$\eta$] inverse of the Frisch elasticity of labor supply, so the Frisch elasticity is $1/\eta$;
+  \item[$\delta$] capital depreciation rate;
+  \item[$\alpha$] cost share of capital in production;
+  \item[$\theta$] elasticity of substitution between differentiated intermediate goods;
+  \item[$\varphi$] Rotemberg price-adjustment cost coefficient;
+  \item[$\bar{\pi}$] steady-state gross inflation rate;
+  \item[$\phi_{\pi}$] monetary-policy response to inflation;
+  \item[$\phi_y$] monetary-policy response to output;
+  \item[$r^*$] intercept in the monetary-policy rule;
+  \item[$\pi^*$] inflation target, with $\pi^*=\bar{\pi}$;
+  \item[$y_t^*$] stationary output target, set to steady-state output $\bar y$
+    in the baseline;
+  \item[$\bar\Gamma$] balanced-growth value of gross technology growth;
+  \item[$\rho_\Gamma$] persistence of the log deviation of technology growth,
+    with $0\leq\rho_\Gamma<1$;
+  \item[$\sigma_\Gamma$] standard deviation of the log technology-growth
+    innovation;
+  \item[$\bar s$] steady-state gross risk-premium wedge;
+  \item[$\rho_s$] persistence of the risk-premium wedge, with
+    $0\leq\rho_s<1$;
+  \item[$\sigma_s$] standard deviation of the risk-premium innovation.
+\end{description}
+
+The calibration retains the original NK values where they remain applicable and
+uses the Eusepi--Preston deterministic growth rate for the rewritten technology
+process:
+\begin{align*}
+  \beta  & = 0.995,
+         & \frac{1}{\eta}  & = 3,
+         & \delta          & = 0.025,
+         & \alpha          & = 0.33,   \\
+  \theta & = 6,
+         & \varphi         & = 59.11,
+         & \bar\pi         & = 1.006,
+         & \phi_\pi        & = 1.5,    \\
+  \phi_y & = 0.1,
+         & \bar\Gamma      & = \exp(0.0053),
+         & \rho_\Gamma     & = 0,
+         & \bar s           & = 1,     \\
+  \rho_s & = 0,
+         & \sigma_s         & = 0.
+\end{align*}
+The parameter $\chi$ is calibrated so that steady-state labor equals $1/3$.
+The value of $\sigma_\Gamma$ will be stated by the experiment configuration so
+that the NK and Eusepi--Preston models receive the same technology-growth
+innovation in the same units.
+Thus the default has $s_t=1$ in every period and no risk-premium shock.  A
+demand-shock experiment must explicitly override $\rho_s$ and $\sigma_s$.
+
+\section{Economic Primitives}
+
+\paragraph{Household objective.}
+The representative household chooses $\{c_t,i_t,n_t,b_t\}_{t=0}^{\infty}$ to
+maximize
+\begin{equation}
+  E_0\sum_{t=0}^{\infty}\beta^t
+  \left[
+  \log c_t-\frac{\chi n_t^{1+\eta}}{1+\eta}
+  \right].
+  \label{eq:utility}
+\end{equation}
+This stationary objective differs from level utility by the exogenous term
+$\log X_t$, which does not affect the household's choices.
+
+\paragraph{Household budget constraint.}
+In levels, consumption, investment, and bond purchases equal labor income,
+capital income, the real payoff from previously purchased nominal bonds, and
+firm profits:
+\begin{equation}
+  C_t+I_t+B_t
+  =W_tN_t+R_t^kK_t
+  +\frac{R_{t-1}B_{t-1}}{\Pi_t}+D_t.
+  \label{eq:budget-level}
+\end{equation}
+Here $B_t$ is the real value of the nominal bond purchased in period $t$, and
+$R_{t-1}B_{t-1}/\Pi_t$ is its realized real payoff.  Divide by $X_t$ and use
+$b_t=B_t/X_t$, $k_t=K_t/X_{t-1}$, and
+$b_{t-1}=B_{t-1}/X_{t-1}$.  The stationary budget constraint is
+\begin{equation}
+  c_t+i_t+b_t
+  =w_tn_t+r_t^k\frac{k_t}{\Gamma_t}
+  +\frac{r_{t-1}b_{t-1}}{\pi_t\Gamma_t}+d_t.
+  \label{eq:budget}
+\end{equation}
+Both predetermined stocks are divided by $\Gamma_t$ because they were chosen or
+measured relative to $X_{t-1}$ but the period-$t$ budget is normalized by
+$X_t$.
+
+\paragraph{Capital accumulation.}
+In levels, next period's capital equals undepreciated beginning-of-period
+capital plus current investment:
+\begin{equation}
+  K_{t+1}=(1-\delta)K_t+I_t.
+  \label{eq:capital-law-level}
+\end{equation}
+Divide by $X_t$ and use $k_{t+1}=K_{t+1}/X_t$,
+$k_t=K_t/X_{t-1}$, $i_t=I_t/X_t$, and
+$\Gamma_t=X_t/X_{t-1}$.  The stationary law of motion is therefore
+\begin{equation}
+  k_{t+1}=\frac{1-\delta}{\Gamma_t}k_t+i_t.
+  \label{eq:capital-law}
+\end{equation}
+Technology growth divides the surviving stock because $k_t$ is normalized by
+$X_{t-1}$ whereas $k_{t+1}$ is normalized by $X_t$.
+
+\paragraph{Intermediate-goods production.}
+Each intermediate firm combines beginning-of-period capital and current labor
+with labor-augmenting technology:
+\begin{equation}
+  Y_t(f)=K_t(f)^{\alpha}\left[X_tN_t(f)\right]^{1-\alpha}.
+  \label{eq:firm-production}
+\end{equation}
+In a symmetric equilibrium, this becomes
+\begin{equation}
+  Y_t=K_t^{\alpha}(X_tN_t)^{1-\alpha}.
+  \label{eq:aggregate-production}
+\end{equation}
+Using $y_t=Y_t/X_t$, $k_t=K_t/X_{t-1}$,
+$n_t=N_t$, and $\Gamma_t=X_t/X_{t-1}$ gives
+\begin{align}
+  y_t
+  &=\frac{K_t^{\alpha}(X_tN_t)^{1-\alpha}}{X_t} \notag \\
+  &=\left(\frac{K_t}{X_t}\right)^{\alpha}N_t^{1-\alpha}
+   =\left(\frac{k_t}{\Gamma_t}\right)^{\alpha}n_t^{1-\alpha}.
+  \label{eq:stationary-production}
+\end{align}
+
+\paragraph{Technology process.}
+The nonstationary technology level grows according to the stationary process
+defined in \eqref{eq:trend-level}--\eqref{eq:trend-growth}:
+\begin{equation}
+  \log\Gamma_t-\log\bar\Gamma
+  =\rho_\Gamma(\log\Gamma_{t-1}-\log\bar\Gamma)
+  +\sigma_\Gamma\varepsilon_t^\Gamma.
+  \label{eq:technology}
+\end{equation}
+
+\paragraph{Final-good aggregation.}
+The representative final-goods firm combines differentiated intermediate goods with a Dixit--Stiglitz aggregator:
+\begin{equation}
+  y_t
+  \equiv
+  \left[
+    \int_0^1 y_t(f)^{(\theta-1)/\theta}\,df
+    \right]^{\theta/(\theta-1)}.
+  \label{eq:final-good}
+\end{equation}
+
+\paragraph{Demand for an intermediate good.}
+Cost minimization by the final-goods firm yields demand for firm $f$'s output:
+\begin{equation}
+  y_t(f)=\left(\frac{p_t(f)}{p_t}\right)^{-\theta}y_t.
+  \label{eq:firm-demand}
+\end{equation}
+
+\paragraph{Aggregate price index.}
+The price of the final good is the corresponding Dixit--Stiglitz price index:
+\begin{equation}
+  p_t
+  =\left[
+    \int_0^1 p_t(f)^{1-\theta}\,df
+    \right]^{1/(1-\theta)}.
+  \label{eq:price-index}
+\end{equation}
+
+\paragraph{Rotemberg price-adjustment cost.}
+Each intermediate firm loses output when it changes its price relative to steady-state inflation:
+\begin{equation}
+  adj_t(f)
+  =\frac{\varphi}{2}
+  \left[
+    \frac{p_t(f)}{\bar\pi p_{t-1}(f)}-1
+    \right]^2y_t.
+  \label{eq:adjustment-cost-firm}
+\end{equation}
+In a symmetric equilibrium,
+\begin{equation}
+  adj_t
+  =\frac{\varphi}{2}
+  \left(\frac{\pi_t}{\bar\pi}-1\right)^2y_t.
+  \label{eq:adjustment-cost}
+\end{equation}
+
+\paragraph{Pricing kernel.}
+With log utility, the household's one-period real stochastic discount factor in
+levels is $\beta C_t/C_{t+1}$.  Substituting $C_t=X_tc_t$ and
+$C_{t+1}=\Gamma_{t+1}X_tc_{t+1}$ gives
+\begin{equation}
+  \lambda_{t,t+1}
+  =\beta\frac{c_t}{\Gamma_{t+1}c_{t+1}},
+  \label{eq:pricing-kernel-one}
+\end{equation}
+
+\section{Equilibrium Equation Block}
+
+The following equations are the compact equilibrium system most directly corresponding to a Dynare model.
+
+\paragraph{Household labor-supply condition.}
+The real wage equals the household's marginal rate of substitution between consumption and labor:
+\begin{equation}
+  w_t=\chi n_t^{\eta}c_t.
+  \label{eq:labor-foc}
+\end{equation}
+
+\paragraph{Nominal-bond Euler equation.}
+The household is indifferent at the margin between current consumption and
+purchasing a one-period nominal bond.  Using the stationary pricing kernel,
+\begin{equation}
+  1
+  =s_tr_tE_t\left[
+    \beta\frac{c_t}{\Gamma_{t+1}c_{t+1}}
+    \frac{1}{\pi_{t+1}}
+    \right].
+  \label{eq:bond-euler}
+\end{equation}
+Equivalently, $1=s_tr_tE_t[\lambda_{t,t+1}/\pi_{t+1}]$.  The growth factor is
+part of the stochastic discount factor; it is not an additional return on the
+bond.  A positive innovation that raises $s_t$ increases the effective return
+to saving at a given policy rate and therefore acts as a contractionary demand
+shock.
+
+\paragraph{Risk-premium process.}
+Following the additive AR(1) specification in the cited demand-shock model, the
+gross risk-premium wedge evolves as
+\begin{equation}
+  s_t=(1-\rho_s)\bar s+\rho_s s_{t-1}+\sigma_s\varepsilon_t^s.
+  \label{eq:risk-premium-block}
+\end{equation}
+The baseline $\bar s=1$ leaves the deterministic steady state unchanged.  The
+additive process is a local approximation and does not impose global positivity;
+the shock calibration must therefore keep simulated values of $s_t$ positive.
+
+\paragraph{Capital Euler equation.}
+In levels, the marginal utility cost of saving through capital equals the
+expected discounted marginal utility of its rental return and undepreciated
+value:
+\begin{equation}
+  \frac{1}{C_t}
+  =E_t\left[
+    \beta\frac{1}{C_{t+1}}
+    \left(R_{t+1}^k+1-\delta\right)
+    \right].
+  \label{eq:capital-euler-level}
+\end{equation}
+Substituting $C_t=X_tc_t$,
+$C_{t+1}=X_{t+1}c_{t+1}=\Gamma_{t+1}X_tc_{t+1}$, and
+$r_{t+1}^k=R_{t+1}^k$ gives the stationary Euler equation
+\begin{equation}
+  \frac{1}{c_t}
+  =E_t\left[
+    \frac{\beta}{\Gamma_{t+1}}\frac{1}{c_{t+1}}
+    \left(r_{t+1}^k+1-\delta\right)
+    \right].
+  \label{eq:capital-euler}
+\end{equation}
+The factor $1/\Gamma_{t+1}$ converts next period's normalized marginal utility
+back into units comparable with period $t$.
+
+\paragraph{Capital-demand condition.}
+In levels, the real rental rate of capital equals capital's marginal revenue
+product, $R_t^k=\alpha\Psi_tY_t/K_t$.  Because
+$Y_t=X_ty_t$, $K_t=X_{t-1}k_t$, and $X_t/X_{t-1}=\Gamma_t$, the stationary
+condition is
+\begin{equation}
+  r_t^k=\alpha\Psi_t\Gamma_t\frac{y_t}{k_t}.
+  \label{eq:capital-foc}
+\end{equation}
+
+\paragraph{Labor-demand condition.}
+In levels, labor demand satisfies
+$W_t=(1-\alpha)\Psi_tY_t/N_t$.  Dividing the real wage and output by the same
+trend $X_t$ leaves no technology-growth factor in the stationary condition:
+\begin{equation}
+  w_t=(1-\alpha)\Psi_t\frac{y_t}{n_t}.
+  \label{eq:firm-labor-foc}
+\end{equation}
+
+\paragraph{Aggregate production.}
+In a symmetric equilibrium, stationary aggregate production is
+\begin{equation}
+  y_t=\left(\frac{k_t}{\Gamma_t}\right)^{\alpha}n_t^{1-\alpha}.
+  \label{eq:production-block}
+\end{equation}
+
+\paragraph{Rotemberg pricing condition.}
+A price change today balances the current markup incentive against the expected value of future price adjustment:
+\begin{equation}
+  \varphi
+  \left(\frac{\pi_t}{\bar\pi}-1\right)
+  \frac{\pi_t}{\bar\pi}
+  =(1-\theta)+\theta\Psi_t
+  +\varphi E_t\left[
+    \lambda_{t,t+1}\Gamma_{t+1}
+    \left(\frac{\pi_{t+1}}{\bar\pi}-1\right)
+    \frac{\pi_{t+1}}{\bar\pi}
+    \frac{y_{t+1}}{y_t}
+    \right].
+  \label{eq:pricing-foc}
+\end{equation}
+Here $Y_{t+1}/Y_t=\Gamma_{t+1}y_{t+1}/y_t$.  Consequently, the displayed
+$\Gamma_{t+1}$ cancels the $1/\Gamma_{t+1}$ inside
+$\lambda_{t,t+1}$; keeping both factors visible records where that cancellation
+comes from.
+
+\paragraph{Monetary-policy rule.}
+The central bank sets the gross nominal interest rate in response to inflation
+and output:
+\begin{equation}
+  r_t
+  =r^*\left(\frac{\pi_t}{\pi^*}\right)^{\phi_\pi}
+  \left(\frac{y_t}{y_t^*}\right)^{\phi_y}.
+  \label{eq:policy-rule}
+\end{equation}
+The baseline abstracts from the zero lower bound and therefore keeps the policy
+equation smooth around the balanced-growth steady state.
+The inflation target is $\pi^*=\bar\pi$.  The baseline output target is the
+stationary balanced-growth steady state:
+\begin{equation}
+  y_t^*=\bar y
+  \label{eq:ss-output-target}
+\end{equation}
+This makes the policy rule respond to stationary output relative to its constant
+steady-state benchmark.  An output-gap extension would require deriving the
+flexible-price allocation of this capital model.
+
+\paragraph{Capital law of motion.}
+Current investment determines next period's capital stock:
+\begin{equation}
+  k_{t+1}=\frac{1-\delta}{\Gamma_t}k_t+i_t.
+  \label{eq:capital-block}
+\end{equation}
+
+\paragraph{Resource constraint.}
+Consumption and investment exhaust output net of Rotemberg price-adjustment costs:
+\begin{equation}
+  c_t+i_t
+  =y_t-
+  \frac{\varphi}{2}
+  \left(\frac{\pi_t}{\bar\pi}-1\right)^2y_t.
+  \label{eq:resource-direct}
+\end{equation}
+
+\paragraph{Technology process.}
+Technology growth follows the stationary process
+\begin{equation}
+  \widehat\gamma_t
+  =\rho_\Gamma\widehat\gamma_{t-1}
+  +\sigma_\Gamma\varepsilon_t^\Gamma.
+  \label{eq:technology-block}
+\end{equation}
+
+\paragraph{Bond-market clearing.}
+Because the representative household's bond position is in zero net supply,
+\begin{equation}
+  b_t=0.
+  \label{eq:bond-clearing}
+\end{equation}
+
+\section{Balanced-Growth Steady State}
+
+At the deterministic balanced-growth steady state,
+$\widehat\gamma=0$, $\Gamma=\bar\Gamma$, $s=\bar s$,
+$\pi=\bar\pi$, and every normalized real variable is constant.  The capital
+Euler equation then implies
+\begin{equation}
+  \bar r^k=\frac{\bar\Gamma}{\beta}-(1-\delta).
+  \label{eq:ss-capital-return}
+\end{equation}
+The stationary capital law gives the investment--capital ratio
+\begin{equation}
+  \frac{\bar i}{\bar k}
+  =1-\frac{1-\delta}{\bar\Gamma}.
+  \label{eq:ss-investment-capital-ratio}
+\end{equation}
+Finally, the nominal-bond Euler equation gives
+\begin{equation}
+  \bar r=\frac{\bar\Gamma\bar\pi}{\beta\bar s}.
+  \label{eq:ss-nominal-rate}
+\end{equation}
+Because the policy targets are met in steady state, the smooth Taylor rule also
+requires $r^*=\bar r$.  With the baseline $\bar s=1$, this reduces to
+$r^*=\bar\Gamma\bar\pi/\beta$.
+
+At $\bar\pi=\pi^*$, both Rotemberg adjustment terms are zero.  The pricing
+condition therefore reduces to
+\begin{equation}
+  \bar\Psi=\frac{\theta-1}{\theta}.
+  \label{eq:ss-marginal-cost}
+\end{equation}
+Capital demand then determines the capital--output ratio:
+\begin{equation}
+  \frac{\bar k}{\bar y}
+  =\frac{\alpha\bar\Psi\bar\Gamma}{\bar r^k}.
+  \label{eq:ss-capital-output-ratio}
+\end{equation}
+Given the target $\bar n$, stationary production determines output as
+\begin{equation}
+  \bar y
+  =\left(
+    \frac{\bar k/\bar y}{\bar\Gamma}
+    \right)^{\alpha/(1-\alpha)}\bar n.
+  \label{eq:ss-output}
+\end{equation}
+The remaining real allocation follows sequentially from capital accumulation,
+the resource constraint, and labor demand:
+\begin{align}
+  \bar k
+  &=\left(\frac{\bar k}{\bar y}\right)\bar y,
+  \label{eq:ss-capital}\\
+  \bar i
+  &=\left[1-\frac{1-\delta}{\bar\Gamma}\right]\bar k,
+  \label{eq:ss-investment}\\
+  \bar c&=\bar y-\bar i,
+  \label{eq:ss-consumption}\\
+  \bar w&=(1-\alpha)\bar\Psi\frac{\bar y}{\bar n}.
+  \label{eq:ss-wage}
+\end{align}
+Finally, if labor is calibrated to $\bar n=1/3$, the labor-supply condition
+determines the preference scale rather than requiring a nonlinear solve:
+\begin{equation}
+  \chi=\frac{\bar w}{\bar n^{\eta}\bar c}.
+  \label{eq:ss-labor-disutility-scale}
+\end{equation}
+These relationships are algebraic evaluations of the stationary equilibrium
+conditions.  Dynare can calculate their numerical values and then verify the
+residuals of the full nonlinear model.
+
+\section{Compact Dynare Ordering}
+
+For direct transcription into Dynare, define the model-local gross growth factor
+\begin{equation*}
+  \Gamma_t=\bar\Gamma\exp(\widehat\gamma_t).
+\end{equation*}
+The twelve endogenous variables are then determined by the following twelve
+equations, in declaration order:
+\begin{enumerate}[label=\arabic*.,leftmargin=2.4em]
+  \item Capital demand:
+  \begin{equation*}
+    r_t^k=\alpha\Psi_t\Gamma_t\frac{y_t}{k_t}.
+  \end{equation*}
+
+  \item Household labor supply:
+  \begin{equation*}
+    w_t=\chi n_t^\eta c_t.
+  \end{equation*}
+
+  \item Aggregate production:
+  \begin{equation*}
+    y_t=\left(\frac{k_t}{\Gamma_t}\right)^\alpha n_t^{1-\alpha}.
+  \end{equation*}
+
+  \item Labor demand:
+  \begin{equation*}
+    w_t=(1-\alpha)\Psi_t\frac{y_t}{n_t}.
+  \end{equation*}
+
+  \item Capital Euler equation:
+  \begin{equation*}
+    \frac{1}{c_t}
+    =E_t\left[
+      \frac{\beta}{\Gamma_{t+1}c_{t+1}}
+      \left(r_{t+1}^k+1-\delta\right)
+      \right].
+  \end{equation*}
+
+  \item Resource constraint:
+  \begin{equation*}
+    c_t+i_t
+    =y_t-\frac{\varphi}{2}
+      \left(\frac{\pi_t}{\bar\pi}-1\right)^2y_t.
+  \end{equation*}
+
+  \item Capital accumulation:
+  \begin{equation*}
+    k_{t+1}=\frac{1-\delta}{\Gamma_t}k_t+i_t.
+  \end{equation*}
+
+  \item Rotemberg pricing:
+  \begin{align*}
+    \varphi\left(\frac{\pi_t}{\bar\pi}-1\right)
+      \frac{\pi_t}{\bar\pi}
+    &=(1-\theta)+\theta\Psi_t \\
+    &\quad+\varphi E_t\left[
+      \beta\frac{c_t}{c_{t+1}}
+      \left(\frac{\pi_{t+1}}{\bar\pi}-1\right)
+      \frac{\pi_{t+1}}{\bar\pi}
+      \frac{y_{t+1}}{y_t}
+      \right].
+  \end{align*}
+
+  \item Nominal-bond Euler equation:
+  \begin{equation*}
+    1=s_tr_tE_t\left[
+      \beta\frac{c_t}
+      {\Gamma_{t+1}c_{t+1}\pi_{t+1}}
+      \right].
+  \end{equation*}
+
+  \item Monetary policy:
+  \begin{equation*}
+    r_t=r^*
+      \left(\frac{\pi_t}{\bar\pi}\right)^{\phi_\pi}
+      \left(\frac{y_t}{\bar y}\right)^{\phi_y}.
+  \end{equation*}
+
+  \item Technology growth:
+  \begin{equation*}
+    \widehat\gamma_t
+    =\rho_\Gamma\widehat\gamma_{t-1}
+      +\sigma_\Gamma\varepsilon_t^\Gamma.
+  \end{equation*}
+
+  \item Risk premium:
+  \begin{equation*}
+    s_t=(1-\rho_s)\bar s+\rho_s s_{t-1}
+      +\sigma_s\varepsilon_t^s.
+  \end{equation*}
+\end{enumerate}
+
+\end{document}
