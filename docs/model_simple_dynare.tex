@@ -1,0 +1,357 @@
+\documentclass[12pt,final]{article}
+\usepackage{econ_paper_2}
+
+\begin{document}
+\setpaperheader{Model 2: Baseline New Keynesian Model with Capital}
+
+\section{Model 2: Baseline with Capital}
+\label{sec:model2-clean}
+
+This document collects the equations for Model 2 in a compact, Dynare-oriented order. It retains the equations and timing in the original model and includes the equations inherited from Model 1.
+
+\subsection{Variables}
+
+The endogenous variables are itemized in the following order:
+\begin{enumerate}[label=\arabic*.,leftmargin=2.4em]
+  \item $r_t^k$: real rental rate of capital,
+  \item $w_t$: real wage rate,
+  \item $y_t$: aggregate output before price-adjustment costs,
+  \item $n_t$: labor hours,
+  \item $c_t$: household consumption,
+  \item $i_t$: investment,
+  \item $k_t$: capital carried from period $t$ into period $t+1$,
+  \item $\pi_t=p_t/p_{t-1}$: gross inflation rate,
+  \item $r_t$: gross nominal interest rate,
+  \item $\Psi_t$: real marginal cost,
+  \item $z_t$: level of technology.
+\end{enumerate}
+
+Additional variables and objects appearing in the model are
+\begin{itemize}[leftmargin=2em]
+  \item $b_t$: real value of a one-period nominal bond,
+  \item $d_t$: real profits distributed by intermediate-goods firms,
+  \item $y_t^{adj}$: output net of Rotemberg price-adjustment costs,
+  \item $p_t(f)$ and $y_t(f)$: the price and output of intermediate firm $f$,
+  \item $E_t[\cdot]$: expectation conditional on information available in period $t$,
+  \item $\lambda_{t,k}$: the household's real stochastic discount factor from period $t$ to period $k$.
+\end{itemize}
+
+The exogenous innovation is
+\begin{equation*}
+  \upsilon_t \sim \mathbb{N}(0,\sigma_{\upsilon}^{2}),
+\end{equation*}
+which drives the technology process.
+
+\subsection{Parameters}
+
+\begin{description}[style=multiline,leftmargin=3.2cm,font=\normalfont]
+  \item[$\beta$] household discount factor;
+  \item[$\chi$] scale parameter on the disutility of labor;
+  \item[$\eta$] inverse of the Frisch elasticity of labor supply, so the Frisch elasticity is $1/\eta$;
+  \item[$\delta$] capital depreciation rate;
+  \item[$\alpha$] cost share of capital in production;
+  \item[$\theta$] elasticity of substitution between differentiated intermediate goods;
+  \item[$\varphi$] Rotemberg price-adjustment cost coefficient;
+  \item[$\bar{\pi}$] steady-state gross inflation rate;
+  \item[$\phi_{\pi}$] monetary-policy response to inflation;
+  \item[$\phi_y$] monetary-policy response to output;
+  \item[$r^*$] intercept in the monetary-policy rule;
+  \item[$\pi^*$] inflation target, with $\pi^*=\bar{\pi}$;
+  \item[$y_t^*$] output target, equal either to steady-state output $\bar y$ or potential output $y_t^n$;
+  \item[$\bar z$] steady-state technology;
+  \item[$\rho_z$] persistence of technology, with $0\leq\rho_z<1$;
+  \item[$\sigma_{\upsilon}$] standard deviation of the technology innovation;
+  \item[$\mu$] markup term appearing in the paper's expression for potential output.
+\end{description}
+
+The paper's baseline calibration for the parameters used directly in Model 2 is
+\begin{align*}
+  \beta  & = 0.995,
+         & \frac{1}{\eta}  & = 3,
+         & \delta          & = 0.025,
+         & \alpha          & = 0.33,   \\
+  \theta & = 6,
+         & \varphi         & = 59.11,
+         & \bar\pi         & = 1.006,
+         & \phi_\pi        & = 1.5,    \\
+  \phi_y & = 0.1,
+         & \bar z          & = 1,
+         & \rho_z          & = 0.9,
+         & \sigma_\upsilon & = 0.0025.
+\end{align*}
+The parameter $\chi$ is calibrated so that steady-state labor equals approximately $1/3$.
+
+\section{Economic Primitives}
+
+\paragraph{Household objective.}
+The representative household chooses $\{c_t,i_t,n_t,b_t\}_{t=0}^{\infty}$ to maximize the preferences inherited from Model 1:
+\begin{equation}
+  E_0\sum_{t=0}^{\infty}\beta^t
+  \left[
+  \log c_t-\frac{\chi n_t^{1+\eta}}{1+\eta}
+  \right].
+  \label{eq:utility}
+\end{equation}
+
+\paragraph{Household budget constraint.}
+Consumption, investment, and bond purchases equal labor income, capital income, the real payoff from previously purchased bonds, and firm profits:
+\begin{equation}
+  c_t+i_t+b_t
+  =w_tn_t+r_t^k k_{t-1}
+  +\frac{r_{t-1}b_{t-1}}{\pi_t}+d_t.
+  \label{eq:budget}
+\end{equation}
+
+\paragraph{Capital accumulation.}
+Current capital equals undepreciated inherited capital plus current investment:
+\begin{equation}
+  k_t=(1-\delta)k_{t-1}+i_t.
+  \label{eq:capital-law}
+\end{equation}
+
+\paragraph{Intermediate-goods production.}
+Each intermediate firm combines inherited capital and current labor using a Cobb--Douglas technology:
+\begin{equation}
+  y_t(f)=z_t k_{t-1}(f)^{\alpha}n_t(f)^{1-\alpha}.
+  \label{eq:firm-production}
+\end{equation}
+In a symmetric equilibrium, this becomes
+\begin{equation}
+  y_t=z_t k_{t-1}^{\alpha}n_t^{1-\alpha}.
+  \label{eq:aggregate-production}
+\end{equation}
+
+\paragraph{Technology process.}
+Technology follows the stationary stochastic process specified in the original model:
+\begin{equation}
+  z_t=\bar z\left(\frac{z_{t-1}}{\bar z}\right)^{\rho_z}
+  \exp(\upsilon_t).
+  \label{eq:technology}
+\end{equation}
+
+\paragraph{Final-good aggregation.}
+The representative final-goods firm combines differentiated intermediate goods with a Dixit--Stiglitz aggregator:
+\begin{equation}
+  y_t
+  \equiv
+  \left[
+    \int_0^1 y_t(f)^{(\theta-1)/\theta}\,df
+    \right]^{\theta/(\theta-1)}.
+  \label{eq:final-good}
+\end{equation}
+
+\paragraph{Demand for an intermediate good.}
+Cost minimization by the final-goods firm yields demand for firm $f$'s output:
+\begin{equation}
+  y_t(f)=\left(\frac{p_t(f)}{p_t}\right)^{-\theta}y_t.
+  \label{eq:firm-demand}
+\end{equation}
+
+\paragraph{Aggregate price index.}
+The price of the final good is the corresponding Dixit--Stiglitz price index:
+\begin{equation}
+  p_t
+  =\left[
+    \int_0^1 p_t(f)^{1-\theta}\,df
+    \right]^{1/(1-\theta)}.
+  \label{eq:price-index}
+\end{equation}
+
+\paragraph{Rotemberg price-adjustment cost.}
+Each intermediate firm loses output when it changes its price relative to steady-state inflation:
+\begin{equation}
+  adj_t(f)
+  =\frac{\varphi}{2}
+  \left[
+    \frac{p_t(f)}{\bar\pi p_{t-1}(f)}-1
+    \right]^2y_t.
+  \label{eq:adjustment-cost-firm}
+\end{equation}
+In a symmetric equilibrium,
+\begin{equation}
+  adj_t
+  =\frac{\varphi}{2}
+  \left(\frac{\pi_t}{\bar\pi}-1\right)^2y_t.
+  \label{eq:adjustment-cost}
+\end{equation}
+
+\paragraph{Intermediate-firm profits.}
+The original Model 2 section does not restate the profit equation after adding capital. For a Dynare implementation, profits need not be introduced as a separate equilibrium variable because bond-market clearing and the aggregate resource constraint eliminate them from the compact system.
+
+\paragraph{Pricing kernel.}
+The household's one-period real stochastic discount factor is
+\begin{equation}
+  \lambda_{t,t+1}=\beta\frac{c_t}{c_{t+1}},
+  \label{eq:pricing-kernel-one}
+\end{equation}
+with
+\begin{equation}
+  \lambda_{t,t}\equiv1,
+  \qquad
+  \lambda_{t,k}\equiv
+  \prod_{j=t+1}^{k}\lambda_{j-1,j}.
+  \label{eq:pricing-kernel-many}
+\end{equation}
+
+\section{Equilibrium Equation Block}
+
+The following equations are the compact equilibrium system most directly corresponding to a Dynare model.
+
+\paragraph{Household labor-supply condition.}
+The real wage equals the household's marginal rate of substitution between consumption and labor:
+\begin{equation}
+  w_t=\chi n_t^{\eta}c_t.
+  \label{eq:labor-foc}
+\end{equation}
+
+\paragraph{Nominal-bond Euler equation.}
+The household is indifferent at the margin between current consumption and purchasing a one-period nominal bond:
+\begin{equation}
+  1
+  =r_tE_t\left[
+    \beta\frac{c_t}{c_{t+1}}\frac{1}{\pi_{t+1}}
+    \right].
+  \label{eq:bond-euler}
+\end{equation}
+
+\paragraph{Capital Euler equation.}
+The marginal utility cost of saving through capital equals the expected discounted marginal utility of its rental return and undepreciated value:
+\begin{equation}
+  \frac{1}{c_t}
+  =E_t\left[
+    \beta\frac{1}{c_{t+1}}
+    \left(r_{t+1}^k+1-\delta\right)
+    \right].
+  \label{eq:capital-euler}
+\end{equation}
+
+\paragraph{Capital-demand condition.}
+The real rental rate of capital equals capital's marginal revenue product:
+\begin{equation}
+  r_t^k=\alpha\Psi_t\frac{y_t}{k_{t-1}}.
+  \label{eq:capital-foc}
+\end{equation}
+
+\paragraph{Labor-demand condition.}
+The real wage equals labor's marginal revenue product:
+\begin{equation}
+  w_t=(1-\alpha)\Psi_t\frac{y_t}{n_t}.
+  \label{eq:firm-labor-foc}
+\end{equation}
+
+\paragraph{Aggregate production.}
+Symmetric intermediate firms produce aggregate output using inherited capital, current labor, and current technology:
+\begin{equation}
+  y_t=z_t k_{t-1}^{\alpha}n_t^{1-\alpha}.
+  \label{eq:production-block}
+\end{equation}
+
+\paragraph{Rotemberg pricing condition.}
+A price change today balances the current markup incentive against the expected value of future price adjustment:
+\begin{equation}
+  \varphi
+  \left(\frac{\pi_t}{\bar\pi}-1\right)
+  \frac{\pi_t}{\bar\pi}
+  =(1-\theta)+\theta\Psi_t
+  +\varphi E_t\left[
+    \lambda_{t,t+1}
+    \left(\frac{\pi_{t+1}}{\bar\pi}-1\right)
+    \frac{\pi_{t+1}}{\bar\pi}
+    \frac{y_{t+1}}{y_t}
+    \right].
+  \label{eq:pricing-foc}
+\end{equation}
+
+\paragraph{Monetary-policy rule.}
+The central bank sets the gross nominal interest rate in response to inflation and output, subject to the zero lower bound:
+\begin{equation}
+  r_t
+  =\max\left\{
+  1,
+  r^*\left(\frac{\pi_t}{\pi^*}\right)^{\phi_\pi}
+  \left(\frac{y_t}{y_t^*}\right)^{\phi_y}
+  \right\}.
+  \label{eq:policy-rule}
+\end{equation}
+The inflation target is $\pi^*=\bar\pi$. The output target is either
+\begin{equation}
+  y_t^*=\bar y
+  \label{eq:ss-output-target}
+\end{equation}
+or potential output,
+% TODO: Verify this potential-output target for Model 2. The expression below is
+% inherited from the labor-only Model 1 and does not depend on the predetermined
+% capital stock. Either derive flexible-price output for the capital model or
+% clarify that y_t^n is an externally specified policy benchmark rather than
+% Model 2's actual output when \varphi=0.
+\begin{equation}
+  y_t^*=y_t^n=(\chi\mu)^{-1/(1+\eta)}z_t.
+  \label{eq:potential-output-target}
+\end{equation}
+The paper also considers $\phi_y=0$.
+
+\paragraph{Capital law of motion.}
+Current investment adds to the undepreciated capital stock:
+\begin{equation}
+  k_t=(1-\delta)k_{t-1}+i_t.
+  \label{eq:capital-block}
+\end{equation}
+
+\paragraph{Resource constraint.}
+Consumption and investment exhaust output net of Rotemberg price-adjustment costs:
+\begin{equation}
+  c_t+i_t=y_t^{adj}.
+  \label{eq:resource-adjusted}
+\end{equation}
+Adjusted output is defined by
+\begin{equation}
+  y_t^{adj}=y_t-adj_t
+  =y_t-
+  \frac{\varphi}{2}
+  \left(\frac{\pi_t}{\bar\pi}-1\right)^2y_t.
+  \label{eq:adjusted-output}
+\end{equation}
+Equivalently, without introducing $y_t^{adj}$ as a separate variable,
+\begin{equation}
+  c_t+i_t
+  =y_t-
+  \frac{\varphi}{2}
+  \left(\frac{\pi_t}{\bar\pi}-1\right)^2y_t.
+  \label{eq:resource-direct}
+\end{equation}
+
+\paragraph{Technology process.}
+Technology evolves according to its stationary autoregressive process:
+\begin{equation}
+  z_t=\bar z\left(\frac{z_{t-1}}{\bar z}\right)^{\rho_z}
+  \exp(\upsilon_t).
+  \label{eq:technology-block}
+\end{equation}
+
+\paragraph{Bond-market clearing.}
+Because the representative household's bond position is in zero net supply,
+\begin{equation}
+  b_t=0.
+  \label{eq:bond-clearing}
+\end{equation}
+
+\section{Compact Dynare Ordering}
+
+Using the eleven endogenous variables listed above, a compact equation order is:
+\begin{enumerate}[label=\arabic*.,leftmargin=2.4em]
+  \item capital-demand condition, \eqref{eq:capital-foc};
+  \item household labor-supply condition, \eqref{eq:labor-foc};
+  \item aggregate production, \eqref{eq:production-block};
+  \item labor-demand condition, \eqref{eq:firm-labor-foc};
+  \item capital Euler equation, \eqref{eq:capital-euler};
+  \item direct resource constraint, \eqref{eq:resource-direct};
+  \item capital law of motion, \eqref{eq:capital-block};
+  \item Rotemberg pricing condition, \eqref{eq:pricing-foc};
+  \item nominal-bond Euler equation, \eqref{eq:bond-euler};
+  \item monetary-policy rule, \eqref{eq:policy-rule};
+  \item technology process, \eqref{eq:technology-block}.
+\end{enumerate}
+
+This ordering is only organizational: it does not alter the model's equilibrium conditions.
+
+\end{document}
