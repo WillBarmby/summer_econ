@@ -19,7 +19,7 @@ The endogenous variables are itemized in the following order:
   \item $n_t$: labor hours,
   \item $c_t$: household consumption,
   \item $i_t$: investment,
-  \item $k_t$: capital carried from period $t$ into period $t+1$,
+  \item $k_t$: capital available at the beginning of period $t$,
   \item $\pi_t=p_t/p_{t-1}$: gross inflation rate,
   \item $r_t$: gross nominal interest rate,
   \item $\Psi_t$: real marginal cost,
@@ -97,27 +97,29 @@ The representative household chooses $\{c_t,i_t,n_t,b_t\}_{t=0}^{\infty}$ to max
 Consumption, investment, and bond purchases equal labor income, capital income, the real payoff from previously purchased bonds, and firm profits:
 \begin{equation}
   c_t+i_t+b_t
-  =w_tn_t+r_t^k k_{t-1}
+  =w_tn_t+r_t^k k_t
   +\frac{r_{t-1}b_{t-1}}{\pi_t}+d_t.
   \label{eq:budget}
 \end{equation}
 
 \paragraph{Capital accumulation.}
-Current capital equals undepreciated inherited capital plus current investment:
+Next period's capital equals undepreciated beginning-of-period capital plus
+current investment:
 \begin{equation}
-  k_t=(1-\delta)k_{t-1}+i_t.
+  k_{t+1}=(1-\delta)k_t+i_t.
   \label{eq:capital-law}
 \end{equation}
 
 \paragraph{Intermediate-goods production.}
-Each intermediate firm combines inherited capital and current labor using a Cobb--Douglas technology:
+Each intermediate firm combines beginning-of-period capital and current labor
+using a Cobb--Douglas technology:
 \begin{equation}
-  y_t(f)=z_t k_{t-1}(f)^{\alpha}n_t(f)^{1-\alpha}.
+  y_t(f)=z_t k_t(f)^{\alpha}n_t(f)^{1-\alpha}.
   \label{eq:firm-production}
 \end{equation}
 In a symmetric equilibrium, this becomes
 \begin{equation}
-  y_t=z_t k_{t-1}^{\alpha}n_t^{1-\alpha}.
+  y_t=z_t k_t^{\alpha}n_t^{1-\alpha}.
   \label{eq:aggregate-production}
 \end{equation}
 
@@ -228,7 +230,7 @@ The marginal utility cost of saving through capital equals the expected discount
 \paragraph{Capital-demand condition.}
 The real rental rate of capital equals capital's marginal revenue product:
 \begin{equation}
-  r_t^k=\alpha\Psi_t\frac{y_t}{k_{t-1}}.
+  r_t^k=\alpha\Psi_t\frac{y_t}{k_t}.
   \label{eq:capital-foc}
 \end{equation}
 
@@ -240,9 +242,10 @@ The real wage equals labor's marginal revenue product:
 \end{equation}
 
 \paragraph{Aggregate production.}
-Symmetric intermediate firms produce aggregate output using inherited capital, current labor, and current technology:
+Symmetric intermediate firms produce aggregate output using beginning-of-period
+capital, current labor, and current technology:
 \begin{equation}
-  y_t=z_t k_{t-1}^{\alpha}n_t^{1-\alpha}.
+  y_t=z_t k_t^{\alpha}n_t^{1-\alpha}.
   \label{eq:production-block}
 \end{equation}
 
@@ -291,9 +294,9 @@ or potential output,
 The paper also considers $\phi_y=0$.
 
 \paragraph{Capital law of motion.}
-Current investment adds to the undepreciated capital stock:
+Current investment determines next period's capital stock:
 \begin{equation}
-  k_t=(1-\delta)k_{t-1}+i_t.
+  k_{t+1}=(1-\delta)k_t+i_t.
   \label{eq:capital-block}
 \end{equation}
 
