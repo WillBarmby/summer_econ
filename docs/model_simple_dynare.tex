@@ -23,6 +23,7 @@ The endogenous variables are itemized in the following order:
   \item $\pi_t=p_t/p_{t-1}$: gross inflation rate,
   \item $r_t$: gross nominal interest rate,
   \item $\Psi_t$: real marginal cost,
+  \item $s_t$: gross risk-premium wedge on nominal-bond saving,
   \item $\widehat\gamma_t$: log deviation of gross technology growth from its
   balanced-growth value.
 \end{enumerate}
@@ -37,11 +38,14 @@ Additional variables and objects appearing in the model are
   \item $\lambda_{t,k}$: the household's real stochastic discount factor from period $t$ to period $k$.
 \end{itemize}
 
-The exogenous innovation is
+The exogenous innovations are
 \begin{equation*}
   \varepsilon_t^\Gamma \sim \mathbb{N}(0,1),
+  \qquad
+  \varepsilon_t^s \sim \mathbb{N}(0,1),
 \end{equation*}
-which enters technology growth with standard deviation $\sigma_\Gamma$.
+which enter technology growth and the risk-premium process with standard
+deviations $\sigma_\Gamma$ and $\sigma_s$, respectively.
 
 \subsection{Balanced-Growth Variable Classification}
 \label{sec:bgp-variable-classification}
@@ -158,6 +162,10 @@ marginal utility.
     with $0\leq\rho_\Gamma<1$;
   \item[$\sigma_\Gamma$] standard deviation of the log technology-growth
     innovation;
+  \item[$\bar s$] steady-state gross risk-premium wedge;
+  \item[$\rho_s$] persistence of the risk-premium wedge, with
+    $0\leq\rho_s<1$;
+  \item[$\sigma_s$] standard deviation of the risk-premium innovation;
   \item[$\mu$] markup term appearing in the paper's expression for potential output.
 \end{description}
 
@@ -175,7 +183,10 @@ process:
          & \phi_\pi        & = 1.5,    \\
   \phi_y & = 0.1,
          & \bar\Gamma      & = \exp(0.0053),
-         & \rho_\Gamma     & = 0.
+         & \rho_\Gamma     & = 0,
+         & \bar s           & = 1,     \\
+  \rho_s & = 0,
+         & \sigma_s         & = 0.
 \end{align*}
 The parameter $\chi$ is calibrated so that steady-state labor equals approximately $1/3$.
 The value of $\sigma_\Gamma$ will be stated by the experiment configuration so
@@ -184,6 +195,9 @@ innovation in the same units.  For provenance, the pre-rewrite NK model instead
 used stationary level technology with $\bar z=1$, $\rho_z=0.9$, and innovation
 standard deviation $0.0025$; those values are not the active balanced-growth
 specification.
+Thus the default has $s_t=1$ in every period and no risk-premium shock.  A
+demand-shock experiment must explicitly override $\rho_s$ and $\sigma_s$, and
+must report both values with its results.
 
 \section{Economic Primitives}
 
@@ -353,15 +367,28 @@ The household is indifferent at the margin between current consumption and
 purchasing a one-period nominal bond.  Using the stationary pricing kernel,
 \begin{equation}
   1
-  =r_tE_t\left[
+  =s_tr_tE_t\left[
     \beta\frac{c_t}{\Gamma_{t+1}c_{t+1}}
     \frac{1}{\pi_{t+1}}
     \right].
   \label{eq:bond-euler}
 \end{equation}
-Equivalently, $1=r_tE_t[\lambda_{t,t+1}/\pi_{t+1}]$.  The growth factor is
+Equivalently, $1=s_tr_tE_t[\lambda_{t,t+1}/\pi_{t+1}]$.  The growth factor is
 part of the stochastic discount factor; it is not an additional return on the
-bond.
+bond.  A positive innovation that raises $s_t$ increases the effective return
+to saving at a given policy rate and therefore acts as a contractionary demand
+shock.
+
+\paragraph{Risk-premium process.}
+Following the additive AR(1) specification in the cited demand-shock model, the
+gross risk-premium wedge evolves as
+\begin{equation}
+  s_t=(1-\rho_s)\bar s+\rho_s s_{t-1}+\sigma_s\varepsilon_t^s.
+  \label{eq:risk-premium-block}
+\end{equation}
+The baseline $\bar s=1$ leaves the deterministic steady state unchanged.  The
+additive process is a local approximation and does not impose global positivity;
+the shock calibration must therefore keep simulated values of $s_t$ positive.
 
 \paragraph{Capital Euler equation.}
 In levels, the marginal utility cost of saving through capital equals the
@@ -512,7 +539,7 @@ Because the representative household's bond position is in zero net supply,
 
 \section{Compact Dynare Ordering}
 
-Using the eleven endogenous variables listed above, a compact equation order is:
+Using the twelve endogenous variables listed above, a compact equation order is:
 \begin{enumerate}[label=\arabic*.,leftmargin=2.4em]
   \item capital-demand condition, \eqref{eq:capital-foc};
   \item household labor-supply condition, \eqref{eq:labor-foc};
@@ -524,7 +551,8 @@ Using the eleven endogenous variables listed above, a compact equation order is:
   \item Rotemberg pricing condition, \eqref{eq:pricing-foc};
   \item nominal-bond Euler equation, \eqref{eq:bond-euler};
   \item monetary-policy rule, \eqref{eq:policy-rule};
-  \item technology process, \eqref{eq:technology-block}.
+  \item technology process, \eqref{eq:technology-block};
+  \item risk-premium process, \eqref{eq:risk-premium-block}.
 \end{enumerate}
 
 This ordering is only organizational: it does not alter the model's equilibrium conditions.
