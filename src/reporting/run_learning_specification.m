@@ -1,18 +1,18 @@
 function result = run_learning_specification(learning_model,id,label, ...
-    standardized_innovations,config,impulse,report_function)
+    standardized_innovations,config,impulse,report_function,shock_name)
 %% RUN_LEARNING_SPECIFICATION Train and simulate one named learning model.
-% The first structural shock is the common technology-growth innovation. Any
-% additional shocks in a model are held at zero. This convention lets the
-% one-shock E&P model and two-shock NK model consume exactly the same recorded
-% random numbers without pretending that the NK risk-premium shock is active.
+% shock_name selects the single innovation used for training and the impulse.
+% Every other shock is held exactly at zero. This makes shock isolation explicit
+% in models, such as NK, that declare more than one structural disturbance.
 
 n = numel(learning_model.model.variable_names);
 q = numel(learning_model.model.shock_names);
-assert(strcmp(learning_model.model.shock_names{1},'eps_x'), ...
+[found,shock_index] = ismember(shock_name,learning_model.model.shock_names);
+assert(found, ...
     'EPResearch:ShockContract', ...
-    'The first model shock must be the common technology-growth shock eps_x.');
+    'The model does not declare requested shock %s.',shock_name);
 impulse_vector = zeros(q,1);
-impulse_vector(1) = impulse;
+impulse_vector(shock_index) = impulse;
 re_native = make_re_irf(learning_model,config.ir_periods,impulse_vector);
 re_reported = report_function(re_native,learning_model.model.variable_names);
 quantity_count = size(re_reported,1);
@@ -28,10 +28,9 @@ policy = struct('magnitude_limit',config.explosion_magnitude, ...
     'reject_nonfinite',true,'variable_indices',1:n);
 
 for draw = 1:config.draw_count
-    % Only eps_x receives the common scalar innovation sequence. The remaining
-    % shock rows are exactly zero throughout training and the paired IRF.
+    % Only the selected disturbance receives the recorded scalar innovations.
     shocks = zeros(q,config.training_periods+config.ir_periods);
-    shocks(1,:) = standardized_innovations(draw,:)* ...
+    shocks(shock_index,:) = standardized_innovations(draw,:)* ...
         config.training_shock_standard_deviation;
     training = shocks(:,1:config.training_periods);
     ir_shocks = shocks(:,config.training_periods+1:end);
