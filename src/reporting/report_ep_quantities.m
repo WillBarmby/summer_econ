@@ -5,11 +5,5 @@ function reported = report_ep_quantities(native,variable_names)
 % and investment are detrended, so adding cumulative technology growth restores
 % their level responses. Hours is stationary and needs no trend restoration.
 
-requested = {'output','consumption','investment','hours','gamma_x'};
-[found,index] = ismember(requested,variable_names);
-assert(all(found),'EPResearch:MissingVariable','Missing E&P report variable.');
-technology_level = cumsum(native(index(5),:),2);
-reported = [native(index(1),:)+technology_level; ...
-    native(index(2),:)+technology_level; ...
-    native(index(3),:)+technology_level;native(index(4),:)];
+reported = report_common_quantities(native,variable_names);
 end

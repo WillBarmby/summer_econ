@@ -32,8 +32,9 @@ for draw = 1:config.draw_count
 end
 results = cell(1,2);
 for j = 1:2
-    results{j} = run_learning_model(learning_models{j},ids{j},labels{j}, ...
-        standardized_innovations,config);
+    results{j} = run_learning_specification(learning_models{j},ids{j}, ...
+        labels{j},standardized_innovations,config, ...
+        config.technology_growth_impulse,@report_common_quantities);
 end
 artifact = struct('experiment',experiment_name, ...
     'config',config,'calibration',calibration, ...
@@ -49,57 +50,4 @@ artifact = struct('experiment',experiment_name, ...
 artifact.output_files = save_ep_artifact_and_panels(artifact,output_dir);
 % Save again so the MAT file records its own complete output-file manifest.
 save(artifact.output_files.mat,'-struct','artifact','-v7.3');
-end
-
-function result = run_learning_model(learning_model,id,label,innovations,config)
-n = numel(learning_model.model.variable_names);
-q = numel(learning_model.model.shock_names);
-assert(q==1,'EPResearch:ShockContract','E&P interface requires one shock.');
-impulse = config.technology_growth_impulse;
-re_native = make_re_irf(learning_model,config.ir_periods,impulse);
-re_reported = report_ep_quantities(re_native,learning_model.model.variable_names);
-raw = NaN(config.draw_count,4,config.ir_periods);
-statuses = strings(config.draw_count,1);
-terminations = cell(config.draw_count,1);
-policy = struct('magnitude_limit',config.explosion_magnitude, ...
-    'reject_nonfinite',true,'variable_indices',1:n);
-for draw = 1:config.draw_count
-    common = innovations(draw,:)*config.training_shock_standard_deviation;
-    training = common(1:config.training_periods);
-    ir_shocks = common(config.training_periods+1:end);
-    paired = simulate_paired_irf(learning_model,training,ir_shocks,impulse, ...
-        zeros(n,1),learning_model.initial_beliefs,policy);
-    statuses(draw) = paired.status;
-    if paired.status=="completed"
-        raw(draw,:,:) = report_ep_quantities(paired.native_irf, ...
-            learning_model.model.variable_names);
-        terminations{draw} = struct();
-    else
-        terminations{draw} = find_termination(paired);
-    end
-end
-completed = statuses=="completed";
-summary = summarize_learning_draws(raw,re_reported,config.band_probabilities);
-result = struct('id',id,'label',label,'model_name',learning_model.model.name, ...
-    'backend',learning_model.model.backend, ...
-    'effective_calibration',learning_model.model.calibration, ...
-    'variable_names',{learning_model.model.variable_names}, ...
-    'learning_specification',learning_model.specification, ...
-    're_native_path',re_native,'re_reported_path',re_reported, ...
-    'learning_draws',raw,'summary',summary,'statuses',statuses, ...
-    'terminations',{terminations},'status_counts',struct( ...
-    'completed',sum(completed),'explosive',sum(contains(statuses,"explosive")), ...
-    'invalid',sum(contains(statuses,"invalid"))));
-end
-
-function termination = find_termination(paired)
-for name = {'training','baseline','shocked'}
-    run = paired.(name{1});
-    if ~isempty(run) && run.status~="completed"
-        termination = run.termination;
-        termination.stage = name{1};
-        return
-    end
-end
-termination = struct();
 end
