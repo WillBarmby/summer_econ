@@ -52,6 +52,10 @@ assert(max(abs(alm.transition-transition),[],'all')<1e-10);
 assert(max(abs(alm.shock_impact-shock),[],'all')<1e-10);
 assert(abs(shock(index('gamma_x'),1)-1)<tolerance);
 assert(max(abs(shock(:,2)))<tolerance); % dormant risk-premium shock
+% Dynare stores chosen k_(t+1) as current `capital`, so accumulation is an
+% accounting identity rather than a subjective capital(+1) expectation.
+assert(max(abs(model.lead(:,index('capital'))))<tolerance);
+assert(max(abs(model.lag(:,index('capital'))))>tolerance);
 assert(max(abs(eig(transition)))<1);
 
 %% Parameter overrides must pass through the Dynare macro layer.

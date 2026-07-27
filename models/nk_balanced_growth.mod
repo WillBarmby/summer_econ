@@ -10,7 +10,8 @@
 //   n_t                   -> hours
 //   c_t                   -> consumption
 //   i_t                   -> investment
-//   k_t                   -> capital
+//   k_t                   -> capital(-1)
+//   k_(t+1)               -> capital
 //   pi_t                  -> inflation
 //   r_t                   -> nominal_rate
 //   Psi_t                 -> marginal_cost
@@ -23,8 +24,6 @@
 
 var rk wage output hours consumption investment capital inflation
     nominal_rate marginal_cost risk_premium gamma_x;
-// capital is installed before period t and chosen one period in advance.
-predetermined_variables capital;
 varexo eps_x eps_s;
 
 parameters beta chi eta delta alpha theta phi_rot pi_bar phi_pi phi_y
@@ -124,13 +123,13 @@ model;
     # Gamma_lead = gamma_bar*exp(gamma_x(+1));
 
     [name='capital_demand']
-    rk = alpha*marginal_cost*Gamma*output/capital;
+    rk = alpha*marginal_cost*Gamma*output/capital(-1);
 
     [name='labor_supply']
     wage = chi*hours^eta*consumption;
 
     [name='production']
-    output = (capital/Gamma)^alpha*hours^(1-alpha);
+    output = (capital(-1)/Gamma)^alpha*hours^(1-alpha);
 
     [name='labor_demand']
     wage = (1-alpha)*marginal_cost*output/hours;
@@ -144,7 +143,7 @@ model;
         -phi_rot/2*(inflation/pi_bar-1)^2*output;
 
     [name='capital_accumulation']
-    capital(+1) = (1-delta)/Gamma*capital+investment;
+    capital = (1-delta)/Gamma*capital(-1)+investment;
 
     [name='rotemberg_pricing']
     phi_rot*(inflation/pi_bar-1)*(inflation/pi_bar)
