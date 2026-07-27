@@ -8,6 +8,7 @@
 Both are explicit linear percentage-deviation systems copied from the verified
 lineage. Their learning assumptions live in MATLAB rather than inside Dynare.
 
-The temporary NK model is deliberately excluded. A nonlinear stationary,
-balanced-growth NK model will be added only after its transformation is derived
-and reviewed.
+- `nk_balanced_growth.mod` is the nonlinear stationary NK model transcribed
+  from `docs/model_simple_dynare.tex`. Dynare computes its analytical
+  first-order approximation. Its top-of-file map documents every TeX-to-Dynare
+  name change, and its risk-premium shock is dormant by default.
