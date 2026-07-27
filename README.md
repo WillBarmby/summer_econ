@@ -24,14 +24,16 @@ From the repository root in MATLAB:
 setup_project
 results = run_ep_comparison();
 growth = run_ep_growth_sensitivity();
+comparison = run_cross_model_comparison();
 run_fast_tests
 run_acceptance_tests
 ```
 
-The E&P experiment runners are active. With no arguments they use the documented
+The experiment runners are active. With no arguments they use the documented
 100-draw defaults and save beneath `results/`; alternatively, pass both a
-complete configuration and an output directory. The public test-suite wrappers
-will be activated in Phase 4.
+complete configuration and an output directory. The cross-model runner gives
+E&P and NK the same technology-growth innovations and reports both a five-path
+overlay and within-model learning-minus-RE panels.
 
 ## Project map
 

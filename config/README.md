@@ -6,5 +6,12 @@ Configuration is separated by purpose:
 - `ep_experiment_config` records simulation and reporting choices.
 - `ep_ee_specification` states what one-step EE agents estimate and observe.
 - `ep_ih_specification` states the verified infinite-horizon information set.
+- `nk_ee_specification` states which NK forecasts agents estimate under the
+  one-step EE comparison and keeps those assumptions outside the Dynare model.
+
+The first cross-model runner deliberately reuses `ep_experiment_config`, so the
+models share the draw count, seed, training length, gain, horizon, technology
+shock volatility, and impulse. NK-specific learning assumptions remain in
+`nk_ee_specification`.
 
 No experiment requires editing a Dynare model file in multiple places.

@@ -1,0 +1,55 @@
+function comparison = run_cross_model_comparison(varargin)
+%% RUN_CROSS_MODEL_COMPARISON Compare E&P and NK under one common shock.
+% The main panels contain five paths: E&P RE, E&P EE, E&P IH, NK RE, and
+% NK EE. Companion wedge panels subtract each model's own RE response from its
+% learning response. The latter are essential because an E&P-versus-NK gap
+% combines structural-model differences with expectation differences.
+
+root = setup_project();
+if nargin==0
+    config = ep_experiment_config();
+    output_dir = fullfile(root,'results','cross_model_comparison');
+elseif nargin==2
+    config = varargin{1};
+    output_dir = varargin{2};
+else
+    error('EPResearch:RequiredArguments', ...
+        'Supply both a complete config and output directory, or neither.');
+end
+validate_ep_experiment_config(config);
+if ~isfolder(output_dir), mkdir(output_dir); end
+
+%% Run E&P and retain its exact standardized innovations.
+% run_ep_experiment supplies the already verified paper-EE and benchmark-IH
+% implementations. Saving its own artifact beneath ep/ preserves the standalone
+% E&P result as well as the combined comparison.
+ep = run_ep_experiment(config,fullfile(output_dir,'ep'),'ep_comparison');
+
+%% Compile and run NK EE using the identical technology innovations.
+% The nonlinear stationary model is analytically linearized by Dynare. A
+% one-unit eps_x impulse is one percentage point of technology growth because
+% sigma_x=0.01 in the model. eps_s remains zero in this experiment.
+nk_model = load_nonlinear_dynare_model( ...
+    fullfile(root,'models','nk_balanced_growth.mod'), ...
+    'DeviationScales',struct('gamma_x',0.01));
+nk_shock_covariance = diag([config.training_shock_standard_deviation^2,0]);
+nk_learning_model = build_ee_learning_model(nk_model, ...
+    nk_ee_specification(config.gain),nk_shock_covariance);
+nk = run_learning_specification(nk_learning_model,'nk_ee', ...
+    'NK one-step EE',ep.standardized_innovations,config, ...
+    config.technology_growth_impulse,@report_common_quantities);
+
+%% Record the comparison contract and save common panels.
+comparison = struct('experiment','cross_model_comparison','config',config, ...
+    'shock_metadata',struct('name','eps_x', ...
+    'description',['one-percentage-point technology-growth innovation; ' ...
+    'risk-premium innovation fixed at zero'], ...
+    'training_standard_deviation',config.training_shock_standard_deviation, ...
+    'impulse',config.technology_growth_impulse), ...
+    'quantity_names',{{'output','consumption','investment','hours'}}, ...
+    'standardized_innovations',ep.standardized_innovations, ...
+    'ep_results',{ep.results},'nk_result',nk,'output_files',struct());
+comparison.output_files = save_cross_model_artifact_and_panels( ...
+    comparison,output_dir);
+save(comparison.output_files.mat,'-struct','comparison','-v7.3');
+end
