@@ -27,10 +27,15 @@ for t = 2:periods
         % This is an economically relevant invalid learning draw, not a reason
         % to abort the remaining Monte Carlo histories. Unexpected programming
         % errors are rethrown so they cannot be mislabeled as instability.
-        if strcmp(exception.identifier,'EPResearch:SingularAlm')
+        if strcmp(exception.identifier,'EPResearch:SingularAlm') || ...
+                strcmp(exception.identifier,'EPResearch:UnstableForecast')
             status = "invalid";
+            criterion = "singular_alm";
+            if strcmp(exception.identifier,'EPResearch:UnstableForecast')
+                criterion = "unstable_forecast";
+            end
             termination = make_termination(t,NaN,NaN, ...
-                "singular_alm",explosion_policy);
+                criterion,explosion_policy);
             last_period = t-1;
             break
         end

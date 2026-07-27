@@ -127,10 +127,23 @@ singular_alm_model.plm_to_alm = @(plm) raise_singular_alm(plm);
 invalid_alm = simulate_learning(singular_alm_model,0,0,initial,policy(1,1000));
 assert(invalid_alm.status=="invalid" && ...
     invalid_alm.termination.criterion=="singular_alm");
+
+unstable_forecast_model = singular_model;
+unstable_forecast_model.plm_to_alm = @(plm) raise_unstable_forecast(plm);
+invalid_forecast = simulate_learning(unstable_forecast_model,0,0,initial, ...
+    policy(1,1000));
+assert(invalid_forecast.status=="invalid" && ...
+    invalid_forecast.termination.criterion=="unstable_forecast");
 end
 
 function alm = raise_singular_alm(~)
 error('EPResearch:SingularAlm','Deliberate singular-ALM test fixture.');
+alm = struct(); %#ok<UNRCH>
+end
+
+function alm = raise_unstable_forecast(~)
+error('EPResearch:UnstableForecast', ...
+    'Deliberate unstable-forecast test fixture.');
 alm = struct(); %#ok<UNRCH>
 end
 
