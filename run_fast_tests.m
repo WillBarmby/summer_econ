@@ -5,6 +5,7 @@ function run_fast_tests()
 
 setup_project();
 test_minimal_engine();
+test_nonlinear_loader();
 test_ep_smoke();
 fprintf('All fast tests passed.\n');
 end
