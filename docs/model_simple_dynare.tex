@@ -539,20 +539,94 @@ residuals of the full nonlinear model.
 
 \section{Compact Dynare Ordering}
 
-Using the twelve endogenous variables listed above, a compact equation order is:
+For direct transcription into Dynare, define the model-local gross growth factor
+\begin{equation*}
+  \Gamma_t=\bar\Gamma\exp(\widehat\gamma_t).
+\end{equation*}
+The twelve endogenous variables are then determined by the following twelve
+equations, in declaration order:
 \begin{enumerate}[label=\arabic*.,leftmargin=2.4em]
-  \item capital-demand condition, \eqref{eq:capital-foc};
-  \item household labor-supply condition, \eqref{eq:labor-foc};
-  \item aggregate production, \eqref{eq:production-block};
-  \item labor-demand condition, \eqref{eq:firm-labor-foc};
-  \item capital Euler equation, \eqref{eq:capital-euler};
-  \item direct resource constraint, \eqref{eq:resource-direct};
-  \item capital law of motion, \eqref{eq:capital-block};
-  \item Rotemberg pricing condition, \eqref{eq:pricing-foc};
-  \item nominal-bond Euler equation, \eqref{eq:bond-euler};
-  \item monetary-policy rule, \eqref{eq:policy-rule};
-  \item technology process, \eqref{eq:technology-block};
-  \item risk-premium process, \eqref{eq:risk-premium-block}.
+  \item Capital demand:
+  \begin{equation*}
+    r_t^k=\alpha\Psi_t\Gamma_t\frac{y_t}{k_t}.
+  \end{equation*}
+
+  \item Household labor supply:
+  \begin{equation*}
+    w_t=\chi n_t^\eta c_t.
+  \end{equation*}
+
+  \item Aggregate production:
+  \begin{equation*}
+    y_t=\left(\frac{k_t}{\Gamma_t}\right)^\alpha n_t^{1-\alpha}.
+  \end{equation*}
+
+  \item Labor demand:
+  \begin{equation*}
+    w_t=(1-\alpha)\Psi_t\frac{y_t}{n_t}.
+  \end{equation*}
+
+  \item Capital Euler equation:
+  \begin{equation*}
+    \frac{1}{c_t}
+    =E_t\left[
+      \frac{\beta}{\Gamma_{t+1}c_{t+1}}
+      \left(r_{t+1}^k+1-\delta\right)
+      \right].
+  \end{equation*}
+
+  \item Resource constraint:
+  \begin{equation*}
+    c_t+i_t
+    =y_t-\frac{\varphi}{2}
+      \left(\frac{\pi_t}{\bar\pi}-1\right)^2y_t.
+  \end{equation*}
+
+  \item Capital accumulation:
+  \begin{equation*}
+    k_{t+1}=\frac{1-\delta}{\Gamma_t}k_t+i_t.
+  \end{equation*}
+
+  \item Rotemberg pricing:
+  \begin{align*}
+    \varphi\left(\frac{\pi_t}{\bar\pi}-1\right)
+      \frac{\pi_t}{\bar\pi}
+    &=(1-\theta)+\theta\Psi_t \\
+    &\quad+\varphi E_t\left[
+      \beta\frac{c_t}{c_{t+1}}
+      \left(\frac{\pi_{t+1}}{\bar\pi}-1\right)
+      \frac{\pi_{t+1}}{\bar\pi}
+      \frac{y_{t+1}}{y_t}
+      \right].
+  \end{align*}
+
+  \item Nominal-bond Euler equation:
+  \begin{equation*}
+    1=s_tr_tE_t\left[
+      \beta\frac{c_t}
+      {\Gamma_{t+1}c_{t+1}\pi_{t+1}}
+      \right].
+  \end{equation*}
+
+  \item Monetary policy:
+  \begin{equation*}
+    r_t=r^*
+      \left(\frac{\pi_t}{\bar\pi}\right)^{\phi_\pi}
+      \left(\frac{y_t}{\bar y}\right)^{\phi_y}.
+  \end{equation*}
+
+  \item Technology growth:
+  \begin{equation*}
+    \widehat\gamma_t
+    =\rho_\Gamma\widehat\gamma_{t-1}
+      +\sigma_\Gamma\varepsilon_t^\Gamma.
+  \end{equation*}
+
+  \item Risk premium:
+  \begin{equation*}
+    s_t=(1-\rho_s)\bar s+\rho_s s_{t-1}
+      +\sigma_s\varepsilon_t^s.
+  \end{equation*}
 \end{enumerate}
 
 \end{document}
