@@ -47,57 +47,25 @@ The exogenous innovations are
 which enter technology growth and the risk-premium process with standard
 deviations $\sigma_\Gamma$ and $\sigma_s$, respectively.
 
-\subsection{Balanced-Growth Variable Classification}
+\subsection{Balanced-Growth Normalization}
 \label{sec:bgp-variable-classification}
-
-This subsection records the notation and trend classification that will govern
-the balanced-growth rewrite.  It does not yet alter any equilibrium equation
-below.  Until those equations are rewritten one block at a time, their lowercase
-symbols retain the level meanings stated in the preceding variable list.
 
 Following Eusepi and Preston (2011), let $X_t$ denote the labor-augmenting
 stochastic trend.  Uppercase letters will denote nonstationary levels and
-lowercase letters their stationary normalizations.  The intended classification
-is:
-
-\begin{table}[H]
-  \centering
-  \small
-  \begin{tabular}{llll}
-    \toprule
-    Economic object & Level notation & Balanced-growth behavior
-      & Planned stationary object \\
-    \midrule
-    Output & $Y_t$ & grows with $X_t$ & $y_t=Y_t/X_t$ \\
-    Consumption & $C_t$ & grows with $X_t$ & $c_t=C_t/X_t$ \\
-    Investment & $I_t$ & grows with $X_t$ & $i_t=I_t/X_t$ \\
-    Real wage & $W_t$ & grows with $X_t$ & $w_t=W_t/X_t$ \\
-    Capital stock & $K_t$ & predetermined at the start of $t$
-      & $k_t=K_t/X_{t-1}$ \\
-    Adjusted output & $Y_t^{adj}$ & grows with $X_t$
-      & $y_t^{adj}=Y_t^{adj}/X_t$ \\
-    Price-adjustment cost & $Adj_t$ & grows with $X_t$
-      & $adj_t=Adj_t/X_t$ \\
-    Real profits & $D_t$ & grows with $X_t$ & $d_t=D_t/X_t$ \\
-    Real bond position & $B_t$ & grows with $X_t$ if nonzero
-      & $b_t=B_t/X_t$ \\
-    Hours & $N_t$ & stationary & $n_t=N_t$ \\
-    Real capital rental rate & $R_t^k$ & stationary & $r_t^k=R_t^k$ \\
-    Gross inflation & $\Pi_t$ & stationary & $\pi_t=\Pi_t$ \\
-    Gross nominal rate & $R_t$ & stationary & $r_t=R_t$ \\
-    Real marginal cost & $\Psi_t$ & stationary & $\psi_t=\Psi_t$ \\
-    Relative firm price & $P_t(f)/P_t$ & stationary
-      & $p_t(f)/p_t=P_t(f)/P_t$ \\
-    Technology level & $X_t$ & stochastic trend & not stationary \\
-    Gross technology growth & $\Gamma_t=X_t/X_{t-1}$ & stationary
-      & $\gamma_t=\log\Gamma_t$ \\
-    \bottomrule
-  \end{tabular}
-  \caption{Planned balanced-growth classification.  ``Stationary'' here means
-  stationary around a constant balanced-growth steady state, not necessarily
-  constant period by period.}
-  \label{tab:bgp-variable-classification}
-\end{table}
+lowercase letters their stationary normalizations.  The growing real quantities
+are defined by
+\begin{align}
+  (Y_t,C_t,I_t,W_t)&=X_t(y_t,c_t,i_t,w_t), \notag\\
+  (Y_t^{adj},Adj_t,D_t,B_t)&=X_t(y_t^{adj},adj_t,d_t,b_t),
+  \label{eq:growing-normalizations}\\
+  K_t&=X_{t-1}k_t.
+  \label{eq:capital-normalization}
+\end{align}
+Hours, the real capital rental rate, gross inflation, the gross nominal rate,
+and real marginal cost are stationary without division by $X_t$:
+$n_t=N_t$, $r_t^k=R_t^k$, $\pi_t=\Pi_t$, $r_t=R_t$, and $\Psi_t$ retains its
+notation.  Here ``stationary'' means stationary around a constant
+balanced-growth steady state, not constant period by period.
 
 As in Eusepi and Preston, $K_t$ is predetermined capital available at the
 beginning of period $t$, and $k_t=K_t/X_{t-1}$.  Investment chosen in period $t$
@@ -110,7 +78,7 @@ The stochastic trend and growth process will satisfy
 \begin{align}
   X_t &= \Gamma_t X_{t-1},
   \qquad \gamma_t\equiv\log\Gamma_t,
-  \label{eq:planned-trend-level} \\
+  \label{eq:trend-level} \\
   \widehat\gamma_t
   \equiv\gamma_t-\log\bar\Gamma
   &=\rho_\Gamma\widehat\gamma_{t-1}
@@ -118,7 +86,7 @@ The stochastic trend and growth process will satisfy
   \qquad
   \varepsilon_t^\Gamma\sim\mathcal N(0,1),
   \quad 0\leq\rho_\Gamma<1.
-  \label{eq:planned-trend-growth}
+  \label{eq:trend-growth}
 \end{align}
 The Eusepi--Preston-comparable baseline sets $\rho_\Gamma=0$, so deviations of
 technology growth from $\bar\Gamma$ are i.i.d.  Retaining $\rho_\Gamma$ as an
@@ -276,7 +244,7 @@ $n_t=N_t$, and $\Gamma_t=X_t/X_{t-1}$ gives
 
 \paragraph{Technology process.}
 The nonstationary technology level grows according to the stationary process
-defined in \eqref{eq:planned-trend-level}--\eqref{eq:planned-trend-growth}:
+defined in \eqref{eq:trend-level}--\eqref{eq:trend-growth}:
 \begin{equation}
   \log\Gamma_t-\log\bar\Gamma
   =\rho_\Gamma(\log\Gamma_{t-1}-\log\bar\Gamma)
