@@ -7,6 +7,13 @@ function learning_model = set_initial_beliefs(learning_model,initialization)
 switch string(initialization)
     case "dynare_re"
         % The compiler already supplied the Dynare RE forecasting coefficients.
+    case "half_re"
+        % A moderate misspecification: agents preserve the signs and relative
+        % structure of the RE forecasting rule but begin halfway toward it.
+        learning_model.initial_beliefs.coefficients = 0.5* ...
+            learning_model.initial_beliefs.coefficients;
+        learning_model.learning.initial_coefficients = ...
+            learning_model.initial_beliefs.coefficients;
     case "zero_coefficients"
         learning_model.initial_beliefs.coefficients(:) = 0;
         learning_model.learning.initial_coefficients(:) = 0;
