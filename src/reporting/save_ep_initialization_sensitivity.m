@@ -53,11 +53,8 @@ fig = figure('Visible','off','Color','white','Position',[50 50 1500 760]);
 cleanup = onCleanup(@() close(fig));
 layout = tiledlayout(fig,2,4,'TileSpacing','compact','Padding','compact');
 for quantity = 1:n_quantities
-    ax = nexttile(layout); hold(ax,'on');
-    for initial = 1:n_initial
-        plot(ax,horizons,squeeze(irf_wedges(initial,:,quantity)), ...
-            'o-','LineWidth',1.5);
-    end
+    ax = nexttile(layout);
+    plot_treatments(ax,squeeze(irf_wedges(:,:,quantity)));
     title(ax,sensitivity.quantity_names{quantity});
     ylabel(ax,'Median draw max |EE - RE|'); format_axis(ax,horizons);
 end
@@ -68,9 +65,10 @@ plot_metric(nexttile(layout),horizons,completion, ...
 plot_metric(nexttile(layout),horizons,median_projections, ...
     'Capital-slope safeguards','Median rejected updates');
 ax = nexttile(layout);
-plot_metric(ax,horizons,median_observations, ...
+legend_handles = plot_metric(ax,horizons,median_observations, ...
     'Training reached','Median completed observations');
-legend(ax,cellstr(strrep(initializations,"_"," ")),'Location','best');
+legend(ax,legend_handles,cellstr(strrep(initializations,"_"," ")), ...
+    'Location','best');
 title(layout,sprintf('E&P EE initialization sensitivity (gain %.4g)', ...
     sensitivity.config.gain));
 exportgraphics(fig,pdf_path,'ContentType','vector');
@@ -92,15 +90,35 @@ for draw = 1:numel(result.statuses)
 end
 end
 
-function plot_metric(ax,horizons,values,heading,y_label)
-hold(ax,'on');
-for initial = 1:size(values,1)
-    plot(ax,horizons,values(initial,:),'o-','LineWidth',1.5);
-end
+function handles = plot_metric(ax,horizons,values,heading,y_label)
+handles = plot_treatments(ax,values);
 title(ax,heading); ylabel(ax,y_label); format_axis(ax,horizons);
 end
 
 function format_axis(ax,horizons)
-xlabel(ax,'Training observations'); xticks(ax,horizons); grid(ax,'on');
-if numel(horizons)>1, xlim(ax,[min(horizons) max(horizons)]); end
+xlabel(ax,'Training observations');
+xticks(ax,1:numel(horizons));
+xticklabels(ax,string(horizons));
+grid(ax,'on');
+if numel(horizons)>1, xlim(ax,[0.85 numel(horizons)+0.15]); end
+end
+
+function handles = plot_treatments(ax,values)
+% Use concentric markers and successively thinner lines. When treatments have
+% exactly the same value, the larger symbols and wider lines remain visible
+% around the later series rather than being completely painted over.
+colors = [0 0.4470 0.7410; 0.8500 0.3250 0.0980; 0.4940 0.1840 0.5560];
+markers = {'o','s','d'};
+styles = {'-','--',':'};
+sizes = [10 7 4];
+widths = [3 2 1.25];
+positions = 1:size(values,2);
+handles = gobjects(size(values,1),1);
+hold(ax,'on');
+for initial = 1:size(values,1)
+    handles(initial) = plot(ax,positions,values(initial,:), ...
+        'Color',colors(initial,:),'Marker',markers{initial}, ...
+        'LineStyle',styles{initial},'LineWidth',widths(initial), ...
+        'MarkerSize',sizes(initial),'MarkerFaceColor','white');
+end
 end
