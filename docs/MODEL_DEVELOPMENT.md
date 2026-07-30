@@ -1,13 +1,14 @@
-# Model Development Rules
+# Balanced-Growth NK Model Development
 
-## Future balanced-growth NK model
+## Implemented design
 
-The temporary NK technology-level specification is not part of the clean
-interface. Its replacement will use labor-augmenting technology and stationary
-variables normalized by the stochastic technology level, matching the economic
-environment of the E&P comparison.
+The active `models/nk_balanced_growth.mod` uses labor-augmenting technology and
+stationary variables normalized by the stochastic technology level, matching
+the aspects of the E&P growth environment required for the comparison. The
+earlier technology-level specification is retained as `models/old_nk.mod` only
+to make the rewrite auditable; supported runners never load it.
 
-The economic transformation must be derived and reviewed before coding:
+The rewrite was developed in reviewable stages:
 
 - define the technology level and gross technology growth;
 - specify the timing of consumption, output, investment, capital, and wages in
@@ -17,11 +18,13 @@ The economic transformation must be derived and reviewed before coding:
 - state agents' information and forecasting assumptions independently of the
   structural equations.
 
-The production Dynare file will contain the nonlinear stationary model. Dynare
-will compute its analytical first-order approximation. MATLAB may then perform
-a small, explicit conversion from additive deviations to log/proportional
-deviations. A separate hand-linearized production model will not be maintained.
+The production Dynare file contains the nonlinear stationary model. Dynare
+computes its analytical first-order approximation, and MATLAB performs a small,
+explicit conversion from additive deviations to proportional percentage units.
+A separate hand-linearized NK production model is deliberately not maintained.
 
-Hand calculations and finite-difference tests will verify economically important
-rows such as production, resource balance, capital accumulation, technology
-growth, and the Taylor rule.
+The source derivation is `docs/model_simple_dynare.tex`. Loader and model tests
+check the steady state, analytical Jacobian, RE law, shock units, capital timing,
+and parameter overrides. Future structural changes should preserve the same
+sequence: derive and review the stationary economics first, transcribe it into
+Dynare second, and add learning assumptions separately in MATLAB.

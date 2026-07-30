@@ -1,8 +1,9 @@
-# E&P Learning Experiments
+# Cross-Model Adaptive-Learning Experiments
 
-This repository is being reorganized around a small research interface for
-comparing rational expectations (RE), Euler-equation (EE) learning, and the
-verified Eusepi-Preston infinite-horizon (IH) learning specification.
+This repository provides a small research interface for comparing rational
+expectations (RE), Euler-equation (EE) learning, and the verified
+Eusepi–Preston infinite-horizon (IH) learning specification in RBC and
+balanced-growth New Keynesian environments.
 
 The active workflow has six concepts:
 
@@ -42,8 +43,8 @@ overlay and within-model learning-minus-RE panels.
 
 ## Project map
 
-- `models/` - active Dynare models; the balanced-growth NK model will be added
-  only after its stationary equations have been derived and reviewed.
+- `models/` - verified E&P models, the active nonlinear stationary
+  balanced-growth NK model, and one clearly documented historical NK source.
 - `config/` - structural calibrations, learning assumptions, and experiment
   settings.
 - `src/` - model loading, expectations, learning, simulation, and reporting.
@@ -52,12 +53,13 @@ overlay and within-model learning-minus-RE panels.
   the frozen replication history.
 - `results/` - generated experiment artifacts and figures.
 
-The existing `Eusepi_Preston_2011_Replication_Pkg/` tree remains the frozen,
-runnable verification implementation during this transition. The active E&P
-runners use only the new root-level models, configuration, and source tree.
-`setup_project` removes frozen-tree entries left by an earlier MATLAB session
-before adding the supported clean paths. See Git tag `ep-verification-v1` and
+The full reconstruction is preserved at Git tag `ep-verification-v1`; it is not
+part of this branch's active filesystem. The supported runners depend only on
+the root-level models, configuration, and source tree. `setup_project` also
+removes stale frozen-tree entries left by an earlier MATLAB session so legacy
+functions cannot silently shadow the clean interface. See
 [`docs/REPLICATION_LINEAGE.md`](docs/REPLICATION_LINEAGE.md) for the archived
-equivalence evidence.
+equivalence evidence and the fixture-based regression checks that carry it
+forward.
 
 See [Documentation map](docs/README.md) for the intended reading order.

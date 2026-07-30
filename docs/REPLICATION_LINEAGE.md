@@ -1,9 +1,9 @@
 # Replication Lineage
 
-The complete Eusepi-Preston reconstruction remains in the frozen
-`Eusepi_Preston_2011_Replication_Pkg/` tree and at Git tag
-`ep-verification-v1`. That implementation remains runnable during the clean
-interface transition.
+The complete Eusepi–Preston reconstruction is preserved at Git tag
+`ep-verification-v1`, where the frozen
+`Eusepi_Preston_2011_Replication_Pkg/` tree remains runnable. That tree is not
+tracked on the active clean-interface branch.
 
 The verified claims at the transition point are:
 
@@ -18,8 +18,8 @@ The verified claims at the transition point are:
 
 The historical milestone commits and detailed test commands are documented in
 `Eusepi_Preston_2011_Replication_Pkg/Model/Impulse-responses/REPLICATION_STATUS.md`
-at the verification tag. New public commands must not add that tree to the
-MATLAB path or call its functions at runtime.
+at the verification tag. New public commands must not restore that tree as a
+runtime dependency.
 
 The clean interface carries forward that evidence through compact numerical
 fixtures in `tests/fixtures/`. Run `run_acceptance_tests` to compare the active

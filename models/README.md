@@ -12,3 +12,7 @@ lineage. Their learning assumptions live in MATLAB rather than inside Dynare.
   from `docs/model_simple_dynare.tex`. Dynare computes its analytical
   first-order approximation. Its top-of-file map documents every TeX-to-Dynare
   name change, and its risk-premium shock is dormant by default.
+
+- `old_nk.mod` is the pre-balanced-growth technology-level specification kept
+  solely for historical comparison. It is not an active model and no supported
+  runner loads it.

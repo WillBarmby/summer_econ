@@ -7,8 +7,8 @@ Read the project documentation in this order:
    comparison and common shock environment.
 3. [`PARAMETER_PROVENANCE.md`](PARAMETER_PROVENANCE.md) - original values,
    active values, and why they differ.
-4. [`MODEL_DEVELOPMENT.md`](MODEL_DEVELOPMENT.md) - rules for the future
-   balanced-growth New Keynesian rewrite.
+4. [`MODEL_DEVELOPMENT.md`](MODEL_DEVELOPMENT.md) - how the balanced-growth
+   New Keynesian rewrite was implemented and how future changes should proceed.
 5. [`REPLICATION_LINEAGE.md`](REPLICATION_LINEAGE.md) - where the numerical
    verification history, Git tag `ep-verification-v1`, and frozen replication-
    status document are preserved.
