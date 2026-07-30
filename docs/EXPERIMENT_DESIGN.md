@@ -22,6 +22,22 @@ The separate deterministic-growth sensitivity changes only gross trend growth
 from `exp(0.0053)` to one. It retains IID stochastic technology-growth shocks
 and runs E&P only.
 
+## Initialization sensitivity
+
+`run_ep_initialization_sensitivity` asks whether E&P EE learning forgets its
+initial forecasting coefficients. Agents begin at the Dynare RE coefficients,
+one-half of those coefficients, or zero. The three treatments retain identical
+structural equations, information, gain, initial RLS moment matrix, innovations,
+and update timing. Defaults use nested training horizons of 0, 100, 500, and
+2,000 observations, so every shorter history is a prefix of the longer one.
+
+This is an initialization-robustness extension, not a claim that E&P used all
+three priors. Its saved diagnostics include completion rates, distance from RE
+beliefs, rejected capital-slope updates, observations reached, and draw-level
+maximum IRF wedges. The corresponding NK runner currently compares RE and zero
+initialization; harmonizing its moderate-prior treatment and summary statistic
+is a separate cross-model analysis step.
+
 ## Information sets
 
 Both learning specifications treat the current technology innovation as

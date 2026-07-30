@@ -9,5 +9,6 @@ test_nonlinear_loader();
 test_nk_ee_specification();
 test_nk_risk_premium_smoke();
 test_ep_smoke();
+test_ep_initialization_sensitivity();
 fprintf('All fast tests passed.\n');
 end
