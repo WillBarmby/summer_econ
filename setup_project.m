@@ -17,7 +17,8 @@ end
 
 folders = {'config','models',fullfile('src','model'), ...
     fullfile('src','learning'),fullfile('src','expectations'), ...
-    fullfile('src','reporting'),'tests'};
+    fullfile('src','reporting'), ...
+    fullfile('experiments','initialization_robustness'),'tests'};
 for j = 1:numel(folders)
     folder_path = fullfile(root,folders{j});
     if isfolder(folder_path)
