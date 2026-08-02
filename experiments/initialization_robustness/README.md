@@ -15,5 +15,5 @@ result = run_initialization_robustness();
 The runner writes one MAT artifact, a flat CSV summary, 2,000-period treatment
 and paired-difference panels, a scalar robustness summary, and an appendix
 training-horizon figure beneath
-`results/initialization_robustness/`. Existing model-specific runners remain
-available for multiple training horizons and zero-coefficient stress tests.
+`results/initialization_robustness/`. It supersedes the former model-specific
+initialization runners with one shared workflow across all three specifications.
