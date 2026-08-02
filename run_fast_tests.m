@@ -11,5 +11,6 @@ test_nk_risk_premium_smoke();
 test_ep_smoke();
 test_ep_initialization_sensitivity();
 test_ep_ih_initialization_robustness();
+test_initialization_robustness();
 fprintf('All fast tests passed.\n');
 end
