@@ -47,12 +47,12 @@ It tests only whether this half-RE displacement is forgotten; it neither maps
 the global basin of attraction nor shows that every initial condition matters.
 
 For paper comparisons, `run_initialization_robustness` harmonizes E&P EE, E&P
-IH, and NK EE at the standard 2,000-observation training period. All three use
-exact RE and half-RE treatments, one common innovation matrix, and the same
-draw-first statistic: each paired draw's maximum absolute treatment difference,
-followed by the median across draws. Zero initialization and multiple training
-horizons remain model-specific stress tests rather than part of this moderate
-cross-model comparison.
+IH, and NK EE over nested training periods of 0, 100, 500, and 2,000
+observations. All three use exact RE and half-RE treatments, common innovation
+histories, and the same draw-first statistic: each paired draw's maximum absolute
+treatment difference, followed by the median across draws. The 2,000-period
+panels are the main comparison; the shorter horizons support an appendix figure.
+Zero initialization is outside this moderate cross-model comparison.
 
 ## Information sets
 

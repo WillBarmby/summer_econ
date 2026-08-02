@@ -11,5 +11,6 @@ outcomes.
 
 `initialization_robustness/` contains the canonical cross-model moderate-prior
 comparison: one common MAT artifact and CSV summary, treatment IRFs, direct
-paired differences, and a dimensionless robustness summary. The model-specific
-initialization folders retain training-horizon and zero-coefficient stress tests.
+paired differences, a dimensionless robustness summary, and an appendix figure
+over nested training horizons. Older model-specific folders are superseded once
+matching cells have passed parity checks.
