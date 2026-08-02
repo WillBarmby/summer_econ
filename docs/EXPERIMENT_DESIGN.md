@@ -38,6 +38,15 @@ maximum IRF wedges. The corresponding NK runner currently compares RE and zero
 initialization; harmonizing its moderate-prior treatment and summary statistic
 is a separate cross-model analysis step.
 
+`run_ep_ih_initialization_robustness` is the targeted IH counterpart. It fixes
+the standard 2,000-period training sample and constant gain `0.002`, comparing
+exact Dynare RE coefficients with half of those coefficients. A single saved
+innovation matrix feeds both treatments draw by draw. The artifact reports
+path outcomes, rejected updates, observations reached, pre-shock belief
+distance, conditional learning-minus-RE IRFs, and paired response differences.
+It tests only whether this half-RE displacement is forgotten; it neither maps
+the global basin of attraction nor shows that every initial condition matters.
+
 ## Information sets
 
 Both learning specifications treat the current technology innovation as

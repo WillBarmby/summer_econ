@@ -7,6 +7,11 @@ reporting, and complete short E&P EE/IH paths against compact verified fixtures.
 layout, percentage-point transformation, transformed RE law, and parameter
 overrides.
 
+`test_ep_ih_initialization_robustness` runs two paired draws through the full
+2,000-observation IH training design. It reconstructs the saved seeded shocks,
+checks both treatments use the same initial RLS moments, and verifies that the
+half-RE coefficients are exactly one-half of the Dynare RE coefficients.
+
 `test_ep_public_interface` checks seeded reproducibility, saved metadata,
 common shocks, growth sensitivity, and complete PDF/PNG output.
 
