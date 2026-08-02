@@ -110,21 +110,49 @@ Thus the possible mismatch predates the current refactor and Dynare work.
 4. **Numerical robustness.** The code may differ from the written description
    without materially changing the benchmark-gain conclusion.
 
-## Next evidence steps
+## Completed implementation and audit
 
-1. Trace every assignment to the full PLM matrices in the early snapshot and
-   prove whether row 12 can change indirectly.
-2. Compare `.m`, `.asv`, `.ptl`, and any saved coefficient workspaces for an
-   alternate consumption-learning implementation.
-3. Reconstruct the stored 5,000-draw Table 5 means from the archived workspace
-   and explain the output-volatility scale discrepancy.
-4. Add a diagnostic test that records the consumption and wage PLM
-   coefficients period by period under archive EE.
-5. Add an explicit wage-to-consumption proxy variant alongside archive EE and
-   direct-consumption EE.
-6. Run matched 1,000- and 5,000-draw comparisons with uncertainty intervals.
-7. Test a calibration with `sigma` different from one to break the approximate
-   consumption-wage identity.
+The static assignment audit now accounts for every write to `OMEGA_0`,
+`OMEGA_c`, and `Regressors`, as well as returned aliases and MATLAB value
+semantics. It confirms that released archive EE cannot change consumption row
+12 after RE initialization. The executable `.m`, autosaves, numbered PTL
+copies, and MAT schemas contain no alternate consumption update. See
+`artifacts/investigation/historical/ep_ee_plm_assignment_audit.md`.
+
+The archived workspaces have been reconstructed directly into machine-readable
+MAT/CSV/Markdown artifacts. Their stored means match exactly and seven Table 5
+entries match after published rounding. No checked transformation explains the
+absolute output-volatility discrepancy, so it remains explicitly unresolved.
+
+The modern harness now names three EE interpretations: `archive` (consumption
+fixed at RE), `paper` (direct consumption learning), and `wage_proxy` (an
+explicit wage-to-consumption coefficient copy). Optional belief histories
+record consumption/wage intercepts, capital slopes, forecasts, and update
+status. Tests establish the intended update identities and show that changing
+expected consumption changes the EE ALM.
+
+The Dynare loader now renders a temporary canonical model for an explicit
+`sigma`, asserts exactly one calibration replacement, and records the loaded
+calibration. Matched Monte Carlo uses identical innovations and preserves
+explosive/invalid draws instead of zero-filling them.
+
+## 1,000-draw pilot result
+
+At `sigma=1`, gain 0.002, all specifications completed all 1,000 draws. At
+gain 0.04, archive completed all draws while paper and wage proxy each had 12
+explosions. Their completed-draw moment differences from RE were modest but
+statistically distinguishable for several moments.
+
+At `sigma=2`, gain 0.002, all specifications again completed all draws. At
+gain 0.04 the archive implementation exploded in all 1,000 draws, while paper
+and wage proxy completed all 1,000. Moreover, paper and wage proxy are no
+longer quantitatively interchangeable: their output-volatility means were
+approximately 0.902 and 1.938, respectively. This confirms that the benchmark
+near-identity of consumption and wages can conceal an economically important
+specification difference.
+
+The 5,000-draw definitive experiment is required before turning this pilot
+result into a paper claim.
 
 ## Current claim boundary
 
@@ -134,9 +162,15 @@ Supported now:
 > consumption forecasting equation described after equation (17), and its
 > saved results closely reproduce the published EE moments.
 
+Also supported by the implementation diagnostics and pilot:
+
+> Direct consumption learning, explicit wage-proxy learning, and consumption
+> fixed at RE are distinct specifications. A non-unit intertemporal-elasticity
+> calibration makes those distinctions quantitatively large.
+
 Not yet supported:
 
 > Eusepi and Preston's published conclusion is wrong because of a coding error.
 
-That stronger claim requires completion of the alternative-implementation and
-large-sample robustness tests above.
+That stronger claim requires the matched 5,000-draw result and still must be
+qualified by the unresolved possibility of unreleased final code.
