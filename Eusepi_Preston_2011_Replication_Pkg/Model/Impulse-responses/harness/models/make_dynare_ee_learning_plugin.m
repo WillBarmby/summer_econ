@@ -3,7 +3,8 @@ function [plugin,state] = make_dynare_ee_learning_plugin(model,config,shock_vari
 
 validate_canonical_model(model);
 assert(strcmp(model.backend,'dynare-7.1'));
-required={'variant','learned_outcomes','regressors','state_variable', ...
+required={'variant','learned_outcomes','consumption_forecast_source', ...
+    'regressors','state_variable', ...
     'observed_but_excluded','gain','initialization','update_timing','projection'};
 assert(isstruct(config) && isempty(setxor(fieldnames(config),required.')), ...
     'EPEE:InvalidConfig','A complete EE learning configuration is required.');
@@ -37,6 +38,12 @@ plugin=struct('name',[model.name ' E&P EE learning'],'model',model, ...
         plm=struct('intercept',re_intercept,'transition',re_transition);
         plm.intercept(outcomes)=beliefs.coefficients(:,1);
         plm.transition(outcomes,capital)=beliefs.coefficients(:,2);
+        if config.consumption_forecast_source=="wage_proxy"
+            wage=find(strcmp(model.variable_names,'wage'),1);
+            consumption=find(strcmp(model.variable_names,'consumption'),1);
+            plm.intercept(consumption)=plm.intercept(wage);
+            plm.transition(consumption,capital)=plm.transition(wage,capital);
+        end
     end
 
     function [candidate,projected]=project_capital(candidate,previous)

@@ -15,6 +15,7 @@ addpath(fullfile(model_dir, 'harness', 'learning'), '-end');
 addpath(fullfile(model_dir, 'harness', 'results'), '-end');
 addpath(fullfile(model_dir, 'harness', 'models'), '-end');
 addpath(fullfile(model_dir, 'harness', 'tests'), '-end');
+addpath(fullfile(model_dir, 'investigation'), '-end');
 addpath(fullfile(pkg_dir, 'Common'), '-end');
 
 end

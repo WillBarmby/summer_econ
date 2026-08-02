@@ -16,9 +16,13 @@ switch config.variant
         config.learned_outcomes={'rk','consumption','capital'};
     case "archive"
         config.learned_outcomes={'rk','wage','output','hours','caput','capital'};
+    case "wage_proxy"
+        config.learned_outcomes={'rk','wage','capital'};
     otherwise
-        error('EPEE:InvalidVariant','variant must be paper or archive.');
+        error('EPEE:InvalidVariant', ...
+            'variant must be paper, archive, or wage_proxy.');
 end
+config.consumption_forecast_source=config.variant;
 config.regressors={'constant','capital_lag'};
 config.state_variable='capital';
 config.observed_but_excluded={'eps_x'};

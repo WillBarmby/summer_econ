@@ -14,6 +14,7 @@ test_ep_learning_path();
 test_ep_ee_learning_path();
 test_ep_ee_dynare_learning_path();
 test_ep_ee_paper_specification();
+test_ep_ee_belief_variants();
 test_update_rls();
 test_ep_archive_moments();
 test_dynare_expectation_reference();

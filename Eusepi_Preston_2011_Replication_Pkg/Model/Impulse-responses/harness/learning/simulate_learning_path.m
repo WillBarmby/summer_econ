@@ -1,9 +1,16 @@
-function run = simulate_learning_path(plugin, shocks, initial_y, initial_learning, explosion_policy)
+function run = simulate_learning_path(plugin, shocks, initial_y, initial_learning, explosion_policy, recording)
 %% SIMULATE_LEARNING_PATH Generic adaptive-learning simulation.
 %
 % A plugin supplies beliefs_to_plm, plm_to_alm, regressor, and outcome.
 
 validate_explosion_policy(explosion_policy);
+if nargin<6
+    recording=struct('record_beliefs',false);
+end
+assert(isstruct(recording) && isscalar(recording) && ...
+    isequal(fieldnames(recording),{'record_beliefs'}') && ...
+    islogical(recording.record_beliefs) && isscalar(recording.record_beliefs), ...
+    'Learning:InvalidRecordingPolicy','record_beliefs must be supplied explicitly.');
 T = size(shocks,2)+1;
 n = numel(initial_y);
 y = zeros(n,T); y(:,1) = initial_y(:);
@@ -13,11 +20,23 @@ belief_distance = NaN(1,T-1);
 plm_roots = NaN(1,T-1);
 alm_roots = NaN(1,T-1);
 one_step_forecasts = NaN(n,T);
+belief_history=empty_belief_history();
+if recording.record_beliefs
+    belief_history.intercept=NaN(n,T);
+    belief_history.capital_slope=NaN(n,T);
+    belief_history.update_status=strings(1,T);
+end
 status = "completed";
 termination = empty_termination();
 last_period = T;
 for t = 2:T
     plm = plugin.beliefs_to_plm(beliefs);
+    if recording.record_beliefs
+        capital=find(strcmp(plugin.model.variable_names,'capital'),1);
+        belief_history.intercept(:,t)=plm.intercept;
+        belief_history.capital_slope(:,t)=plm.transition(:,capital);
+        belief_history.update_status(t)="held_before_update";
+    end
     alm = plugin.plm_to_alm(plm);
     y(:,t) = alm.intercept+alm.transition*y(:,t-1)+alm.shock_impact*shocks(:,t-1);
     monitored = explosion_policy.variable_indices;
@@ -49,6 +68,9 @@ for t = 2:T
         last_period = t;
         break
     end
+    if recording.record_beliefs
+        belief_history.update_status(t)="updated";
+    end
     plm_roots(t-1) = max(abs(eig(plm.transition)));
     alm_roots(t-1) = max(abs(eig(alm.transition)));
     if isfield(plugin,'re_plm') && ~isempty(plugin.re_plm)
@@ -60,7 +82,20 @@ run = struct('native_path',y(:,1:last_period),'learning_state',beliefs, ...
     'belief_distance_from_re',belief_distance,'plm_stability_root',plm_roots, ...
     'alm_stability_root',alm_roots,'status',status,'termination',termination, ...
     'one_step_forecasts',one_step_forecasts(:,1:last_period), ...
+    'belief_history',truncate_belief_history(belief_history,last_period), ...
     'invalid',status=="invalid",'explosive',status=="explosive");
+end
+
+function value=empty_belief_history()
+value=struct('intercept',[],'capital_slope',[],'update_status',strings(1,0));
+end
+
+function value=truncate_belief_history(value,last_period)
+if ~isempty(value.intercept)
+    value.intercept=value.intercept(:,1:last_period);
+    value.capital_slope=value.capital_slope(:,1:last_period);
+    value.update_status=value.update_status(1:last_period);
+end
 end
 
 function validate_explosion_policy(policy)
