@@ -35,8 +35,7 @@ This is an initialization-robustness extension, not a claim that E&P used all
 three priors. Its saved diagnostics include completion rates, distance from RE
 beliefs, rejected capital-slope updates, observations reached, and draw-level
 maximum IRF wedges. The corresponding NK runner currently compares RE and zero
-initialization; harmonizing its moderate-prior treatment and summary statistic
-is a separate cross-model analysis step.
+initialization.
 
 `run_ep_ih_initialization_robustness` is the targeted IH counterpart. It fixes
 the standard 2,000-period training sample and constant gain `0.002`, comparing
@@ -46,6 +45,14 @@ path outcomes, rejected updates, observations reached, pre-shock belief
 distance, conditional learning-minus-RE IRFs, and paired response differences.
 It tests only whether this half-RE displacement is forgotten; it neither maps
 the global basin of attraction nor shows that every initial condition matters.
+
+For paper comparisons, `run_initialization_robustness` harmonizes E&P EE, E&P
+IH, and NK EE at the standard 2,000-observation training period. All three use
+exact RE and half-RE treatments, one common innovation matrix, and the same
+draw-first statistic: each paired draw's maximum absolute treatment difference,
+followed by the median across draws. Zero initialization and multiple training
+horizons remain model-specific stress tests rather than part of this moderate
+cross-model comparison.
 
 ## Information sets
 

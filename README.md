@@ -31,6 +31,7 @@ gain = run_nk_gain_sensitivity();
 initialization = run_nk_initialization_sensitivity();
 ep_initialization = run_ep_initialization_sensitivity();
 ih_initialization = run_ep_ih_initialization_robustness();
+initialization_comparison = run_initialization_robustness();
 ep_gain = run_ep_gain_sensitivity();
 gain_comparison = run_gain_sensitivity_comparison();
 run_fast_tests
@@ -50,6 +51,7 @@ overlay and within-model learning-minus-RE panels.
 - `config/` - structural calibrations, learning assumptions, and experiment
   settings.
 - `src/` - model loading, expectations, learning, simulation, and reporting.
+- `experiments/` - harmonized paper-facing orchestration and figures.
 - `tests/` - fast tests, acceptance tests, and compact numerical fixtures.
 - `docs/` - equations, experiment design, parameter provenance, and the map to
   the frozen replication history.

@@ -12,6 +12,10 @@ overrides.
 checks both treatments use the same initial RLS moments, and verifies that the
 half-RE coefficients are exactly one-half of the Dynare RE coefficients.
 
+`test_initialization_robustness` applies that isolation check to E&P EE, E&P
+IH, and NK EE, reconstructs their single common innovation matrix, and verifies
+the unified MAT, CSV, and paper-figure outputs.
+
 `test_ep_public_interface` checks seeded reproducibility, saved metadata,
 common shocks, growth sensitivity, and complete PDF/PNG output.
 
