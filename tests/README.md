@@ -14,6 +14,11 @@ the unified MAT, CSV, and paper-figure outputs.
 `test_ep_public_interface` checks seeded reproducibility, saved metadata,
 common shocks, growth sensitivity, and complete PDF/PNG output.
 
+`test_ep_ee_consumption_variants` proves the two EE treatments share the same
+RE PLM before updating and satisfy their distinct consumption-row identities
+after one common observation. `test_ep_ee_consumption_audit` exercises the
+full paired artifact and figure path with one 2,000-observation draw.
+
 Public entry points are `run_fast_tests` and `run_acceptance_tests`. The fast
 suite includes a one-draw graph smoke test. Acceptance compares full seeded
 Monte Carlo summaries with compact fixtures from the verified lineage, without

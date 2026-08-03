@@ -29,6 +29,7 @@ comparison = run_cross_model_comparison();
 risk = run_nk_risk_premium_comparison();
 gain = run_nk_gain_sensitivity();
 initialization_comparison = run_initialization_robustness();
+ee_consumption = run_ep_ee_consumption_audit();
 ep_gain = run_ep_gain_sensitivity();
 gain_comparison = run_gain_sensitivity_comparison();
 run_fast_tests

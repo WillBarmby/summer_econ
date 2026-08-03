@@ -12,6 +12,8 @@ Read the project documentation in this order:
 5. [`REPLICATION_LINEAGE.md`](REPLICATION_LINEAGE.md) - where the numerical
    verification history, Git tag `ep-verification-v1`, and frozen replication-
    status document are preserved.
+6. [`EE_CONSUMPTION_SPECIFICATION_AUDIT.md`](EE_CONSUMPTION_SPECIFICATION_AUDIT.md)
+   - the paper-direct versus released-code EE consumption forecast audit.
 
 Documentation should explain economic intent and the public workflow. Function
 headers should explain individual implementation contracts. Generated Dynare
