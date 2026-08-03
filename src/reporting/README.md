@@ -8,6 +8,12 @@ separate functions. The harmonized initialization experiment keeps its
 paper-specific draw-first metrics and graphing beneath
 `experiments/initialization_robustness/`.
 
+Every public artifact uses schema version `2.0.0`. Common fields record the
+research question, response units, impact/horizon convention, array dimensions,
+and generation provenance. Paper-facing metrics live under `summary`,
+`output_files` contains paths only, and every experiment writes a compact CSV.
+See `docs/ARTIFACT_SCHEMA.md` for the field and dimension contract.
+
 Cross-model overlays are descriptive; the corresponding learning-minus-own-RE
 panels are the controlled expectations comparison. Gain heatmaps report
 conditional median wedges and must be read with completion counts, especially

@@ -34,8 +34,9 @@ end
 assert(isequal(training,artifact.training_standardized_innovations));
 assert(isequal(ir,artifact.ir_standardized_innovations));
 assert(artifact.pairing.draw_by_draw);
-assert(isequal(size(artifact.metrics.rates),[3 2 4 3]));
-assert(isequal(size(artifact.metrics.relative_initialization_effect),[3 4 4]));
+assert(isequal(size(artifact.summary.rates),[3 2 4 3]));
+assert(isequal(size(artifact.summary.relative_initialization_effect),[3 4 4]));
+assert(artifact.schema_version=="2.0.0");
 for name = {'mat','summary_csv','irf_pdf','irf_png','difference_pdf', ...
         'difference_png','summary_pdf','summary_png','appendix_pdf','appendix_png'}
     assert(isfile(artifact.output_files.(name{1})));

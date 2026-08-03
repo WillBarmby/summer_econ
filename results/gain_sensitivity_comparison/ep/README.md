@@ -6,3 +6,4 @@ and 0.02 are 0, 0.0290, 0.0662, 0.1054, and 0.2161 for EE, versus 0, 1.1316,
 2.6795, 5.2669, and 9.7886 for IH. The gain-0.02 IH value is conditional on 47
 completed draws; 53 draws are explosive. The parent folder adds NK EE under the
 same histories.
+The labeled E&P-only table is `ep_gain_sensitivity_summary.csv`.

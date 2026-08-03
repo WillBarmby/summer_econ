@@ -18,3 +18,5 @@ Amplification rises with gain under both shocks and is larger for investment
 under the premium shock on this controlled scale. The scale is illustrative,
 not an empirical premium calibration. See `nk_gain_sensitivity.mat` and
 `nk_gain_sensitivity.pdf`.
+The technology and risk-premium rows are combined in
+`nk_gain_sensitivity_summary.csv` with an explicit `shock` column.

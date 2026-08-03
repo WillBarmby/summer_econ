@@ -22,7 +22,10 @@ native = result.simulation.re_native_path;
 assert(abs(native(risk_index,1)-1)<1e-10);
 assert(max(abs(native(growth_index,:)))<1e-12);
 assert(isfile(result.output_files.mat) && isfile(result.output_files.pdf) && ...
-    isfile(result.output_files.png));
+    isfile(result.output_files.png) && isfile(result.output_files.summary_csv));
+assert(result.schema_version=="2.0.0" && ...
+    isequal(size(result.summary. ...
+    maximum_absolute_median_learning_minus_re_wedge),[1 6]));
 clear cleanup
 fprintf('NK risk-premium runner passed its shock-isolation smoke test.\n');
 end

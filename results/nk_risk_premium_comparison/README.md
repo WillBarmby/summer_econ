@@ -13,3 +13,5 @@ learning-minus-RE wedges are:
 The benchmark effects are modest and become larger in the gain sensitivity.
 The shock scale is illustrative rather than empirically estimated. Primary
 files: `nk_risk_premium_comparison.mat` and `nk_risk_premium_panels.pdf`.
+The compact quantity-level metrics are in
+`nk_risk_premium_comparison_summary.csv`.

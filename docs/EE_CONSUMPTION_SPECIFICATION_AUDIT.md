@@ -53,7 +53,7 @@ audit = run_ep_ee_consumption_audit(config,fullfile(pwd,'results','my_audit'));
 ```
 
 The MAT artifact saves the complete standardized innovations and a pairing
-fingerprint. `output_files.metrics` contains outcome rates, rejected-update
+fingerprint. `summary` contains outcome rates, rejected-update
 counts, observations reached, conditional learning-minus-RE IRFs, and full
 draw-level paper-direct-minus-archive IRF differences. “Maximum wedge” means
 the maximum absolute response over the saved horizon; “cumulative wedge” means

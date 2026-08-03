@@ -14,4 +14,5 @@ horizon of the absolute median learning-minus-own-RE response.
 | E&P IH | 0.2095 | 0.1055 | 1.1316 | 0.3151 | 100/100 |
 
 IH produces substantially larger amplification than one-step EE. Primary files:
-`ep_comparison.mat` and `ep_comparison_panels.pdf`.
+`ep_comparison.mat`, `ep_comparison_summary.csv`, and
+`ep_comparison_panels.pdf`.

@@ -15,7 +15,8 @@ The active workflow has six concepts:
 5. **Paired IRF** - shocked and unshocked paths restart from the same trained
    state, so their difference isolates the impulse response.
 6. **Reporting** - one saved artifact contains the inputs, paths, statuses, and
-   graph locations needed to reproduce a result.
+   graph locations needed to reproduce a result. Every runner also writes a
+   compact CSV of paper-facing metrics.
 
 ## Public commands
 
@@ -83,3 +84,5 @@ equivalence evidence and the fixture-based regression checks that carry it
 forward.
 
 See [Documentation map](docs/README.md) for the intended reading order.
+The MAT/CSV field contract is documented in
+[`docs/ARTIFACT_SCHEMA.md`](docs/ARTIFACT_SCHEMA.md).

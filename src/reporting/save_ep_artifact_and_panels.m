@@ -5,6 +5,7 @@ if ~isfolder(output_dir), mkdir(output_dir); end
 mat_path = fullfile(output_dir,[artifact.experiment '.mat']);
 pdf_path = fullfile(output_dir,[artifact.experiment '_panels.pdf']);
 png_path = fullfile(output_dir,[artifact.experiment '_panels.png']);
+summary_csv = fullfile(output_dir,[artifact.experiment '_summary.csv']);
 fig = figure('Visible','off','Color','white','Position',[50 50 1400 650]);
 cleanup = onCleanup(@() close(fig));
 layout = tiledlayout(fig,2,4,'TileSpacing','compact','Padding','compact');
@@ -24,7 +25,9 @@ legend(nexttile(layout,1),{'25th–75th percentile','Learning median','RE'}, ...
 title(layout,'E&P response to a one-percentage-point technology-growth shock');
 exportgraphics(fig,pdf_path,'ContentType','vector');
 exportgraphics(fig,png_path,'Resolution',250);
-files = struct('mat',mat_path,'pdf',pdf_path,'png',png_path);
+files = struct('mat',mat_path,'pdf',pdf_path,'png',png_path, ...
+    'summary_csv',summary_csv);
+write_learning_summary_csv(artifact.summary,summary_csv);
 save(mat_path,'-struct','artifact','-v7.3');
 clear cleanup
 end

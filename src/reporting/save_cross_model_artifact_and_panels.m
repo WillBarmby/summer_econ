@@ -10,6 +10,7 @@ overlay_pdf = fullfile(output_dir,'cross_model_overlay.pdf');
 overlay_png = fullfile(output_dir,'cross_model_overlay.png');
 wedge_pdf = fullfile(output_dir,'learning_wedges.pdf');
 wedge_png = fullfile(output_dir,'learning_wedges.png');
+summary_csv = fullfile(output_dir,'cross_model_comparison_summary.csv');
 periods = comparison.config.plot_periods;
 ep_ee = comparison.ep_results{1};
 ep_ih = comparison.ep_results{2};
@@ -73,6 +74,8 @@ clear cleanup
 
 files = struct('mat',mat_path,'overlay_pdf',overlay_pdf, ...
     'overlay_png',overlay_png,'wedge_pdf',wedge_pdf,'wedge_png',wedge_png, ...
-    'ep_artifact',fullfile(output_dir,'ep','ep_comparison.mat'));
+    'ep_artifact',fullfile(output_dir,'ep','ep_comparison.mat'), ...
+    'summary_csv',summary_csv);
+write_learning_summary_csv(comparison.summary,summary_csv);
 save(mat_path,'-struct','comparison','-v7.3');
 end

@@ -10,6 +10,11 @@ active folders correspond to supported public outputs. Nested `ep/`,
 `original_growth/`, and `zero_growth/` folders are self-contained sub-artifacts
 created by their parent runners.
 
+Each current runner writes a schema-versioned MAT artifact plus a compact
+`*_summary.csv`. The MAT file retains draw-level evidence; the CSV contains the
+headline wedges and completion diagnostics in flat, labeled rows. See
+`../docs/ARTIFACT_SCHEMA.md` before consuming MAT fields programmatically.
+
 `initialization_robustness/` is the canonical cross-model moderate-prior
 comparison. Superseded model-specific initialization outputs and other orphaned
 local products were moved to `archive/orphaned_2026-08-03/`; they are not active

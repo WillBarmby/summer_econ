@@ -5,3 +5,4 @@ It asks how EE and IH respond under the original E&P trend calibration and
 serves as the paired baseline for the zero-growth arm. Both specifications
 complete 100 of 100 draws. The parent folder reports the direct zero-minus-
 original differences.
+Its standalone scalar summary is `ep_original_growth_summary.csv`.

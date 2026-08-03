@@ -7,3 +7,4 @@ same as `results/ep_comparison/`: E&P EE maximum wedges are 0.0053, 0.0028,
 Both specifications complete 100 of 100 draws.
 
 The parent cross-model folder adds NK EE under the identical innovation matrix.
+This sub-artifact also writes `ep_comparison_summary.csv`.

@@ -18,15 +18,18 @@ assert(artifact.results{1}.learning_specification.consumption_forecast.mode== ..
     "learned_outcome");
 assert(artifact.results{2}.learning_specification.consumption_forecast.mode== ...
     "fixed_re");
-metrics = artifact.output_files.metrics;
+metrics = artifact.summary;
 assert(isequal(size(metrics.rates),[2 3]));
 assert(isequal(size(metrics.conditional_learning_minus_re_irf),[1 4 4 2]));
 assert(isequal(size(metrics.draw_level_direct_minus_archive_irf),[1 4 4]));
 assert(isequal(size(metrics.maximum_absolute_learning_minus_re_wedge),[1 4 2]));
 for name = {'mat','comparison_pdf','comparison_png','difference_pdf', ...
-        'difference_png','diagnostics_pdf','diagnostics_png'}
+        'difference_png','diagnostics_pdf','diagnostics_png','summary_csv'}
     assert(isfile(artifact.output_files.(name{1})));
 end
+assert(artifact.schema_version=="2.0.0");
+assert(all(cellfun(@(value) ischar(value) || isstring(value), ...
+    struct2cell(artifact.output_files))));
 clear cleanup
 end
 

@@ -5,30 +5,15 @@ function files = save_ep_gain_heatmap(sensitivity,output_dir)
 % effects. Numeric cell labels preserve exact values used in the figure.
 
 gains = sensitivity.gains;
-periods = sensitivity.config.plot_periods;
-results = {sensitivity.ee_results,sensitivity.ih_results};
-specification_count = numel(results);
-gain_count = numel(gains);
 quantity_count = numel(sensitivity.quantity_names);
-wedges = NaN(specification_count,gain_count,quantity_count);
-completion = NaN(specification_count,gain_count);
-failure = NaN(specification_count,gain_count);
-for row = 1:specification_count
-    for column = 1:gain_count
-        result = results{row}{column};
-        difference = result.summary.learning_median(:,periods)- ...
-            result.summary.re(:,periods);
-        wedges(row,column,:) = max(abs(difference),[],2,'omitnan');
-        draw_count = numel(result.statuses);
-        completion(row,column) = 100*result.status_counts.completed/draw_count;
-        failure(row,column) = 100*(result.status_counts.explosive+ ...
-            result.status_counts.invalid)/draw_count;
-    end
-end
+wedges = sensitivity.summary.maximum_absolute_median_learning_minus_re_wedge;
+completion = 100*sensitivity.summary.completion_rate;
+failure = 100*sensitivity.summary.failure_rate;
 
 mat_path = fullfile(output_dir,'ep_gain_sensitivity.mat');
 pdf_path = fullfile(output_dir,'ep_gain_sensitivity_heatmap.pdf');
 png_path = fullfile(output_dir,'ep_gain_sensitivity_heatmap.png');
+summary_csv = fullfile(output_dir,'ep_gain_sensitivity_summary.csv');
 fig = figure('Visible','off','Color','white','Position',[50 50 1500 760]);
 cleanup = onCleanup(@() close(fig));
 layout = tiledlayout(fig,2,3,'TileSpacing','compact','Padding','compact');
@@ -50,8 +35,8 @@ title(layout,['E&P gain sensitivity: maximum absolute median ' ...
 exportgraphics(fig,pdf_path,'ContentType','vector');
 exportgraphics(fig,png_path,'Resolution',250);
 files = struct('mat',mat_path,'pdf',pdf_path,'png',png_path, ...
-    'wedge_metric',wedges,'completion_percent',completion, ...
-    'failure_percent',failure);
+    'summary_csv',summary_csv);
+write_gain_summary_csv(sensitivity.summary,summary_csv);
 save(mat_path,'-struct','sensitivity','-v7.3');
 clear cleanup
 end

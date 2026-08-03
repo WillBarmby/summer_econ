@@ -11,5 +11,6 @@ test_nk_ee_specification();
 test_nk_risk_premium_smoke();
 test_ep_smoke();
 test_initialization_robustness();
+test_standard_artifact_schema();
 fprintf('All fast tests passed.\n');
 end

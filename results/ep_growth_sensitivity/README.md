@@ -16,3 +16,4 @@ learning response.
 Trend growth changes magnitudes, particularly investment, but does not explain
 the much larger benchmark IH wedge. Primary files:
 `ep_growth_sensitivity.mat` and `ep_growth_sensitivity_panels.pdf`.
+The compact comparison is `ep_growth_sensitivity_summary.csv`.

@@ -1,31 +1,15 @@
 function files = save_gain_comparison_heatmap(comparison,output_dir)
 %% SAVE_GAIN_COMPARISON_HEATMAP Save the common-shock three-specification map.
 
-result_sets = {comparison.ep_ee_results,comparison.ep_ih_results, ...
-    comparison.nk_ee_results};
-rows = numel(result_sets);
-columns = numel(comparison.gains);
 quantities = numel(comparison.quantity_names);
-periods = comparison.config.plot_periods;
-wedges = NaN(rows,columns,quantities);
-completion = NaN(rows,columns);
-failure = NaN(rows,columns);
-for row = 1:rows
-    for column = 1:columns
-        result = result_sets{row}{column};
-        difference = result.summary.learning_median(:,periods)- ...
-            result.summary.re(:,periods);
-        wedges(row,column,:) = max(abs(difference),[],2,'omitnan');
-        draws = numel(result.statuses);
-        completion(row,column) = 100*result.status_counts.completed/draws;
-        failure(row,column) = 100*(result.status_counts.explosive+ ...
-            result.status_counts.invalid)/draws;
-    end
-end
+wedges = comparison.summary.maximum_absolute_median_learning_minus_re_wedge;
+completion = 100*comparison.summary.completion_rate;
+failure = 100*comparison.summary.failure_rate;
 
 mat_path = fullfile(output_dir,'gain_sensitivity_comparison.mat');
 pdf_path = fullfile(output_dir,'gain_sensitivity_comparison_heatmap.pdf');
 png_path = fullfile(output_dir,'gain_sensitivity_comparison_heatmap.png');
+summary_csv = fullfile(output_dir,'gain_sensitivity_comparison_summary.csv');
 fig = figure('Visible','off','Color','white','Position',[50 50 1500 840]);
 cleanup = onCleanup(@() close(fig));
 layout = tiledlayout(fig,2,3,'TileSpacing','compact','Padding','compact');
@@ -45,8 +29,8 @@ title(layout,['Common technology shock: maximum absolute median ' ...
 exportgraphics(fig,pdf_path,'ContentType','vector');
 exportgraphics(fig,png_path,'Resolution',250);
 files = struct('mat',mat_path,'pdf',pdf_path,'png',png_path, ...
-    'wedge_metric',wedges,'completion_percent',completion, ...
-    'failure_percent',failure);
+    'summary_csv',summary_csv);
+write_gain_summary_csv(comparison.summary,summary_csv);
 save(mat_path,'-struct','comparison','-v7.3');
 clear cleanup
 end

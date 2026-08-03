@@ -26,12 +26,13 @@ assert(first.results{1}.learning_specification.variant== ...
 assert(first.results{2}.learning_specification.formulation=="infinite_horizon");
 assert(isequal(size(first.results{1}.terminal_training_coefficients),[2 3 2]));
 assert(all(first.results{1}.training_projection_events>=0));
-for name = {'mat','pdf','png'}
+for name = {'mat','pdf','png','summary_csv'}
     assert(isfile(first.output_files.(name{1})), ...
         'Missing public-interface output: %s.',name{1});
 end
 saved = load(first.output_files.mat,'config','calibration','shock_metadata', ...
-    'results','output_files');
+    'results','output_files','schema_version','question','units','periods', ...
+    'axes','provenance','summary');
 assert(isequal(saved.config,first.config));
 assert(isequal(saved.calibration,first.calibration));
 assert(isequal(saved.shock_metadata,first.shock_metadata));
@@ -39,6 +40,11 @@ assert(isequal(saved.results{1}.statuses,first.results{1}.statuses));
 assert(isequal(saved.results{1}.terminal_training_coefficients, ...
     first.results{1}.terminal_training_coefficients));
 assert(isequal(saved.output_files,first.output_files));
+assert(saved.schema_version=="2.0.0" && strlength(saved.question)>0);
+assert(isequal(saved.periods.horizons,0:config.ir_periods-1));
+assert(isequal(saved.axes.results,{'specification'}));
+assert(isequal(size(saved.summary. ...
+    maximum_absolute_median_learning_minus_re_wedge),[2 4]));
 
 growth_config = config;
 growth_config.draw_count = 1;
@@ -47,8 +53,9 @@ assert(growth.baseline.calibration.gamma_bar==exp(0.0053));
 assert(growth.zero_growth.calibration.gamma_bar==1);
 assert(isequal(growth.baseline.standardized_innovations, ...
     growth.zero_growth.standardized_innovations));
-assert(isfile(growth.output_file));
-assert(isfile(growth.figure_files.pdf) && isfile(growth.figure_files.png));
+assert(isfile(growth.output_files.mat));
+assert(isfile(growth.output_files.pdf) && isfile(growth.output_files.png));
+assert(isfile(growth.output_files.summary_csv));
 clear cleanup
 fprintf('Clean E&P public interface passed reproducibility and output checks.\n');
 end

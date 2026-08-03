@@ -28,7 +28,7 @@ for s = 1:3
         ax = nexttile(layout); hold(ax,'on'); yline(ax,0,':');
         handles = gobjects(1,2);
         for treatment = 1:2
-            values = squeeze(median(artifact.metrics.learning_minus_re_irf( ...
+            values = squeeze(median(artifact.summary.learning_minus_re_irf( ...
                 :,s,treatment,j,q,:),1,'omitnan'));
             style = '-'; if treatment==2, style = '--'; end
             handles(treatment) = plot(ax,1:numel(values),values,style, ...
@@ -54,10 +54,10 @@ fig = figure('Visible','off','Color','white','Position',[30 30 1500 1000]);
 cleanup = onCleanup(@() close(fig));
 layout = tiledlayout(fig,3,4,'TileSpacing','compact','Padding','compact');
 for s = 1:3
-    usable = artifact.metrics.joint_completion(:,s,j);
+    usable = artifact.summary.joint_completion(:,s,j);
     for q = 1:4
         ax = nexttile(layout); hold(ax,'on');
-        values = squeeze(artifact.metrics.initialization_difference_irf( ...
+        values = squeeze(artifact.summary.initialization_difference_irf( ...
             usable,s,j,q,:));
         ordered = sort(values,1);
         n = size(ordered,1);
@@ -85,14 +85,14 @@ fig = figure('Visible','off','Color','white','Position',[30 30 1450 500]);
 cleanup = onCleanup(@() close(fig));
 layout = tiledlayout(fig,1,3,'TileSpacing','compact','Padding','compact');
 render_heatmap(nexttile(layout), ...
-    squeeze(artifact.metrics.relative_initialization_effect(:,j,:)), ...
+    squeeze(artifact.summary.relative_initialization_effect(:,j,:)), ...
     artifact,'Initialization effect / learning effect','%.2f');
 ax = nexttile(layout);
-bar(ax,median(artifact.metrics.retained_initial_displacement(:,:,j),1,'omitnan'));
+bar(ax,median(artifact.summary.retained_initial_displacement(:,:,j),1,'omitnan'));
 grid(ax,'on'); xticklabels(ax,artifact.specification_labels);
 ylabel(ax,'Fraction'); title(ax,'Median initial displacement retained');
 ax = nexttile(layout);
-completion = 100*squeeze(artifact.metrics.rates(:,:,j,1));
+completion = 100*squeeze(artifact.summary.rates(:,:,j,1));
 bar(ax,completion); ylim(ax,[0 105]); grid(ax,'on');
 xticklabels(ax,artifact.specification_labels); ylabel(ax,'Percent');
 title(ax,'Completed paths'); legend(ax,{'RE','Half-RE'},'Location','best');
@@ -110,7 +110,7 @@ for s = 1:3
     for q = 1:4
         ax = nexttile(layout);
         plot(ax,artifact.training_horizons,squeeze( ...
-            artifact.metrics.median_max_initialization_effect(s,:,q)), ...
+            artifact.summary.median_max_initialization_effect(s,:,q)), ...
             'o-','LineWidth',1.6);
         grid(ax,'on'); title(ax,artifact.quantity_names{q});
         if q==1

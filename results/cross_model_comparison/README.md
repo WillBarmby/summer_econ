@@ -14,3 +14,4 @@ The one-step EE specifications remain close to their own RE benchmarks; IH is
 much farther away. The five-path overlay combines structural and expectations
 differences, so `learning_wedges.pdf` is the controlled comparison. The complete
 artifact is `cross_model_comparison.mat`.
+The flat paper-facing metrics are in `cross_model_comparison_summary.csv`.

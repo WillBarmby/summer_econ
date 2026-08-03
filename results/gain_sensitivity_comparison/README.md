@@ -18,3 +18,5 @@ Wedges rise with gain in every model, but IH is much more sensitive. At gain
 `0.02`, 53 IH draws are explosive, so its median is conditional on the 47
 completed draws. See `gain_sensitivity_comparison.mat` for all quantities and
 `gain_sensitivity_comparison_heatmap.pdf` for the summary figure.
+The full labeled gain-by-specification table is
+`gain_sensitivity_comparison_summary.csv`.

@@ -15,3 +15,5 @@ The forecast contract matters for the relatively small EE response, especially
 investment, but the difference remains much smaller than the benchmark IH
 amplification. Use `ep_ee_consumption_audit_diagnostics.pdf` with the comparison
 and difference figures; the MAT artifact contains full draw-level diagnostics.
+Use `ep_ee_consumption_audit_summary.csv` for the compact variant-by-quantity
+comparison.
