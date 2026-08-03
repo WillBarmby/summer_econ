@@ -63,6 +63,20 @@ and the common training scale is illustrative rather than empirically
 estimated. This experiment isolates a second shock-transmission channel; it is
 not part of the E&P technology-shock comparison.
 
+## NK technology-shock nominal IRFs
+
+**Research question:** what are the NK real, inflation, and nominal-rate
+responses to a one-percentage-point technology-growth innovation, and does
+one-step EE learning change the RE benchmark?
+
+`run_nk_technology_comparison` uses the baseline NK EE specification and the
+same paired-draw, training, reporting, and completion conventions as the other
+experiments. It restores the cumulative technology trend for output,
+consumption, and investment, while retaining inflation and the nominal rate as
+gross-steady-state percentage deviations. The technology shock is active and
+the risk-premium shock is held exactly at zero. The resulting six-panel figure
+is a standalone NK nominal companion to the four-quantity E&P–NK comparison.
+
 ## Initialization sensitivity
 
 **Research question:** how much do learning IRFs depend on exact-RE versus

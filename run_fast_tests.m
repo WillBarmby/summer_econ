@@ -9,6 +9,7 @@ test_nonlinear_loader();
 test_ep_ee_consumption_variants();
 test_nk_ee_specification();
 test_nk_risk_premium_smoke();
+test_nk_technology_smoke();
 test_ep_smoke();
 test_initialization_robustness();
 test_standard_artifact_schema();

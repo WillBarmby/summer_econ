@@ -28,6 +28,7 @@ results = run_ep_comparison();
 growth = run_ep_growth_sensitivity();
 comparison = run_cross_model_comparison();
 risk = run_nk_risk_premium_comparison();
+technology = run_nk_technology_comparison();
 gain = run_nk_gain_sensitivity();
 initialization_comparison = run_initialization_robustness();
 ee_consumption = run_ep_ee_consumption_audit();
@@ -73,6 +74,11 @@ boundary are collected in
 - `docs/` - equations, experiment design, parameter provenance, and the map to
   the frozen replication history.
 - `results/` - generated experiment artifacts and figures.
+
+The standalone NK technology-shock runner reports the four real quantities
+plus inflation and the nominal rate. Its six-panel figure complements the
+four-quantity cross-model technology-shock comparison, where nominal
+quantities cannot be shared with the E&P model.
 
 The full reconstruction is preserved at Git tag `ep-verification-v1`; it is not
 part of this branch's active filesystem. The supported runners depend only on

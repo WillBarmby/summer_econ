@@ -107,6 +107,18 @@ consumption, investment, hours, inflation, and the nominal rate are 0.0069,
 shock-transmission comparison, not an empirical calibration of the premium
 process.
 
+### `run_nk_technology_comparison`
+
+**Question.** What are the NK real, inflation, and nominal-rate responses to a
+one-percentage-point technology-growth innovation, and does one-step EE
+learning change the RE benchmark?
+
+**Result.** The technology shock generates positive inflation and nominal-rate
+responses that peak immediately on impact and then decay. The baseline IRF is
+persistent but not hump-shaped: neither inflation nor the nominal rate rises
+to a later peak. The standalone six-panel figure reports these nominal paths
+together with the four real quantities.
+
 ### `run_nk_gain_sensitivity`
 
 **Question.** How does the learning gain affect NK EE amplification under
