@@ -21,7 +21,8 @@ assert(isequal(first.results{1}.statuses,second.results{1}.statuses));
 assert(first.shock_metadata.impulse==1);
 assert(first.shock_metadata.training_standard_deviation==exp(-0.034));
 assert(first.calibration.gamma_bar==exp(0.0053));
-assert(first.results{1}.learning_specification.variant=="paper");
+assert(first.results{1}.learning_specification.variant== ...
+    "paper_direct_consumption");
 assert(first.results{2}.learning_specification.formulation=="infinite_horizon");
 assert(isequal(size(first.results{1}.terminal_training_coefficients),[2 3 2]));
 assert(all(first.results{1}.training_projection_events>=0));
