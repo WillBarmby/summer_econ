@@ -1,5 +1,7 @@
 function result = run_nk_risk_premium_comparison(varargin)
 %% RUN_NK_RISK_PREMIUM_COMPARISON Compare NK RE and EE after a demand shock.
+% Research question: does one-step EE learning materially change real and
+% nominal NK responses to an IID risk-premium innovation?
 % This first benchmark uses an i.i.d. risk-premium process (rho_s=0). A unit
 % eps_s innovation raises the gross premium by 0.01, which is one percentage
 % point and one canonical deviation unit. Technology innovations remain zero.

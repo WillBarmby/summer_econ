@@ -42,6 +42,24 @@ complete configuration and an output directory. The cross-model runner gives
 E&P and NK the same technology-growth innovations and reports both a five-path
 overlay and within-model learning-minus-RE panels.
 
+## Headline findings
+
+- E&P IH generates substantially larger technology-shock amplification than
+  either E&P one-step EE or NK one-step EE at the benchmark gain.
+- Learning wedges rise with the gain. E&P IH is the most gain-sensitive and
+  has 53 explosive draws at gain `0.02`, so that cell's median is conditional
+  on 47 completions.
+- Directly learning consumption forecasts changes the relatively small E&P EE
+  response, especially investment.
+- Positive deterministic growth affects response magnitudes but does not
+  explain the EE-IH ranking.
+- After 2,000 training observations, IH is comparatively insensitive to a
+  half-RE starting prior; E&P EE and NK EE retain meaningful prior dependence.
+
+Each runner's research question, result metric, numerical summary, and claim
+boundary are collected in
+[`docs/RESULTS_AND_QUESTIONS.md`](docs/RESULTS_AND_QUESTIONS.md).
+
 ## Project map
 
 - `models/` - verified E&P models, the active nonlinear stationary

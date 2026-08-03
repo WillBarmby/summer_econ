@@ -1,5 +1,7 @@
 function comparison = run_cross_model_comparison(varargin)
 %% RUN_CROSS_MODEL_COMPARISON Compare E&P and NK under one common shock.
+% Research question: under identical technology innovations and settings, how
+% do within-model learning-minus-RE wedges differ between E&P and NK?
 % The main panels contain five paths: E&P RE, E&P EE, E&P IH, NK RE, and
 % NK EE. Companion wedge panels subtract each model's own RE response from its
 % learning response. The latter are essential because an E&P-versus-NK gap

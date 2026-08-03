@@ -1,5 +1,7 @@
 function comparison = run_gain_sensitivity_comparison(varargin)
 %% RUN_GAIN_SENSITIVITY_COMPARISON Compare E&P EE, E&P IH, and NK EE gains.
+% Research question: is technology-shock gain sensitivity common across the
+% three learning specifications, or concentrated in E&P IH?
 % All three rows use the same technology-growth shock, gain grid, standardized
 % histories, training length, impulse size, and common-variable reporting. The
 % NK risk-premium gain experiment remains separate because mixing shock types in

@@ -1,5 +1,7 @@
 function sensitivity = run_ep_gain_sensitivity(varargin)
 %% RUN_EP_GAIN_SENSITIVITY Compare E&P EE and IH over one common gain grid.
+% Research question: how does responsiveness to new data alter amplification
+% and stability in E&P one-step EE versus infinite-horizon learning?
 % The documented grid is [0, .002, .005, .01, .02]. Every specification and
 % gain receives exactly the same standardized innovations, training length,
 % technology-growth impulse, and reporting convention. Failed draws are

@@ -67,6 +67,20 @@ response. Inspect the diagnostics beside either figure: a small conditional
 difference is not representative if completion or projection behavior differs
 substantially between treatments.
 
+## Benchmark result
+
+Both treatments complete all 100 draws, have no explosive or invalid paths,
+and have no rejected projection updates. The maximum absolute paired-median
+paper-direct-minus-archive differences over 40 quarters are:
+
+| Output | Consumption | Investment | Hours |
+|---:|---:|---:|---:|
+| 0.0053 | 0.0026 | 0.0284 | 0.0079 |
+
+The consumption contract therefore matters for the relatively small EE
+learning response, especially investment. The result does not imply that the
+contract difference is large relative to the benchmark IH amplification.
+
 ## Claim boundary
 
 The audit can support a statement about whether fixing consumption forecasts at

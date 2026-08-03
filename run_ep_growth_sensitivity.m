@@ -1,5 +1,7 @@
 function growth = run_ep_growth_sensitivity(varargin)
 %% RUN_EP_GROWTH_SENSITIVITY Compare original and zero deterministic growth.
+% Research question: does positive deterministic trend growth, rather than the
+% expectations formulation, drive the E&P response differences?
 % This runner executes only E&P EE and IH. Both gamma_bar calibrations use the
 % same seed, standardized innovations, and structural growth impulse.
 

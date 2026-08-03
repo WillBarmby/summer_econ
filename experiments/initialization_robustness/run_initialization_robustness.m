@@ -1,5 +1,7 @@
 function artifact = run_initialization_robustness(varargin)
 %% RUN_INITIALIZATION_ROBUSTNESS Compare moderate priors across all models.
+% Research question: how much do IRFs depend on exact-RE versus half-RE starting
+% coefficients, and how quickly does common training remove that dependence?
 % Exact RE and half-RE coefficients receive identical shocks draw by draw.
 % The paper comparison uses 100 draws, gain 0.002, and nested training samples
 % of 0, 100, 500, and 2,000 observations in all three specifications.

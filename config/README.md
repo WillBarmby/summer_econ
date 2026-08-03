@@ -12,9 +12,14 @@ Configuration is separated by purpose:
 - `nk_risk_premium_ee_specification` records the corresponding information
   assumption for the i.i.d. NK risk-premium experiment.
 
-The first cross-model runner deliberately reuses `ep_experiment_config`, so the
+The cross-model and gain-comparison runners deliberately reuse
+`ep_experiment_config`, so the
 models share the draw count, seed, training length, gain, horizon, technology
 shock volatility, and impulse. NK-specific learning assumptions remain in
 `nk_ee_specification`.
+
+Research questions and current numerical results are documented in
+`docs/RESULTS_AND_QUESTIONS.md`; configuration files define assumptions rather
+than conclusions.
 
 No experiment requires editing a Dynare model file in multiple places.

@@ -1,5 +1,7 @@
 function artifact = run_ep_ee_consumption_audit(varargin)
 %% RUN_EP_EE_CONSUMPTION_AUDIT Compare written and released EE contracts.
+% Research question: does directly learning subjective consumption forecasts
+% materially change benchmark EE IRFs relative to fixing them at RE?
 % With no arguments, run 100 paired draws and save under results/. Optional
 % arguments are a complete E&P configuration and an output directory.
 

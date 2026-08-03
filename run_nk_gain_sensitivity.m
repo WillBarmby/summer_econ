@@ -1,5 +1,7 @@
 function sensitivity = run_nk_gain_sensitivity(varargin)
 %% RUN_NK_GAIN_SENSITIVITY Map NK EE amplification across learning gains.
+% Research question: how does the gain alter NK EE amplification under separate
+% technology and IID risk-premium shocks?
 % The documented grid is [0, .002, .005, .01, .02]. Every gain receives the
 % same standardized histories. Technology and i.i.d. risk-premium experiments
 % are kept separate, and all failed draws remain recorded rather than replaced.
