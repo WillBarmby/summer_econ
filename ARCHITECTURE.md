@@ -200,6 +200,21 @@ boundary endogenous and shock dimensions without embedding a structural-model
 copy. If `m` variables are learned from `k` regressors, initial coefficients
 are `m`-by-`k` and the initial regressor-moment matrix is `k`-by-`k`.
 
+The executable fields have fixed v1 signatures:
+
+```matlab
+plm = learning_system.belief_to_plm(beliefs)
+alm = learning_system.plm_to_alm(plm)
+x_t = learning_system.regressor(path,t)
+y_t = learning_system.outcome(path,t)
+[beliefs,diagnostic] = learning_system.updater(beliefs,x_t,y_t)
+```
+
+A PLM contains `intercept` and `transition`. An ALM contains `intercept`,
+`transition`, and `shock`, using the same declaration order as the model and
+RE solution. The compiler fills unlearned PLM rows from the RE solution and
+replaces only coefficients named by the learning specification.
+
 ### `experiment_specification`
 
 Required fields:
@@ -274,6 +289,7 @@ AdaptiveLearning:InvalidExperimentSpecification
 AdaptiveLearning:InvalidLearningSpecification
 AdaptiveLearning:UnknownVariable
 AdaptiveLearning:InvalidShockSchedule
+AdaptiveLearning:IncompatibleHandoff
 ```
 
 The red contract suite specifies these behaviors before the implementations
