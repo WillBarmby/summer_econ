@@ -11,10 +11,12 @@ classdef TestArtifactAssembly < matlab.unittest.TestCase
 
             artifact = assemble_artifact(model,learning,experiment,result);
 
-            expected = {'schema_version','model','learning_specification', ...
-                'experiment_specification','simulation_result'};
+            expected = {'schema_version','kind','case','model', ...
+                'learning_specification','experiment_specification', ...
+                'simulation_result','axes','units','timing','provenance'};
             testCase.verifyEqual(sort(fieldnames(artifact)),sort(expected.'));
-            testCase.verifyEqual(artifact.schema_version,"1.0");
+            testCase.verifyEqual(artifact.schema_version,"2.0");
+            testCase.verifyEqual(artifact.kind,"single_run");
             testCase.verifyEqual(artifact.model.variable_names,{'y'});
             testCase.verifyEqual(artifact.model.shock_names,{'eps'});
             testCase.verifyEqual(artifact.model.calibration,model.calibration);
@@ -48,6 +50,7 @@ classdef TestArtifactAssembly < matlab.unittest.TestCase
 
             artifact = assemble_artifact(model,learning,experiment,result);
 
+            testCase.verifyEqual(artifact.kind,"training_irf");
             testCase.verifyEqual(artifact.simulation_result.irf,[0 1 3]);
             testCase.verifyEqual(artifact.simulation_result.status,"completed");
         end

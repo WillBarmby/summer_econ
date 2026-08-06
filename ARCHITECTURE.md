@@ -322,6 +322,34 @@ report = report_artifact(artifact,reporting_specification);
 figure_handle = generate_artifact_figure(artifact,reporting_specification);
 ```
 
+## Case and comparison toolkit
+
+Model-specific choices sit above, and do not alter, the stable core pipeline:
+
+```matlab
+definition = ep_ee_case(options);
+prepared = prepare_case(definition);
+single = run_case(prepared,one_draw_design);
+comparison = run_comparison({prepared,other_case},shared_design);
+```
+
+A case definition contains identity, model source/options, a learning-
+specification factory, and a declarative reporting specification. Preparation
+exposes every core handoff. Study designs identify shocks by economic name;
+materialization resolves model declaration order and leaves all unselected
+shock rows at zero.
+
+`run_case` returns a `training_irf` artifact with full primitive histories.
+`run_comparison` returns a `comparison` artifact whose `cases` are compact
+`case_collection` artifacts. Collections retain native and reported IRFs,
+statuses and terminations, terminal coefficients and moments, projection
+counts, RE benchmarks, and pointwise summaries. They do not retain compiled
+callbacks, structural matrices, or every period's histories.
+
+Primitive paired IRFs include the shared initial state. Study artifacts expose
+columns `2:end`, so their first column is impact horizon zero. Saving and
+export remain separate from all execution and reporting functions.
+
 The specification selects source `"path"` or `"irf"` and declares plotted
 series by output name, native variable, cumulative addends, and scale. A
 reported series is

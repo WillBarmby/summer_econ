@@ -13,10 +13,23 @@ The intended handoffs are:
 4. the experiment engine repeatedly maps beliefs to an ALM and simulates paths;
 5. the experiment returns paths, belief states, diagnostics, and artifacts.
 
-The active code currently contains the model loaders, structural validation,
-one-step PLM-to-ALM mapping, RLS updater, and recursive simulation primitives.
-The generic specification compiler and experiment artifact layer are the next
-pieces to build.
+The active code contains the complete linear-model pipeline, one-step and
+infinite-horizon expectation mappings, one-draw and comparison runners, and
+nonexecutable artifact/reporting consumers.
+
+The verified E&P comparison is intentionally short to invoke:
+
+```matlab
+setup_project;
+options = ep_comparison_options();
+ee = prepare_case(ep_ee_case(options));
+ih = prepare_case(ep_ih_case(options));
+comparison = run_comparison({ee,ih},ep_comparison_design(options));
+```
+
+For a single explicit draw, select one row from the design's standardized
+innovations and call `run_case`. That artifact retains full training and IRF
+histories; `run_comparison` retains compact draw evidence and summaries.
 
 ## Project map
 
@@ -26,11 +39,14 @@ pieces to build.
 - `src/expectations/` - expectation mappings from a PLM to an ALM.
 - `src/learning/` - belief state, RLS updates, recursive simulation, and paired
   path primitives.
+- `src/case/` - readable model-specific case definitions and preparation.
+- `src/study/` - named-shock designs and single/comparison execution.
+- `src/artifact/` - nonexecutable schemas, validation, and description.
+- `src/reporting/` - pure summaries and in-memory graph consumers.
 - `tests/` - focused loader and engine tests.
 - `docs/` - historical research and experiment documentation retained for
   provenance; it does not describe every active file in this branch.
 
-Call `setup_project` from MATLAB before using the active functions. The former
-paper-specific runners, reporting code, and experiment configurations have
-been removed from the active tree. Their research history remains in Git and
-in the historical documentation under `docs/`.
+Call `setup_project` from MATLAB before using the active functions. Historical
+paper-specific code remains in Git; the new E&P case layer reproduces its
+verified baseline without reintroducing the old bundled runner boundaries.
