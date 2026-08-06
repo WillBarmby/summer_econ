@@ -28,6 +28,46 @@ classdef TestLearningCompilerContract < matlab.unittest.TestCase
                 'AdaptiveLearning:InvalidLearningSystem');
         end
 
+        function rejectsIncoherentBeliefDimensions(testCase)
+            system = testsupport.scalar_learning_system();
+            system.initial_beliefs.moment_matrix = eye(3);
+            testCase.verifyError(@() validate_learning_system(system), ...
+                'AdaptiveLearning:InvalidLearningSystem');
+        end
+
+        function rejectsMalformedBeliefState(testCase)
+            system = testsupport.scalar_learning_system();
+            system.initial_beliefs.observations = -1;
+            testCase.verifyError(@() validate_learning_system(system), ...
+                'AdaptiveLearning:InvalidLearningSystem');
+            system = testsupport.scalar_learning_system();
+            system.initial_beliefs.invalid = 0;
+            testCase.verifyError(@() validate_learning_system(system), ...
+                'AdaptiveLearning:InvalidLearningSystem');
+        end
+
+        function rejectsMalformedNames(testCase)
+            system = testsupport.scalar_learning_system();
+            system.regressor_names = {'constant','constant'};
+            testCase.verifyError(@() validate_learning_system(system), ...
+                'AdaptiveLearning:InvalidLearningSystem');
+            system = testsupport.scalar_learning_system();
+            system.learned_variables = {'unknown'};
+            testCase.verifyError(@() validate_learning_system(system), ...
+                'AdaptiveLearning:InvalidLearningSystem');
+        end
+
+        function rejectsExperimentOrReportingLeakage(testCase)
+            system = testsupport.scalar_learning_system();
+            system.shocks = zeros(1,2);
+            testCase.verifyError(@() validate_learning_system(system), ...
+                'AdaptiveLearning:InvalidLearningSystem');
+            system = testsupport.scalar_learning_system();
+            system.output_path = "result.mat";
+            testCase.verifyError(@() validate_learning_system(system), ...
+                'AdaptiveLearning:InvalidLearningSystem');
+        end
+
         function compilesMinimalDeclarativeSpecification(testCase)
             model = testsupport.scalar_structural_model();
             solution = testsupport.scalar_re_solution();

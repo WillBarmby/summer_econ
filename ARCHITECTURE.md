@@ -185,6 +185,8 @@ Unknown methods or names are configuration errors.
 Required fields:
 
 ```text
+variable_names, shock_names
+learned_variables, regressor_names
 initial_beliefs
 belief_to_plm, plm_to_alm, regressor, outcome, updater
 ```
@@ -192,6 +194,11 @@ belief_to_plm, plm_to_alm, regressor, outcome, updater
 This is the only handoff that combines structural and learning details. It
 contains compiled learning machinery only. It must not contain an experiment
 shock schedule, output path, or reporting configuration.
+
+The name lists make the compiled system inspectable and give the experiment
+boundary endogenous and shock dimensions without embedding a structural-model
+copy. If `m` variables are learned from `k` regressors, initial coefficients
+are `m`-by-`k` and the initial regressor-moment matrix is `k`-by-`k`.
 
 ### `experiment_specification`
 
@@ -252,6 +259,7 @@ success and throw a typed MATLAB exception on failure:
 ```matlab
 validate_structural_model(structural_model)
 validate_re_solution(re_solution)
+validate_learning_specification(learning_specification)
 validate_learning_system(learning_system)
 validate_experiment_specification(experiment_specification)
 ```
