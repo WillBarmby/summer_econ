@@ -13,7 +13,7 @@ if ~isfield(structural_model,'source') || ...
 end
 
 source = structural_model.source;
-required = {'file','kind','parameter_overrides'};
+required = {'file','kind','parameter_overrides','deviation_scales'};
 if ~all(isfield(source,required))
     error('AdaptiveLearning:MissingSolverSource', ...
         'The structural model has incomplete source metadata.');
@@ -24,9 +24,13 @@ if ~(ischar(source.file) || ...
     error('AdaptiveLearning:MissingSolverSource', ...
         'The structural model source file is unavailable.');
 end
-if string(source.kind)~="linear"
+if ~any(string(source.kind)==["linear" "nonlinear"])
     error('AdaptiveLearning:UnsupportedModelKind', ...
-        'The new RE solver currently supports only linear Dynare models.');
+        'The RE solver source kind is unsupported.');
+end
+if ~isstruct(source.deviation_scales) || ~isscalar(source.deviation_scales)
+    error('AdaptiveLearning:MissingSolverSource', ...
+        'The structural model has invalid deviation-scale metadata.');
 end
 if ~isstruct(source.parameter_overrides) || ...
         ~isscalar(source.parameter_overrides)

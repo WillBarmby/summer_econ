@@ -31,6 +31,16 @@ classdef TestNonlinearModelLoader < matlab.unittest.TestCase
             testCase.verifyEqual(scales(gamma),0.01,'AbsTol',1e-12);
             testCase.verifyEqual(model.transformation.scale_overrides, ...
                 struct('gamma_x',0.01));
+            p = model.calibration;
+            index = @(name) find(strcmp(model.variable_names,name),1);
+            testCase.verifyEqual(steady(index('hours')),1/3,'AbsTol',1e-10);
+            testCase.verifyEqual(steady(index('marginal_cost')), ...
+                (p.theta-1)/p.theta,'AbsTol',1e-10);
+            testCase.verifyEqual(steady(index('rk')), ...
+                p.gamma_bar/p.beta-(1-p.delta),'AbsTol',1e-10);
+            testCase.verifyEqual(steady(index('nominal_rate')), ...
+                p.gamma_bar*p.pi_bar/(p.beta*p.risk_premium_bar), ...
+                'AbsTol',1e-10);
         end
 
         function requiresScaleForZeroSteadyStateVariable(testCase)
@@ -45,6 +55,20 @@ classdef TestNonlinearModelLoader < matlab.unittest.TestCase
             options.deviation_scales.gamma_x = -1;
             testCase.verifyError(@() load_nk(options), ...
                 'AdaptiveLearning:InvalidModelOptions');
+        end
+
+        function rejectsUnknownScaleName(testCase)
+            options = testsupport.nk_model_options();
+            options.deviation_scales.not_a_variable = 1;
+            testCase.verifyError(@() load_nk(options), ...
+                'AdaptiveLearning:UnknownVariable');
+        end
+
+        function rejectsUnusedParameterOverride(testCase)
+            options = testsupport.nk_model_options();
+            options.parameter_overrides = struct('not_a_parameter',1);
+            testCase.verifyError(@() load_nk(options), ...
+                'AdaptiveLearning:UnknownParameter');
         end
 
         function transformsDynareRELawIntoTheSameUnits(testCase)

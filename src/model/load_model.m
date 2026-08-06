@@ -10,7 +10,12 @@ end
 options = validate_load_options(model_options);
 source = validate_model_source(model_file,options);
 
-components = run_dynare_linear(source,options);
+if options.kind=="linear"
+    components = run_dynare_linear(source,options);
+else
+    components = run_dynare_nonlinear(source,options);
+end
+verify_parameter_overrides(components.calibration,options.parameter_overrides);
 structural_model = assemble_structural_model(components,source,options);
 
 % This is the new boundary check. The current validator is intentionally

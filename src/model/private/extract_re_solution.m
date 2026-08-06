@@ -16,11 +16,20 @@ assert_declaration_order(M,structural_model);
 rule = oo.dr;
 n = numel(structural_model.variable_names);
 q = numel(structural_model.shock_names);
+scales = structural_model.transformation.deviation_scales(:);
+if ~isequal(size(scales),[n 1]) || any(~isfinite(scales) | scales<=0)
+    error('AdaptiveLearning:InvalidStructuralModel', ...
+        'The structural model has invalid deviation scales.');
+end
+row_scales = scales(rule.order_var);
+state_scales = scales(rule.state_var);
+ghx = diag(1./row_scales)*rule.ghx*diag(state_scales);
+ghu = diag(1./row_scales)*rule.ghu;
 
 transition = zeros(n,n);
-transition(rule.order_var,rule.state_var) = rule.ghx;
+transition(rule.order_var,rule.state_var) = ghx;
 shock = zeros(n,q);
-shock(rule.order_var,:) = rule.ghu;
+shock(rule.order_var,:) = ghu;
 
 re_solution = struct( ...
     'intercept',zeros(n,1), ...

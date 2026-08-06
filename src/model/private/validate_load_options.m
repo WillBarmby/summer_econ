@@ -8,7 +8,8 @@ if ~isstruct(input_options) || ~isscalar(input_options)
         'Model options must be a scalar struct.');
 end
 
-options = struct('kind',"linear",'parameter_overrides',struct());
+options = struct('kind',"linear",'parameter_overrides',struct(), ...
+    'deviation_scales',struct());
 if isfield(input_options,'kind')
     kind = input_options.kind;
     if ischar(kind)
@@ -20,9 +21,9 @@ if isfield(input_options,'kind')
     end
     options.kind = lower(kind);
 end
-if options.kind~="linear"
+if ~any(options.kind==["linear" "nonlinear"])
     error('AdaptiveLearning:UnsupportedModelKind', ...
-        'The new loader currently supports only kind="linear".');
+        'Model kind must be "linear" or "nonlinear".');
 end
 
 if isfield(input_options,'parameter_overrides')
@@ -41,5 +42,27 @@ if isfield(input_options,'parameter_overrides')
         end
     end
     options.parameter_overrides = overrides;
+end
+
+if isfield(input_options,'deviation_scales')
+    scales = input_options.deviation_scales;
+    if ~isstruct(scales) || ~isscalar(scales)
+        error('AdaptiveLearning:InvalidModelOptions', ...
+            'Deviation scales must be a scalar struct.');
+    end
+    names = fieldnames(scales);
+    for j = 1:numel(names)
+        value = scales.(names{j});
+        if ~isvarname(names{j}) || ~isnumeric(value) || ~isscalar(value) || ...
+                ~isreal(value) || ~isfinite(value) || value<=0
+            error('AdaptiveLearning:InvalidModelOptions', ...
+                'Deviation scales require positive finite scalar values.');
+        end
+    end
+    options.deviation_scales = scales;
+end
+if options.kind=="linear" && ~isempty(fieldnames(options.deviation_scales))
+    error('AdaptiveLearning:InvalidModelOptions', ...
+        'Explicit linear models use unit scales and accept no scale overrides.');
 end
 end
