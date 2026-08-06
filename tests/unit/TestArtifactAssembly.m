@@ -48,7 +48,7 @@ classdef TestArtifactAssembly < matlab.unittest.TestCase
 
             artifact = assemble_artifact(model,learning,experiment,result);
 
-            testCase.verifyEqual(artifact.simulation_result.irf,[0 1 1]);
+            testCase.verifyEqual(artifact.simulation_result.irf,[0 1 3]);
             testCase.verifyEqual(artifact.simulation_result.status,"completed");
         end
 

@@ -288,8 +288,10 @@ paired_result = run_training_irf(learning_system,struct( ...
     'shocked',shocked_experiment));
 ```
 
-The terminal training beliefs initialize both branches. Baseline and shocked
-specifications have matching periods and initial values; their full shock
+The terminal training values and beliefs initialize both branches. Baseline
+and shocked specifications have matching periods and declared initial values;
+the declared values establish compatibility before training and are replaced
+by the shared terminal training state for the composed branches. Their full shock
 schedules may differ. `paired_result.irf` is `shocked.path-baseline.path`,
 including the common initial-value column. The result preserves all three
 primitive runs and adds only aggregate `status` and staged `termination`.

@@ -15,9 +15,9 @@ classdef TestTrainingIRFComposition < matlab.unittest.TestCase
             testCase.verifyEqual( ...
                 result.shocked.belief_history{1}, ...
                 result.training.terminal_beliefs);
-            testCase.verifyEqual(result.baseline.path,[0 0 0]);
-            testCase.verifyEqual(result.shocked.path,[0 1 1]);
-            testCase.verifyEqual(result.irf,[0 1 1]);
+            testCase.verifyEqual(result.baseline.path,[1 1 1]);
+            testCase.verifyEqual(result.shocked.path,[1 2 4]);
+            testCase.verifyEqual(result.irf,[0 1 3]);
             testCase.verifyEqual(result.status,"completed");
             testCase.verifyEmpty(fieldnames(result.termination));
         end
@@ -29,6 +29,18 @@ classdef TestTrainingIRFComposition < matlab.unittest.TestCase
             run_training_irf(system,paired_specification());
 
             testCase.verifyEqual(system.initial_beliefs,original);
+        end
+
+        function restartsBothBranchesFromTerminalTrainingValues(testCase)
+            system = adaptive_scalar_system();
+            specification = paired_specification();
+
+            result = run_training_irf(system,specification);
+
+            testCase.verifyEqual(result.training.path(:,end),1);
+            testCase.verifyEqual(result.baseline.path(:,1),1);
+            testCase.verifyEqual(result.shocked.path(:,1),1);
+            testCase.verifyEqual(result.irf(:,1),0);
         end
 
         function stopsCompositionAfterTrainingFailure(testCase)

@@ -21,8 +21,13 @@ end
 trained_system = learning_system;
 trained_system.initial_beliefs = training.terminal_beliefs;
 validate_learning_system(trained_system);
-baseline = run_experiment(trained_system,specification.baseline);
-shocked = run_experiment(trained_system,specification.shocked);
+restart_values = training.path(:,end);
+baseline_specification = specification.baseline;
+shocked_specification = specification.shocked;
+baseline_specification.initial_values = restart_values;
+shocked_specification.initial_values = restart_values;
+baseline = run_experiment(trained_system,baseline_specification);
+shocked = run_experiment(trained_system,shocked_specification);
 
 status = "completed";
 termination = struct();
