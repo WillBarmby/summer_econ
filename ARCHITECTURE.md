@@ -291,17 +291,18 @@ Simulation, artifact assembly, and reporting are separate operations:
 
 ```matlab
 simulation_result = run_experiment(learning_system,experiment_specification);
-artifact = assemble_artifact(model_metadata,learning_specification, ...
+artifact = assemble_artifact(structural_model,learning_specification, ...
     experiment_specification,simulation_result);
 figures = generate_figures(artifact,reporting_specification);
 ```
 
-The latter two names illustrate boundaries rather than finalized APIs.
-`run_experiment` does not save files or draw figures. An artifact may preserve
-the declarative specifications, innovations, pairing metadata, statuses, and
-diagnostics needed for reproducibility. Reporting consumes that artifact and
-may apply the structural model's transformation metadata, but reporting
-choices do not flow backward into the model, learning, or simulation values.
+`run_experiment` does not save files or draw figures. `assemble_artifact`
+extracts nonexecutable model metadata and preserves the declarative
+specifications, innovations, statuses, paths, beliefs, and diagnostics needed
+for reproducibility. It does not copy structural matrices or compiled
+callbacks. Reporting consumes that artifact and may apply the structural
+model's transformation metadata, but reporting choices do not flow backward
+into the model, learning, or simulation values.
 
 ## Validation and error policy
 
