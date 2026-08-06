@@ -86,6 +86,66 @@ classdef TestLearningCompilerContract < matlab.unittest.TestCase
                 'AdaptiveLearning:InvalidLearningSpecification');
         end
 
+        function rejectsUnknownRegressorVariable(testCase)
+            model = testsupport.scalar_structural_model();
+            solution = testsupport.scalar_re_solution();
+            specification = testsupport.scalar_learning_specification();
+            specification.regressors{2}.variable = "unknown";
+            testCase.verifyError(@() compile_learning( ...
+                model,solution,specification), ...
+                'AdaptiveLearning:UnknownVariable');
+        end
+
+        function rejectsDuplicateRegressorName(testCase)
+            model = testsupport.scalar_structural_model();
+            solution = testsupport.scalar_re_solution();
+            specification = testsupport.scalar_learning_specification();
+            specification.regressors{2}.name = "constant";
+            testCase.verifyError(@() compile_learning( ...
+                model,solution,specification), ...
+                'AdaptiveLearning:InvalidLearningSpecification');
+        end
+
+        function rejectsInvalidInitializationCovariance(testCase)
+            model = testsupport.scalar_structural_model();
+            solution = testsupport.scalar_re_solution();
+            specification = testsupport.scalar_learning_specification();
+            specification.initialization.moments.shock_covariance = -1;
+            testCase.verifyError(@() compile_learning( ...
+                model,solution,specification), ...
+                'AdaptiveLearning:InvalidLearningSpecification');
+        end
+
+        function rejectsInvalidEstimatorConvention(testCase)
+            model = testsupport.scalar_structural_model();
+            solution = testsupport.scalar_re_solution();
+            specification = testsupport.scalar_learning_specification();
+            specification.estimator.moment_timing = "coefficients_first";
+            testCase.verifyError(@() compile_learning( ...
+                model,solution,specification), ...
+                'AdaptiveLearning:InvalidLearningSpecification');
+        end
+
+        function rejectsProjectionOfUnlearnedVariable(testCase)
+            model = testsupport.scalar_structural_model();
+            solution = testsupport.scalar_re_solution();
+            specification = testsupport.scalar_learning_specification();
+            specification.projection.variable = "not_learned";
+            testCase.verifyError(@() compile_learning( ...
+                model,solution,specification), ...
+                'AdaptiveLearning:UnknownVariable');
+        end
+
+        function rejectsUnknownExpectationMapping(testCase)
+            model = testsupport.scalar_structural_model();
+            solution = testsupport.scalar_re_solution();
+            specification = testsupport.scalar_learning_specification();
+            specification.expectation_mapping.method = "magic";
+            testCase.verifyError(@() compile_learning( ...
+                model,solution,specification), ...
+                'AdaptiveLearning:InvalidLearningSpecification');
+        end
+
         function rejectsInvalidUpdateTiming(testCase)
             model = testsupport.scalar_structural_model();
             solution = testsupport.scalar_re_solution();

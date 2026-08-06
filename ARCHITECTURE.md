@@ -72,12 +72,113 @@ This is declarative input, not executable machinery. It contains:
 
 ```text
 learned_variables, regressors, gain
-initialization, update_timing, projection
+estimator, initialization, update_timing, projection, expectation_mapping
 ```
 
-It identifies what the researcher wants learned. It must not contain a model
-copy, function handles, closures, shock schedules, output paths, or reporting
-settings.
+It identifies what the researcher wants learned and how those beliefs enter
+the model. It must not contain a model copy, function handles, closures, shock
+schedules, output paths, experiment labels, or reporting settings.
+
+`learned_variables` is a nonempty list of unique endogenous names. Variables
+not listed here retain their RE perceived-law rows; the compiler must never
+silently replace them with learned coefficients.
+
+`regressors` is an ordered cell array of named declarative descriptors. The
+v1 descriptor kinds are:
+
+```matlab
+struct('name',"constant",'kind',"constant")
+struct('name',"capital_lag",'kind',"lagged_variable", ...
+    'variable',"capital",'lag',1)
+```
+
+Names are unique and become the column labels of the coefficient matrix.
+Lagged-variable descriptors must name a structural-model variable and use a
+positive integer lag. Function handles and arbitrary expressions are not
+valid regressors. This representation covers the constant-and-lagged-capital
+PLMs used by the retained E&P and NK experiments while leaving room for later
+descriptor kinds.
+
+`gain` selects the RLS gain schedule. V1 supports:
+
+```matlab
+struct('type',"constant",'value',0.002)
+struct('type',"decreasing",'offset',500)
+```
+
+A constant gain is finite and nonnegative; zero is valid and freezes beliefs
+for RE equivalence tests. A decreasing-gain offset is finite and nonnegative.
+
+`estimator` makes numerically consequential RLS conventions explicit:
+
+```matlab
+struct( ...
+    'method',"rls", ...
+    'moment_timing',"update_before_coefficients", ...
+    'rcond_tolerance',1e-12)
+```
+
+V1 supports RLS only. The timing value means the period-t regressor moment is
+updated before it is used in the period-t coefficient update, matching the
+retained implementation. The reciprocal-condition tolerance is a finite
+positive scalar. Keeping it declarative permits exact reproduction of older
+specifications that used different tolerances without creating separate
+updater functions.
+
+`initialization` has separate coefficient and regressor-moment policies:
+
+```matlab
+struct( ...
+    'coefficients',struct('method',"re",'scale',1), ...
+    'moments',struct('method',"stationary_re", ...
+        'shock_covariance',Sigma))
+```
+
+The coefficient scale supports exact-RE (`1`), half-RE (`0.5`), and zero
+(`0`) treatments without modifying a compiled system after the fact. The
+stationary moment policy uses the supplied finite positive-semidefinite
+`q`-by-`q` innovation covariance and the RE law to initialize regressor
+moments. Explicit coefficient or moment initializations may be added later as
+new discriminated methods; they must not be inferred from field shape.
+
+`update_timing` is `"decide_then_update"` in v1: period-t decisions use the
+beliefs held at the beginning of the period, and the realized period-t
+observation updates beliefs afterward.
+
+`projection` is either empty or a declarative rule (or rule array):
+
+```matlab
+struct( ...
+    'variable',"capital", ...
+    'regressor',"capital_lag", ...
+    'criterion',"absolute_limit", ...
+    'limit',0.99, ...
+    'action',"retain_previous_coefficient")
+```
+
+The variable must be learned and the regressor must be declared. Projection
+changes only the named candidate coefficient, leaving other updates from the
+same observation intact.
+
+`expectation_mapping` selects the named PLM-to-ALM compiler strategy. It is
+declarative so the old one-step EE and infinite-horizon E&P experiments do not
+require different public compiler functions:
+
+```matlab
+struct('method',"one_step",'options',struct())
+
+struct('method',"infinite_horizon",'options',struct( ...
+    'forecast_targets',{{'rk','wage'}}, ...
+    'present_value_variables',{{'rk_sum','w_sum'}}, ...
+    'present_value_equations',{{'capital_pv','wage_pv'}}, ...
+    'decision_equation',"ih_consumption", ...
+    'decision_forecast_targets',{{'gamma_x','rk','wage'}}, ...
+    'feedback',true))
+```
+
+Strategy options contain names and scalar settings only. The compiler resolves
+those names against the structural model and creates the executable mapping.
+Unknown methods or names are configuration errors.
 
 ### `learning_system`
 
@@ -124,6 +225,24 @@ diagnostics, status, termination
 
 Expected runtime failures are represented by `status` and `termination`.
 Configuration and handoff errors are exceptions.
+
+## Artifacts and reporting
+
+Simulation, artifact assembly, and reporting are separate operations:
+
+```matlab
+simulation_result = run_experiment(learning_system,experiment_specification);
+artifact = assemble_artifact(model_metadata,learning_specification, ...
+    experiment_specification,simulation_result);
+figures = generate_figures(artifact,reporting_specification);
+```
+
+The latter two names illustrate boundaries rather than finalized APIs.
+`run_experiment` does not save files or draw figures. An artifact may preserve
+the declarative specifications, innovations, pairing metadata, statuses, and
+diagnostics needed for reproducibility. Reporting consumes that artifact and
+may apply the structural model's transformation metadata, but reporting
+choices do not flow backward into the model, learning, or simulation values.
 
 ## Validation and error policy
 
