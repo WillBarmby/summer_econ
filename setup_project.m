@@ -4,15 +4,19 @@ function root = setup_project()
 % without depending on the caller's working directory.
 
 root = fileparts(mfilename('fullpath'));
+% Keep this checkout ahead of stale paths from another working tree. Adding
+% the root also keeps SETUP_PROJECT resolvable if a test changes directory.
+addpath(root,'-begin');
+
 folders = {'models', ...
     fullfile('src','model'), ...
     fullfile('src','learning'), ...
     fullfile('src','expectations'), ...
     'tests'};
-for j = 1:numel(folders)
+for j = numel(folders):-1:1
     folder_path = fullfile(root,folders{j});
     if isfolder(folder_path)
-        addpath(folder_path,'-end');
+        addpath(folder_path,'-begin');
     end
 end
 end

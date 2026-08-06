@@ -1,9 +1,13 @@
-function components = extract_linear_components(M,oo,residual_function)
+function components = extract_linear_components(context)
 %% EXTRACT_LINEAR_COMPONENTS Convert Dynare's store into structural pieces.
 % For an explicit linear model, a unit perturbation of one dense dynamic
 % input recovers the corresponding column of the equation-residual matrix.
 % The dense input is [all lags; all current values; all leads], while the
 % output columns are restored to declared variable order here.
+
+M = context.M;
+oo = context.oo;
+residual_function = context.residual_function;
 
 n = M.endo_nbr;
 q = M.exo_nbr;

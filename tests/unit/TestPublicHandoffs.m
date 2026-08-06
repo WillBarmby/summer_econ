@@ -19,7 +19,9 @@ classdef TestPublicHandoffs < matlab.unittest.TestCase
         end
 
         function solveREReturnsSeparateSolution(testCase)
-            structural_model = testsupport.scalar_structural_model();
+            root = setup_project();
+            model_file = fullfile(root,'tests','fixtures','tiny_linear.mod');
+            structural_model = load_model(model_file,struct('kind',"linear"));
             re_solution = solve_re(structural_model);
             validate_re_solution(re_solution);
             testCase.verifyEqual(re_solution.variable_names, ...

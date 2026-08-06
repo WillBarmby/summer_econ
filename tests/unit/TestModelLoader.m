@@ -13,7 +13,7 @@ classdef TestModelLoader < matlab.unittest.TestCase
             testCase.verifyEqual(structural_model.variable_names,{'y'});
             testCase.verifyEqual(structural_model.shock_names,{'eps'});
             testCase.verifyEqual(structural_model.equation_names, ...
-                {'equation_1'});
+                {'y'});
             testCase.verifyEqual(structural_model.current,1);
             testCase.verifyEqual(structural_model.lag,-0.5);
             testCase.verifyEqual(structural_model.lead,-0.25);
