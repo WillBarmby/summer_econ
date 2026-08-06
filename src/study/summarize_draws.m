@@ -1,0 +1,19 @@
+function summary = summarize_draws(draws,re_path,probabilities)
+%% SUMMARIZE_DRAWS Compute pointwise legacy-compatible median and bands.
+
+usable = draws(~all(isnan(draws),[2 3]),:,:);
+if isempty(usable)
+    missing = NaN(size(re_path));
+    summary = struct('learning_median',missing,'learning_low',missing, ...
+        'learning_high',missing,'re',re_path, ...
+        'band_probabilities',probabilities,'completed_draw_count',0);
+    return
+end
+ordered = sort(usable,1);
+n = size(ordered,1);
+summary = struct('learning_median',squeeze(median(usable,1)), ...
+    'learning_low',squeeze(ordered(max(1,ceil(probabilities(1)*n)),:,:)), ...
+    'learning_high',squeeze(ordered(min(n,ceil(probabilities(2)*n)),:,:)), ...
+    're',re_path,'band_probabilities',probabilities, ...
+    'completed_draw_count',n);
+end
