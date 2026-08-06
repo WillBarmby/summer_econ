@@ -3,18 +3,17 @@
 This directory contains the model-independent state transitions used by an
 adaptive-learning experiment:
 
-- `initialize_beliefs` creates the mutable belief state;
+- `compile_learning` resolves a declarative specification into callbacks;
+- `initialize_learning_beliefs` privately creates the mutable belief state;
 - `update_beliefs_rls` performs one RLS update;
-- `simulate_learning` applies a PLM-to-ALM callback, realizes a path, and then
-  updates beliefs;
-- `simulate_paired_irf` trains once and restarts shocked and unshocked paths
-  from the same terminal state;
+- `run_experiment` owns the primitive simulation loop;
+- `run_training_irf` composes training and paired paths from the same terminal
+  values and beliefs;
 - `set_initial_beliefs` applies a named prior treatment.
 
-The simulator consumes a `learning_model` contract containing callbacks for
+The simulator consumes a `learning_system` contract containing callbacks for
 belief-to-PLM conversion, PLM-to-ALM conversion, regressors, and observed
 outcomes. It does not know the equations of a particular economic model.
 
-The current implementation assumes RLS and a decide-then-update timing rule.
-Those assumptions belong in the future learning-specification compiler rather
-than in model-specific code.
+The current compiler supports RLS and a decide-then-update timing rule. Those
+choices remain explicit in the declarative learning specification.
