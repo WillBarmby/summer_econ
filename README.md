@@ -31,6 +31,14 @@ For a single explicit draw, select one row from the design's standardized
 innovations and call `run_case`. That artifact retains full training and IRF
 histories; `run_comparison` retains compact draw evidence and summaries.
 
+The nonlinear NK technology case uses the same public preparation and study
+boundary:
+
+```matlab
+nk = prepare_case(nk_ee_case(options));
+nk_artifact = run_case(nk,one_draw_design);
+```
+
 ## Project map
 
 - `models/` - Dynare model files used as concrete loader examples.

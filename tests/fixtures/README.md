@@ -19,3 +19,10 @@ innovation SHA-256
 `d81fa94e9c325cd86fc4058c2f4ed460d46f5a8ee1dc792ee7a4df334c03b334`.
 The original fixture did not record its MATLAB or Dynare version; that missing
 historical metadata cannot be reconstructed and is kept explicit here.
+
+`nk_small_reference.mat` contains one seeded draw with 8 training periods and
+a 5-period technology IRF, generated independently by `main` commit
+`f7f2565e023a45a469357f262be4e143ad877b32`. It stores only the shared numeric
+boundary: innovations, status, RE native/reported paths, the reported learning
+IRF, terminal coefficients and moments, and projection count. The fixture was
+generated with MATLAB R2026a Update 3 and Dynare 7.1.
