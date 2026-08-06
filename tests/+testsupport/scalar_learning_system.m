@@ -23,7 +23,7 @@ plm = struct('intercept',0,'transition',0.5);
 end
 
 function alm = plm_to_alm(~)
-alm = struct('intercept',0,'transition',0.5,'shock_impact',1);
+alm = struct('intercept',0,'transition',0.5,'shock',1);
 end
 
 function value = regressor(~,~)
@@ -34,6 +34,9 @@ function value = outcome(~,~)
 value = 0;
 end
 
-function value = updater(varargin)
+function [value,diagnostic] = updater(varargin)
 value = varargin{1};
+value.observations = value.observations+1;
+diagnostic = struct('gain',0,'rcond',1, ...
+    'prediction_error',0,'projected',false);
 end

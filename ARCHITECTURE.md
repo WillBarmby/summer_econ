@@ -236,6 +236,19 @@ Each shock column produces one simulated period. `periods` is a
 nonnegative integer equal to the number of shock columns. The specification
 does not construct PLMs or ALMs.
 
+For period `t = 1,...,periods`, the engine performs:
+
+```text
+beliefs at start of t -> PLM_t -> ALM_t -> y_t -> belief update
+```
+
+Thus decisions never use the observation they generate. `path` is always
+`n`-by-`(periods+1)`; after early termination its unproduced columns are
+`NaN`. `plm_history`, `alm_history`, and `diagnostics` are 1-by-`periods`
+cell arrays. When requested, `belief_history` is 1-by-`(periods+1)`, with the
+initial beliefs first and each successful post-observation update following.
+Otherwise `belief_history` is empty. Unreached history entries remain empty.
+
 ### `simulation_result`
 
 Outputs remain separate by meaning:
@@ -247,6 +260,12 @@ diagnostics, status, termination
 
 Expected runtime failures are represented by `status` and `termination`.
 Configuration and handoff errors are exceptions.
+
+Completed runs have status `"completed"` and an empty termination struct.
+Expected numerical failures use status `"invalid"`; policy violations use
+`"explosive"`. A termination record identifies `period`, `criterion`,
+`variable_index`, `variable_name`, and triggering `value`. Unexpected
+programming exceptions are rethrown rather than mislabeled as runtime state.
 
 ## Artifacts and reporting
 

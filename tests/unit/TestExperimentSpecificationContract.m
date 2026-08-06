@@ -39,9 +39,35 @@ classdef TestExperimentSpecificationContract < matlab.unittest.TestCase
 
         function rejectsMalformedShockMatrix(testCase)
             specification = testsupport.scalar_experiment_specification();
-            specification.shocks = [1;0; -1];
+            specification.shocks = [1 NaN -1];
             testCase.verifyError(@() ...
                 validate_experiment_specification(specification), ...
+                'AdaptiveLearning:InvalidExperimentSpecification');
+        end
+
+        function rejectsUnexpectedSpecificationFields(testCase)
+            specification = testsupport.scalar_experiment_specification();
+            specification.output_path = "result.mat";
+            testCase.verifyError(@() ...
+                validate_experiment_specification(specification), ...
+                'AdaptiveLearning:InvalidExperimentSpecification');
+        end
+
+        function rejectsInvalidInitialDimensionAtRunnerBoundary(testCase)
+            learning_system = testsupport.scalar_learning_system();
+            specification = testsupport.scalar_experiment_specification();
+            specification.initial_values = [0;0];
+            testCase.verifyError(@() run_experiment( ...
+                learning_system,specification), ...
+                'AdaptiveLearning:InvalidExperimentSpecification');
+        end
+
+        function rejectsInvalidMonitoredIndexAtRunnerBoundary(testCase)
+            learning_system = testsupport.scalar_learning_system();
+            specification = testsupport.scalar_experiment_specification();
+            specification.explosion_policy.variable_indices = 2;
+            testCase.verifyError(@() run_experiment( ...
+                learning_system,specification), ...
                 'AdaptiveLearning:InvalidExperimentSpecification');
         end
 
