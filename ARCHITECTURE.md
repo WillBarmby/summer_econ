@@ -304,6 +304,26 @@ callbacks. Reporting consumes that artifact and may apply the structural
 model's transformation metadata, but reporting choices do not flow backward
 into the model, learning, or simulation values.
 
+The initial reporting API is:
+
+```matlab
+report = report_artifact(artifact,reporting_specification);
+figure_handle = generate_artifact_figure(artifact,reporting_specification);
+```
+
+The specification selects source `"path"` or `"irf"` and declares plotted
+series by output name, native variable, cumulative addends, and scale. A
+reported series is
+
+```text
+scale * (native variable + sum(cumsum(cumulative variables)))
+```
+
+This covers stationary-to-level transformations such as adding cumulative
+technology growth without embedding E&P-specific variable choices in the
+reporter. Figure generation is in-memory; saving and file naming are separate
+caller responsibilities.
+
 ## Validation and error policy
 
 The eventual validators are single-value functions that return no value on
