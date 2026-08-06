@@ -52,6 +52,35 @@ The structural model contains the equation-residual representation only. It
 must not contain `re`, Dynare decision-rule objects, learning beliefs,
 learning callbacks, shock schedules, output paths, or reporting settings.
 
+#### Dynare linearization contract
+
+Both explicit `model(linear)` sources and stationary nonlinear sources use
+Dynare's generated analytical first-order dynamic Jacobian. A shared extractor
+maps its dense declaration-ordered columns into `lag`, `current`, `lead`, and
+`shock` blocks. The linear backend evaluates at zero deviations and uses unit
+endogenous scales. The nonlinear backend evaluates at Dynare's deterministic
+steady state and applies the change of variables
+
+```text
+x = x_bar + diag(deviation_scales) * y.
+```
+
+Positive steady-state variables default to `x_bar/100`, so one unit of `y` is
+one percentage-point proportional deviation. Every variable with a zero or
+nonpositive steady state requires an explicit positive `deviation_scales`
+entry. Shock units remain those declared by the `.mod` file. Transformation
+metadata records the level steady state, resolved scales, and scale overrides.
+
+The nonlinear loader returns only transformed structural derivatives. At the
+separate RE boundary, Dynare's level decision rule is transformed as
+
+```text
+transition = S^(-1) * transition_level * S
+shock      = S^(-1) * shock_level.
+```
+
+No level decision rule or Dynare runtime object crosses either boundary.
+
 ### `re_solution`
 
 Required fields:
