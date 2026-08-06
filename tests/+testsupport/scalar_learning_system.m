@@ -1,0 +1,32 @@
+function system = scalar_learning_system()
+%% SCALAR_LEARNING_SYSTEM Minimal compiled-learning contract fixture.
+
+system = struct( ...
+    'initial_beliefs',struct('coefficients',[0 0.5], ...
+        'moment_matrix',eye(2)), ...
+    'belief_to_plm',@belief_to_plm, ...
+    'plm_to_alm',@plm_to_alm, ...
+    'regressor',@regressor, ...
+    'outcome',@outcome, ...
+    'updater',@updater);
+end
+
+function plm = belief_to_plm(~)
+plm = struct('intercept',0,'transition',0.5);
+end
+
+function alm = plm_to_alm(~)
+alm = struct('intercept',0,'transition',0.5,'shock_impact',1);
+end
+
+function value = regressor(~,~)
+value = [1;0];
+end
+
+function value = outcome(~,~)
+value = 0;
+end
+
+function value = updater(varargin)
+value = varargin{1};
+end
