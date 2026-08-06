@@ -1,11 +1,6 @@
-function system = assemble_one_step_learning_system( ...
+function system = assemble_learning_system( ...
     model,solution,specification,contract,initial_beliefs)
 %% ASSEMBLE_ONE_STEP_LEARNING_SYSTEM Create the compiled public handoff.
-
-if string(specification.expectation_mapping.method)~="one_step"
-    error('AdaptiveLearning:InvalidLearningSpecification', ...
-        'Only the one-step expectation mapping is implemented.');
-end
 
 system = struct( ...
     'variable_names',{model.variable_names}, ...
@@ -15,8 +10,7 @@ system = struct( ...
     'initial_beliefs',initial_beliefs, ...
     'belief_to_plm',make_belief_to_plm( ...
         solution.intercept,solution.transition,contract), ...
-    'plm_to_alm',make_plm_to_alm( ...
-        model.current,model.lag,model.lead,model.shock, ...
+    'plm_to_alm',make_plm_to_alm(model,contract.expectation, ...
         specification.estimator.rcond_tolerance), ...
     'regressor',make_regressor(contract), ...
     'outcome',make_outcome(contract.learned_indices), ...
@@ -49,9 +43,18 @@ callback = @belief_to_plm;
     end
 end
 
-function callback = make_plm_to_alm(current,lag,lead,shock,tolerance)
-callback = @plm_to_alm;
-    function alm = plm_to_alm(plm)
+function callback = make_plm_to_alm(model,expectation,tolerance)
+if expectation.method=="one_step"
+    callback = make_one_step_alm( ...
+        model.current,model.lag,model.lead,model.shock,tolerance);
+else
+    callback = make_infinite_horizon_alm(model,expectation,tolerance);
+end
+end
+
+function callback = make_one_step_alm(current,lag,lead,shock,tolerance)
+callback = @one_step_alm;
+    function alm = one_step_alm(plm)
         n = size(current,1);
         if ~isstruct(plm) || ~isscalar(plm) || ...
                 ~all(isfield(plm,{'intercept','transition'})) || ...
@@ -70,6 +73,67 @@ callback = @plm_to_alm;
             'transition',-(lhs\lag), ...
             'shock',-(lhs\shock));
     end
+end
+
+function callback = make_infinite_horizon_alm(model,expectation,tolerance)
+current = model.current;
+lead = model.lead;
+base_lag = model.lag;
+base_shock = model.shock;
+n = size(current,1);
+callback = @infinite_horizon_alm;
+    function alm = infinite_horizon_alm(plm)
+        validate_plm(plm,n);
+        lhs = current+lead*plm.transition;
+        constant = lead*plm.intercept;
+        lag = base_lag;
+        shock = base_shock;
+        for j = 1:numel(expectation.present_value_target_indices)
+            target = zeros(1,n);
+            target(expectation.present_value_target_indices(j)) = ...
+                expectation.present_value_target_scales(j);
+            forecast = evaluate_discounted_forecast( ...
+                plm,target,expectation.discount);
+            equation = expectation.present_value_equation_indices(j);
+            variable = expectation.present_value_variable_indices(j);
+            lhs(equation,:) = -forecast.coefficients;
+            lhs(equation,variable) = lhs(equation,variable)+1;
+            constant(equation) = -forecast.intercept;
+            lag(equation,:) = 0;
+            shock(equation,:) = 0;
+        end
+        decision = expectation.decision_equation_index;
+        lhs(decision,expectation.decision_remove_indices) = 0;
+        for j = 1:numel(expectation.decision_target_indices)
+            target = zeros(1,n);
+            target(expectation.decision_target_indices(j)) = 1;
+            forecast = evaluate_discounted_forecast( ...
+                plm,target,expectation.discount);
+            weight = expectation.decision_weights(j);
+            lhs(decision,:) = lhs(decision,:)- ...
+                weight*forecast.coefficients;
+            constant(decision) = constant(decision)- ...
+                weight*forecast.intercept;
+        end
+        if rcond(lhs)<tolerance
+            error('AdaptiveLearning:SingularALM', ...
+                'Beliefs imply a singular infinite-horizon actual law.');
+        end
+        alm = struct( ...
+            'intercept',-(lhs\constant), ...
+            'transition',-(lhs\lag), ...
+            'shock',-(lhs\shock));
+    end
+end
+
+function validate_plm(plm,n)
+if ~isstruct(plm) || ~isscalar(plm) || ...
+        ~all(isfield(plm,{'intercept','transition'})) || ...
+        ~isequal(size(plm.intercept),[n 1]) || ...
+        ~isequal(size(plm.transition),[n n])
+    error('AdaptiveLearning:InvalidLearningSystem', ...
+        'PLM dimensions do not match the structural model.');
+end
 end
 
 function callback = make_regressor(contract)

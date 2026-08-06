@@ -63,7 +63,60 @@ contract = struct( ...
     'regressor_kinds',regressor_kinds, ...
     'regressor_names',{regressor_names}, ...
     'projection_rows',projection_rows, ...
-    'projection_columns',projection_columns);
+    'projection_columns',projection_columns, ...
+    'expectation',resolve_expectation_contract( ...
+        model,specification.expectation_mapping));
+end
+
+function expectation = resolve_expectation_contract(model,mapping)
+method = string(mapping.method);
+expectation = struct('method',method);
+if method=="one_step"
+    return
+end
+options = mapping.options;
+present_values = options.present_values;
+target_indices = zeros(1,numel(present_values));
+variable_indices = zeros(1,numel(present_values));
+equation_indices = zeros(1,numel(present_values));
+target_scales = zeros(1,numel(present_values));
+for j = 1:numel(present_values)
+    target_indices(j) = index_of( ...
+        model.variable_names,present_values(j).target,'variable');
+    variable_indices(j) = index_of( ...
+        model.variable_names,present_values(j).variable,'variable');
+    equation_indices(j) = index_of( ...
+        model.equation_names,present_values(j).equation,'equation');
+    target_scales(j) = present_values(j).target_scale;
+end
+decision = options.decision;
+expectation.discount = options.discount;
+expectation.present_value_target_indices = target_indices;
+expectation.present_value_variable_indices = variable_indices;
+expectation.present_value_equation_indices = equation_indices;
+expectation.present_value_target_scales = target_scales;
+expectation.decision_equation_index = index_of( ...
+    model.equation_names,decision.equation,'equation');
+expectation.decision_remove_indices = indices_of( ...
+    model.variable_names,decision.remove_variables,'variable');
+expectation.decision_target_indices = indices_of( ...
+    model.variable_names,decision.forecast_targets,'variable');
+expectation.decision_weights = decision.forecast_weights(:).';
+end
+
+function indices = indices_of(names,requested,kind)
+indices = zeros(1,numel(requested));
+for j = 1:numel(requested)
+    indices(j) = index_of(names,string(requested(j)),kind);
+end
+end
+
+function index = index_of(names,requested,kind)
+[found,index] = ismember(string(requested),string(names));
+if ~found
+    error('AdaptiveLearning:UnknownName', ...
+        'Unknown %s name "%s".',kind,string(requested));
+end
 end
 
 function unknown(message,varargin)

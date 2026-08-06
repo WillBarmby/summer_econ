@@ -162,19 +162,56 @@ end
 end
 
 function validate_infinite_horizon_options(options)
-required = {'decision_equation';'decision_forecast_targets';'feedback'; ...
-    'forecast_targets';'present_value_equations';'present_value_variables'};
-if ~isempty(setxor(fieldnames(options),required))
+required = {'decision';'discount';'feedback';'present_values'};
+if ~isequal(sort(fieldnames(options)),required) || ...
+        ~positive_discount(options.discount) || ...
+        ~islogical(options.feedback) || ~isscalar(options.feedback) || ...
+        ~options.feedback
     invalid('Infinite-horizon expectation options are incomplete.');
 end
-validate_names(options.forecast_targets,'forecast_targets');
-validate_names(options.present_value_variables,'present_value_variables');
-validate_names(options.present_value_equations,'present_value_equations');
-validate_names(options.decision_forecast_targets, ...
-    'decision_forecast_targets');
-if strlength(text_scalar(options.decision_equation))==0 || ...
-        ~islogical(options.feedback) || ~isscalar(options.feedback)
-    invalid('Infinite-horizon expectation options are malformed.');
+present_values = options.present_values;
+pv_fields = {'equation';'target';'target_scale';'variable'};
+if ~isstruct(present_values) || isempty(present_values) || ...
+        ~isvector(present_values)
+    invalid('Infinite-horizon present values must be a descriptor array.');
+end
+variables = strings(numel(present_values),1);
+equations = strings(numel(present_values),1);
+for j = 1:numel(present_values)
+    descriptor = present_values(j);
+    if ~isequal(sort(fieldnames(descriptor)),pv_fields)
+        invalid('Present-value descriptor fields are malformed.');
+    end
+    text_scalar(descriptor.target);
+    variables(j) = text_scalar(descriptor.variable);
+    equations(j) = text_scalar(descriptor.equation);
+    if ~isnumeric(descriptor.target_scale) || ...
+            ~isreal(descriptor.target_scale) || ...
+            ~isscalar(descriptor.target_scale) || ...
+            ~isfinite(descriptor.target_scale)
+        invalid('Present-value target scale must be finite and real.');
+    end
+end
+if numel(unique(variables))~=numel(variables) || ...
+        numel(unique(equations))~=numel(equations)
+    invalid('Present-value variables and equations must be unique.');
+end
+
+decision = options.decision;
+decision_fields = {'equation';'forecast_targets'; ...
+    'forecast_weights';'remove_variables'};
+if ~isstruct(decision) || ~isscalar(decision) || ...
+        ~isequal(sort(fieldnames(decision)),decision_fields) || ...
+        strlength(text_scalar(decision.equation))==0
+    invalid('Infinite-horizon decision descriptor is malformed.');
+end
+validate_names(decision.remove_variables,'remove_variables');
+targets = decision.forecast_targets;
+validate_names(targets,'forecast_targets');
+weights = decision.forecast_weights;
+if ~isnumeric(weights) || ~isreal(weights) || ~isvector(weights) || ...
+        numel(weights)~=numel(targets) || ~all(isfinite(weights))
+    invalid('Decision forecast weights must match forecast targets.');
 end
 end
 
@@ -229,6 +266,10 @@ end
 
 function result = positive_scalar(value)
 result = nonnegative_scalar(value) && value>0;
+end
+
+function result = positive_discount(value)
+result = positive_scalar(value) && value<=1;
 end
 
 function invalid(message,varargin)
