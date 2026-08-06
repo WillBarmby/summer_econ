@@ -43,6 +43,8 @@ classdef TestExperimentEngineAlgebra < matlab.unittest.TestCase
             testCase.verifyEqual(result.belief_history{1}.observations,0);
             testCase.verifyEqual(result.belief_history{2}.observations,1);
             testCase.verifyEqual(result.belief_history{4}.observations,3);
+            testCase.verifyEqual(result.terminal_beliefs, ...
+                result.belief_history{4});
         end
 
         function omitsBeliefHistoryWhenNotRequested(testCase)

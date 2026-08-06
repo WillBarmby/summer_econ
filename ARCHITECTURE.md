@@ -255,7 +255,7 @@ Outputs remain separate by meaning:
 
 ```text
 path, belief_history, plm_history, alm_history
-diagnostics, status, termination
+diagnostics, terminal_beliefs, status, termination
 ```
 
 Expected runtime failures are represented by `status` and `termination`.
@@ -266,6 +266,24 @@ Expected numerical failures use status `"invalid"`; policy violations use
 `"explosive"`. A termination record identifies `period`, `criterion`,
 `variable_index`, `variable_name`, and triggering `value`. Unexpected
 programming exceptions are rethrown rather than mislabeled as runtime state.
+
+### Training and paired IRF composition
+
+Training and impulse-response comparison compose the primitive rather than
+introducing another simulation loop:
+
+```matlab
+paired_result = run_training_irf(learning_system,struct( ...
+    'training',training_experiment, ...
+    'baseline',baseline_experiment, ...
+    'shocked',shocked_experiment));
+```
+
+The terminal training beliefs initialize both branches. Baseline and shocked
+specifications have matching periods and initial values; their full shock
+schedules may differ. `paired_result.irf` is `shocked.path-baseline.path`,
+including the common initial-value column. The result preserves all three
+primitive runs and adds only aggregate `status` and staged `termination`.
 
 ## Artifacts and reporting
 
