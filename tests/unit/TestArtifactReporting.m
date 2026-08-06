@@ -68,7 +68,7 @@ classdef TestArtifactReporting < matlab.unittest.TestCase
             testCase.verifyNumElements(lines,1);
             testCase.verifyEqual(lines.XData,0:3);
             testCase.verifyEqual(lines.YData,[0 1 0.5 -0.75]);
-            testCase.verifyEqual(figure_handle.Visible,'off');
+            testCase.verifyEqual(string(figure_handle.Visible),"off");
         end
     end
 end
