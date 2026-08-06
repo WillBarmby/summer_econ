@@ -1,11 +1,11 @@
 # Numerical Fixtures
 
 `ep_engine_reference.mat` contains structural matrices, RE laws, one fixed shock
-sequence, and short paper-EE/IH paths generated from the verified implementation
-at commit `ea47484`. Tests read this compact fixture without executing the
-frozen legacy implementation.
+sequence, and a historical short learning-path comparison generated from the
+verified implementation at commit `ea47484`. It is retained as provenance while
+the generic loader and engine tests are rebuilt; it is not a current experiment
+output contract.
 
-`ep_experiment_reference.mat` contains statuses and pointwise RE/learning
-summaries for the retained 100-draw baseline and zero-deterministic-growth
-experiments. Its provenance is Git tag `ep-verification-v1`; it contains no
-executable code and lets acceptance tests remain independent of the old tree.
+The former experiment-summary fixture has been removed with the paper-specific
+acceptance suite. New fixtures should test the canonical model, learning, and
+artifact contracts directly rather than preserve runner-specific schemas.

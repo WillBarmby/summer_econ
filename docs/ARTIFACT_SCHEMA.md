@@ -1,5 +1,9 @@
 # Result Artifact Schema
 
+> **Historical documentation.** This describes the former paper-specific
+> artifact/reporting layer. The active branch has removed that layer while the
+> generic experiment contract is being rebuilt.
+
 Public runners write schema-version `2.0.0` MAT artifacts and compact CSV
 summaries. The MAT file preserves configuration, draw-level evidence, and
 diagnostics; the CSV is the quickest route to paper-facing scalar results.

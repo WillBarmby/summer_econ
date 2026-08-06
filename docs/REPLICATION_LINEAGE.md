@@ -1,5 +1,9 @@
 # Replication Lineage
 
+> **Historical documentation.** This records verification of the former
+> experiment implementation. It is intentionally retained outside the active
+> model-loader and learning-engine contract.
+
 The complete Eusepi–Preston reconstruction is preserved at Git tag
 `ep-verification-v1`, where the frozen
 `Eusepi_Preston_2011_Replication_Pkg/` tree remains runnable. That tree is not

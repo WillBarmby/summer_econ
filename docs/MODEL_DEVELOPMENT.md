@@ -1,5 +1,9 @@
 # Balanced-Growth NK Model Development
 
+> **Historical documentation.** This records the former model-development
+> workflow and its experiment context. The active branch retains the Dynare
+> model-loader code and model files while rebuilding the surrounding contracts.
+
 ## Implemented design
 
 The active `models/nk_balanced_growth.mod` uses labor-augmenting technology and

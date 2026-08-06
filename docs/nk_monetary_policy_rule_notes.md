@@ -1,5 +1,9 @@
 # NK Monetary-Policy Rule Notes
 
+> **Historical documentation.** This note belongs to the former NK comparison
+> workflow and is retained as model background while the active interface is
+> rebuilt.
+
 This note explains the monetary-policy rule inherited from the original New
 Keynesian model and records why the balanced-growth rewrite uses a simpler
 baseline output target. It is background documentation rather than part of the

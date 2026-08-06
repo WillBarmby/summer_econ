@@ -1,5 +1,9 @@
 # Parameter Provenance
 
+> **Historical documentation.** The calibration tables below belong to the
+> former E&P/NK experiments. They are retained for provenance, not as active
+> defaults for the generalized engine.
+
 The clean interface separates structural calibration from experiment design.
 Every saved artifact contains Dynare's effective calibration as well as the
 requested experiment configuration.

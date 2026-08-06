@@ -1,5 +1,9 @@
 # EE consumption-forecast specification audit
 
+> **Historical documentation.** This audit belongs to the former E&P
+> experiment suite and is retained for provenance. Its runner and artifact
+> contract are not active in the current generalized-engine branch.
+
 ## Question and scope
 
 This experiment asks one narrow question: at the Eusepi–Preston benchmark

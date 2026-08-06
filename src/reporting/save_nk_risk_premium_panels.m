@@ -1,6 +1,0 @@
-function files = save_nk_risk_premium_panels(result,output_dir)
-%% SAVE_NK_RISK_PREMIUM_PANELS Save NK EE distribution and RE comparison.
-files = save_nk_nominal_panels(result,output_dir, ...
-    'nk_risk_premium_comparison', ...
-    'NK response to a one-percentage-point i.i.d. risk-premium shock');
-end
