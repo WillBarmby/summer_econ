@@ -3,7 +3,7 @@ classdef TestNKCaseDefinition < matlab.unittest.TestCase
 
     methods (Test)
         function definesTechnologyEEWithoutRunnerDetails(testCase)
-            definition = nk_ee_case(ep_comparison_options());
+            definition = nk_ee_case(nk_case_options());
             testCase.verifyEqual(definition.id,"nk_technology_ee");
             testCase.verifyEqual(definition.model_options.kind,"nonlinear");
             testCase.verifyEqual(definition.model_options.deviation_scales, ...
@@ -14,7 +14,7 @@ classdef TestNKCaseDefinition < matlab.unittest.TestCase
         end
 
         function preparesTwoShockLearningContract(testCase)
-            prepared = prepare_case(nk_ee_case(ep_comparison_options()));
+            prepared = prepare_case(nk_ee_case(nk_case_options()));
             testCase.verifyEqual(prepared.learning_specification. ...
                 learned_variables, ...
                 {'rk','consumption','capital','inflation','output'});
@@ -31,7 +31,7 @@ classdef TestNKCaseDefinition < matlab.unittest.TestCase
             options.draw_count = 1;
             options.training_periods = 8;
             options.irf_periods = 5;
-            prepared = prepare_case(nk_ee_case(options));
+            prepared = prepare_case(nk_ee_case(nk_case_options()));
             artifact = run_case(prepared,ep_comparison_design(options));
             testCase.verifyEqual(artifact.simulation_result.status,"completed");
             testCase.verifyEqual(artifact.experiment_specification.training. ...

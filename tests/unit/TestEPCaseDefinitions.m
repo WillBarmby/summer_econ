@@ -3,18 +3,19 @@ classdef TestEPCaseDefinitions < matlab.unittest.TestCase
 
     methods (Test)
         function exposesVerifiedDefaults(testCase)
-            options = ep_comparison_options();
-            testCase.verifyEqual(options.gain,0.002);
-            testCase.verifyEqual(options.random_seed,20260721);
-            testCase.verifyEqual(options.draw_count,100);
-            testCase.verifyEqual(options.training_periods,2000);
-            testCase.verifyEqual(options.irf_periods,40);
-            testCase.verifyEqual(options.shock_name,"eps_x");
-            testCase.verifyEqual(options.gamma_bar,exp(0.0053));
+            case_options = ep_case_options();
+            study_options = learning_irf_options();
+            testCase.verifyEqual(case_options.gain,0.002);
+            testCase.verifyEqual(study_options.random_seed,20260721);
+            testCase.verifyEqual(study_options.draw_count,100);
+            testCase.verifyEqual(study_options.training_periods,2000);
+            testCase.verifyEqual(study_options.irf_periods,40);
+            testCase.verifyEqual(study_options.shock_name,"eps_x");
+            testCase.verifyEqual(case_options.gamma_bar,exp(0.0053));
         end
 
         function definesDistinctEEAndIHCases(testCase)
-            options = ep_comparison_options();
+            options = ep_case_options();
             ee = ep_ee_case(options);
             ih = ep_ih_case(options);
             testCase.verifyEqual(ee.id,"ep_ee");
@@ -25,7 +26,7 @@ classdef TestEPCaseDefinitions < matlab.unittest.TestCase
         end
 
         function preparesAndExposesEveryCoreHandoff(testCase)
-            prepared = prepare_case(ep_ee_case(ep_comparison_options()));
+            prepared = prepare_case(ep_ee_case(ep_case_options()));
             testCase.verifyEqual(prepared.id,"ep_ee");
             testCase.verifyTrue(isfield(prepared,'structural_model'));
             testCase.verifyTrue(isfield(prepared,'re_solution'));
@@ -36,7 +37,7 @@ classdef TestEPCaseDefinitions < matlab.unittest.TestCase
         end
 
         function rejectsMalformedDefinitionBeforeLoading(testCase)
-            definition = ep_ee_case(ep_comparison_options());
+            definition = ep_ee_case(ep_case_options());
             definition.id = "";
             testCase.verifyError(@() prepare_case(definition), ...
                 'AdaptiveLearning:InvalidCaseDefinition');
