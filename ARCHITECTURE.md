@@ -357,6 +357,28 @@ paths retain `[y_0,...,y_T]`; exposed IRFs use columns `2:end`, so the first
 column is impact horizon zero. `run_comparison` compacts each draw immediately
 into independently understandable case collections.
 
+### Folder-local experiment manifests
+
+The one-call convenience boundary is:
+
+```matlab
+artifact = run_experiment_folder(folder_path);
+```
+
+The folder contains a local `experiment.m` function and any model files it
+uses. The manifest returns exactly:
+
+```matlab
+struct('case_definition',case_definition, ...
+       'study_options',study_options)
+```
+
+The runner temporarily places the folder on the MATLAB path, evaluates the
+manifest, delegates to the existing case and study toolkit, and restores the
+caller path before returning. A manifest is configuration above the engine;
+it does not change the structural, learning, experiment, or artifact
+contracts.
+
 ## Reporting contract
 
 Each reported series has stable machine-facing metadata:

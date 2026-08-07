@@ -58,6 +58,19 @@ nk = prepare_case(nk_ee_case(nk_case_options()));
 nk_artifact = run_case(nk,study);
 ```
 
+New experiments can be self-contained folders. Each folder needs an
+`experiment.m` manifest that returns `case_definition` and `study_options`,
+plus any local Dynare model file:
+
+```matlab
+setup_project;
+artifact = run_experiment_folder("examples/tiny_linear_experiment");
+```
+
+The manifest resolves its model path relative to its own folder, so adding a
+new model does not require editing the root case or study files. See
+`examples/tiny_linear_experiment/` for the complete convention.
+
 Artifacts are inert schema-3 data. Saving validates them and writes a canonical
 MAT file plus a readable JSON metadata sidecar:
 
