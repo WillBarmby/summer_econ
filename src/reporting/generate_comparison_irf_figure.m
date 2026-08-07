@@ -7,10 +7,10 @@ if comparison.kind~="comparison"
     error('AdaptiveLearning:UnsupportedArtifact', ...
         'Comparison figure requires a comparison artifact.');
 end
-quantity_names = comparison.cases{1}.quantity_names;
+series = comparison.cases{1}.series;
 figure_handle = figure('Visible','off','Color','white');
 layout = tiledlayout(figure_handle,'flow');
-for quantity = 1:numel(quantity_names)
+for quantity = 1:numel(series)
     axes_handle = nexttile(layout);
     hold(axes_handle,'on');
     labels = strings(1,2*numel(comparison.cases));
@@ -25,7 +25,7 @@ for quantity = 1:numel(quantity_names)
         labels(2*j-1) = item.case.label+" learning";
         labels(2*j) = item.case.label+" RE";
     end
-    title(axes_handle,string(quantity_names{quantity}),'Interpreter','none');
+    title(axes_handle,string(series(quantity).label),'Interpreter','none');
     xlabel(axes_handle,'Quarters'); ylabel(axes_handle,'Percent deviation');
     grid(axes_handle,'on');
     legend(axes_handle,cellstr(labels),'Interpreter','none');

@@ -15,25 +15,26 @@ classdef TestStudyToolkit < matlab.unittest.TestCase
         end
 
         function designUsesLegacyRowWiseRNG(testCase)
-            options = ep_comparison_options();
+            options = learning_irf_options();
             options.draw_count = 2;
             options.training_periods = 2;
             options.irf_periods = 1;
-            design = ep_comparison_design(options);
+            design = learning_irf_design(options);
             rng(options.random_seed,'twister');
             expected = [randn(1,3);randn(1,3)];
-            testCase.verifyEqual(design.standardized_innovations,expected);
+            testCase.verifyEqual([design.training.standardized_innovations ...
+                design.irf.standardized_innovations],expected);
         end
 
         function runsOneCaseWithImpactOnlyInFirstIRFPeriod(testCase)
             prepared = scalar_prepared_case();
             design = scalar_design([0 0 0]);
             artifact = run_case(prepared,design);
-            shocked = artifact.experiment_specification.shocked.shocks;
-            baseline = artifact.experiment_specification.baseline.shocks;
+            shocked = artifact.irf.irf_design.shocked_shocks;
+            baseline = artifact.irf.irf_design.baseline_shocks;
             testCase.verifyEqual(shocked-baseline,[1 0]);
-            testCase.verifyEqual(artifact.native_irf,[1 0.5]);
-            testCase.verifyEqual(artifact.timing.horizons,0:1);
+            testCase.verifyEqual(artifact.irf.native_irf,[1 0.5]);
+            testCase.verifyEqual(artifact.irf.timing.horizons,0:1);
             testCase.verifyFalse(contains_callbacks(artifact));
         end
 
@@ -65,8 +66,8 @@ model = testsupport.scalar_structural_model();
 model.name = "scalar";
 model.backend = "fixture";
 model.source = struct('file',"fixture");
-series = struct('name',"y",'variable',"y", ...
-    'cumulative_variables',{{}},'scale',1);
+series = struct('id',"y",'label',"Y",'unit',"model_units", ...
+    'transformation',struct('kind',"native",'variable',"y",'scale',1));
 reporting = struct('source',"irf",'series',series, ...
     'title',"Scalar",'x_label',"Period",'y_label',"Deviation");
 prepared = struct('id',"scalar",'label',"Scalar case", ...
@@ -77,14 +78,16 @@ prepared = struct('id',"scalar",'label',"Scalar case", ...
 end
 
 function design = scalar_design(innovations)
-design = struct('shock_name',"eps", ...
-    'standardized_innovations',innovations, ...
-    'training_standard_deviation',1,'training_periods',1, ...
-    'irf_periods',2,'impulse',1, ...
-    'initialization',struct('initial_values',"zeros"), ...
-    'explosion_policy',struct('magnitude_limit',100, ...
-        'reject_nonfinite',true), ...
-    'band_probabilities',[0.25 0.75],'random_seed',1);
+options=learning_irf_options(); options.draw_count=size(innovations,1);
+options.training_periods=1; options.irf_periods=2;
+design=learning_irf_design(options);
+design.training.shock_name="eps"; design.irf.shock_name="eps";
+design.training.standard_deviation=1; design.irf.standard_deviation=1;
+design.training.standardized_innovations=innovations(:,1);
+design.irf.standardized_innovations=innovations(:,2:3);
+design.training.innovation_fingerprint=innovation_fingerprint(innovations(:,1));
+design.irf.innovation_fingerprint=innovation_fingerprint(innovations(:,2:3));
+design.provenance.innovation_fingerprint=innovation_fingerprint(innovations);
 end
 
 function result = contains_callbacks(value)
