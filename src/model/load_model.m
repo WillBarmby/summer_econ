@@ -18,7 +18,6 @@ end
 verify_parameter_overrides(components.calibration,options.parameter_overrides);
 structural_model = assemble_structural_model(components,source,options);
 
-% This is the new boundary check. The current validator is intentionally
-% still legacy and will be migrated against the red contract tests.
+% Validate the canonical structural boundary before returning it.
 validate_structural_model(structural_model);
 end

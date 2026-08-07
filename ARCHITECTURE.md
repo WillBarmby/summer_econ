@@ -71,6 +71,12 @@ nonpositive steady state requires an explicit positive `deviation_scales`
 entry. Shock units remain those declared by the `.mod` file. Transformation
 metadata records the level steady state, resolved scales, and scale overrides.
 
+Analytical `dynamic_g1` evaluation is the only structural-matrix extraction
+path. The engine does not use finite-difference perturbations or hand-coded
+linear matrices. The separate RE boundary continues to ask Dynare for its
+first-order decision rule and translates that rule into the same canonical
+deviation units.
+
 The nonlinear loader returns only transformed structural derivatives. At the
 separate RE boundary, Dynare's level decision rule is transformed as
 
@@ -448,9 +454,8 @@ AdaptiveLearning:InvalidShockSchedule
 AdaptiveLearning:IncompatibleHandoff
 ```
 
-The red contract suite specifies these behaviors before the implementations
-are migrated. Existing `EPResearch:*` identifiers are legacy behavior and do
-not define the new interface.
+The contract suite specifies these behaviors. Existing `EPResearch:*`
+identifiers are legacy behavior and do not define the new interface.
 
 ## Test order
 
