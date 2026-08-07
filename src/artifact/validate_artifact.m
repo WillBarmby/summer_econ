@@ -6,7 +6,8 @@ required = {'schema_version','kind','case','model','axes','units', ...
 if ~isstruct(artifact) || ~isscalar(artifact) || ~all(isfield(artifact,required))
     invalid('Artifact lacks common metadata.');
 end
-allowed = ["single_run" "training_irf" "case_collection" "comparison"];
+allowed = ["single_run" "training" "irf" "training_irf" ...
+    "case_collection" "comparison"];
 if ~any(string(artifact.kind)==allowed)
     invalid('Artifact kind is not recognized.');
 end

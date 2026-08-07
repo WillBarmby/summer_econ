@@ -1,9 +1,24 @@
-function prepared = prepare_case(definition)
+function prepared = prepare_case(definition,varargin)
 %% PREPARE_CASE Resolve a readable case definition into stable core values.
 
 validate_definition(definition);
-structural_model = load_model(definition.model_file,definition.model_options);
-re_solution = solve_re(structural_model);
+if isempty(varargin)
+    structural_model = load_model(definition.model_file,definition.model_options);
+    re_solution = solve_re(structural_model);
+elseif numel(varargin)==2
+    structural_model = varargin{1};
+    re_solution = varargin{2};
+    validate_structural_model(structural_model);
+    validate_re_solution(re_solution);
+    if ~isequal(string(structural_model.variable_names),string(re_solution.variable_names)) || ...
+            ~isequal(string(structural_model.shock_names),string(re_solution.shock_names))
+        error('AdaptiveLearning:IncompatibleHandoff', ...
+            'Reused structural model and RE solution declarations differ.');
+    end
+else
+    error('AdaptiveLearning:InvalidCaseDefinition', ...
+        'Supply neither reused handoff or both structural model and RE solution.');
+end
 learning_specification = definition.learning_specification_factory(structural_model);
 learning_system = compile_learning( ...
     structural_model,re_solution,learning_specification);
