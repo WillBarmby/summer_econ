@@ -41,12 +41,18 @@ end
 
 function specification = ep_reporting_specification()
 names = {'output','consumption','investment','hours'};
-series = repmat(struct('name',"",'variable',"", ...
-    'cumulative_variables',{{}},'scale',1),1,numel(names));
+series = repmat(struct('id',"",'label',"",'unit',"percent_deviation", ...
+    'transformation',struct()),1,numel(names));
 for j = 1:numel(names)
-    series(j).name = string(names{j});
-    series(j).variable = string(names{j});
-    if j<4, series(j).cumulative_variables = {'gamma_x'}; end
+    series(j).id = string(names{j}); series(j).label = string(names{j});
+    if j<4
+        series(j).transformation = struct('kind',"add_cumulative", ...
+            'variable',string(names{j}),'cumulative_variables',{{'gamma_x'}}, ...
+            'scale',1);
+    else
+        series(j).transformation = struct('kind',"native", ...
+            'variable',string(names{j}),'scale',1);
+    end
 end
 specification = struct('source',"irf",'series',series, ...
     'title',"E&P impulse responses",'x_label',"Quarters", ...

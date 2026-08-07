@@ -34,8 +34,10 @@ shocked = run_experiment(system,shocked_spec);
 primitive_irf = shocked.path-baseline.path;
 native_irf = primitive_irf(:,2:end);
 re_native = re_irf(prepared.learning_system,design.periods,impulse);
-[reported,series] = apply_reporting(native_irf,prepared);
-[re_reported,~] = apply_reporting(re_native,prepared);
+[reported,series] = apply_reporting_specification(native_irf, ...
+    prepared.structural_model.variable_names,prepared.reporting_specification);
+[re_reported,~] = apply_reporting_specification(re_native, ...
+    prepared.structural_model.variable_names,prepared.reporting_specification);
 stored_design = design; stored_design.baseline_shocks = future;
 stored_design.shocked_shocks = shocked_shocks;
 artifact = struct('schema_version',"3.0",'kind',"irf", ...
@@ -82,20 +84,6 @@ path = zeros(numel(system.variable_names),periods);
 if periods==0, return; end
 path(:,1) = alm.intercept+alm.shock*impulse;
 for t=2:periods, path(:,t)=alm.intercept+alm.transition*path(:,t-1); end
-end
-function [values,series] = apply_reporting(native,prepared)
-series = prepared.reporting_specification.series;
-names = prepared.structural_model.variable_names;
-values = zeros(numel(series),size(native,2));
-for j=1:numel(series)
-    [~,index]=ismember(string(series(j).variable),string(names));
-    value=native(index,:);
-    for k=1:numel(series(j).cumulative_variables)
-        [~,c]=ismember(string(series(j).cumulative_variables{k}),string(names));
-        value=value+cumsum(native(c,:),2);
-    end
-    values(j,:)=series(j).scale*value;
-end
 end
 function validate_irf_design(value)
 required = {'explosion_policy';'impulse';'innovation_fingerprint';'periods'; ...

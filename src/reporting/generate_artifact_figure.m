@@ -10,6 +10,6 @@ grid(axes_handle,'on');
 xlabel(axes_handle,report.x_label);
 ylabel(axes_handle,report.y_label);
 title(axes_handle,report.title,'Interpreter','none');
-legend(axes_handle,cellstr(report.series_names), ...
+legend(axes_handle,cellstr(report.series_labels), ...
     'Location','best','Interpreter','none');
 end

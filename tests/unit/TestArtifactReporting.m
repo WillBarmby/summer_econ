@@ -8,7 +8,7 @@ classdef TestArtifactReporting < matlab.unittest.TestCase
 
             report = report_artifact(artifact,specification);
 
-            testCase.verifyEqual(report.series_names,"y");
+            testCase.verifyEqual(report.series_ids,"y");
             testCase.verifyEqual(report.horizons,0:3);
             testCase.verifyEqual(report.values,[0 1 0.5 -0.75]);
             testCase.verifyEqual(report.source,"path");
@@ -35,11 +35,10 @@ classdef TestArtifactReporting < matlab.unittest.TestCase
             artifact = scalar_artifact();
             artifact.model.variable_names = {'output','gamma_x'};
             artifact.simulation_result.path = [0 1 1;0 0.1 0.2];
-            series = struct( ...
-                'name',"output_level", ...
-                'variable',"output", ...
-                'cumulative_variables',{{'gamma_x'}}, ...
-                'scale',1);
+            series = struct('id',"output_level",'label',"Output level", ...
+                'unit',"percent_deviation",'transformation',struct( ...
+                'kind',"add_cumulative",'variable',"output", ...
+                'cumulative_variables',{{'gamma_x'}},'scale',1));
             specification = reporting_specification("path",series);
 
             report = report_artifact(artifact,specification);
@@ -51,7 +50,7 @@ classdef TestArtifactReporting < matlab.unittest.TestCase
         function rejectsUnknownReportedVariable(testCase)
             artifact = scalar_artifact();
             specification = scalar_reporting_specification("path");
-            specification.series.variable = "unknown";
+            specification.series.transformation.variable = "unknown";
 
             testCase.verifyError(@() report_artifact(artifact,specification), ...
                 'AdaptiveLearning:InvalidReportingSpecification');
@@ -82,11 +81,8 @@ artifact = assemble_artifact(model,learning,experiment,result);
 end
 
 function specification = scalar_reporting_specification(source)
-series = struct( ...
-    'name',"y", ...
-    'variable',"y", ...
-    'cumulative_variables',{{}}, ...
-    'scale',1);
+series = struct('id',"y",'label',"Y",'unit',"model_units", ...
+    'transformation',struct('kind',"native",'variable',"y",'scale',1));
 specification = reporting_specification(source,series);
 end
 

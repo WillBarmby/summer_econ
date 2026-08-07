@@ -49,7 +49,8 @@ end
 function prepared = scalar_prepared_case()
 model=testsupport.scalar_structural_model(); model.name="scalar";
 model.backend="fixture"; model.source=struct('file',"fixture");
-series=struct('name',"y",'variable',"y",'cumulative_variables',{{}},'scale',1);
+series=struct('id',"y",'label',"Y",'unit',"model_units", ...
+    'transformation',struct('kind',"native",'variable',"y",'scale',1));
 reporting=struct('source',"irf",'series',series,'title',"Scalar", ...
     'x_label',"Period",'y_label',"Deviation");
 prepared=struct('id',"scalar",'label',"Scalar",'structural_model',model, ...
