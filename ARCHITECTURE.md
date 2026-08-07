@@ -325,72 +325,79 @@ schedules may differ. `paired_result.irf` is `shocked.path-baseline.path`,
 including the common initial-value column. The result preserves all three
 primitive runs and adds only aggregate `status` and staged `termination`.
 
-## Artifacts and reporting
+## Public case and study toolkit
 
-Simulation, artifact assembly, and reporting are separate operations:
-
-```matlab
-simulation_result = run_experiment(learning_system,experiment_specification);
-artifact = assemble_artifact(structural_model,learning_specification, ...
-    experiment_specification,simulation_result);
-figures = generate_figures(artifact,reporting_specification);
-```
-
-`run_experiment` does not save files or draw figures. `assemble_artifact`
-extracts nonexecutable model metadata and preserves the declarative
-specifications, innovations, statuses, paths, beliefs, and diagnostics needed
-for reproducibility. It does not copy structural matrices or compiled
-callbacks. Reporting consumes that artifact and may apply the structural
-model's transformation metadata, but reporting choices do not flow backward
-into the model, learning, or simulation values.
-
-The initial reporting API is:
+Model-specific choices sit above the stable core. Case options own calibration
+and learning choices; study options own realized innovations and evaluation:
 
 ```matlab
-report = report_artifact(artifact,reporting_specification);
-figure_handle = generate_artifact_figure(artifact,reporting_specification);
+definition = ep_ee_case(ep_case_options());
+prepared = prepare_case(definition);             % loads and solves once
+study = learning_irf_design(learning_irf_options());
+training = train_case(prepared,study.training);  % reusable data artifact
+irf = run_irf(prepared,training,study.irf);       % no Dynare or retraining
+result = run_case(prepared,study);                % thin composition
 ```
 
-## Case and comparison toolkit
+`prepare_case(definition,structural_model,re_solution)` reuses an existing
+model solution for another compatible learning definition. A case definition
+contains identity, model source/options, a learning-specification factory, and
+a declarative reporting specification. Preparation exposes the structural
+model, RE solution, resolved learning specification, and compiled system.
 
-Model-specific choices sit above, and do not alter, the stable core pipeline:
+Study designs have visibly separate `training`, `irf`, and `summary` sections.
+They identify one shock by economic name; materialization resolves declaration
+order and guarantees that every unselected shock row is zero. Innovations are
+generated row by row for reproducibility.
+
+`train_case` stores terminal values and beliefs alongside the training path.
+`run_irf` verifies its prepared case against the training fingerprint, then
+starts baseline and shocked branches from the same terminal state. Primitive
+paths retain `[y_0,...,y_T]`; exposed IRFs use columns `2:end`, so the first
+column is impact horizon zero. `run_comparison` compacts each draw immediately
+into independently understandable case collections.
+
+## Reporting contract
+
+Each reported series has stable machine-facing metadata:
 
 ```matlab
-definition = ep_ee_case(options);
-prepared = prepare_case(definition);
-single = run_case(prepared,one_draw_design);
-comparison = run_comparison({prepared,other_case},shared_design);
+struct('id',"output",'label',"Output", ...
+    'unit',"percent_deviation", ...
+    'transformation',struct('kind',"add_cumulative", ...
+        'variable',"output", ...
+        'cumulative_variables',{{'gamma_x'}},'scale',1))
 ```
 
-A case definition contains identity, model source/options, a learning-
-specification factory, and a declarative reporting specification. Preparation
-exposes every core handoff. Study designs identify shocks by economic name;
-materialization resolves model declaration order and leaves all unselected
-shock rows at zero.
+Schema 3 supports `native` and `add_cumulative` transformations and the unit
+IDs `model_units`, `percent_deviation`, and `percentage_points`. Reporting is a
+pure consumer. Cross-case consumers align by series ID and reject unit
+mismatches. Figure and CSV export remain separate operations.
 
-`run_case` returns a `training_irf` artifact with full primitive histories.
-`run_comparison` returns a `comparison` artifact whose `cases` are compact
-`case_collection` artifacts. Collections retain native and reported IRFs,
-statuses and terminations, terminal coefficients and moments, projection
-counts, RE benchmarks, and pointwise summaries. They do not retain compiled
-callbacks, structural matrices, or every period's histories.
+## Schema-3 artifacts and persistence
 
-Primitive paired IRFs include the shared initial state. Study artifacts expose
-columns `2:end`, so their first column is impact horizon zero. Saving and
-export remain separate from all execution and reporting functions.
+The supported artifact kinds are `single_run`, `training`, `irf`,
+`training_irf`, `case_collection`, and `comparison`. Every artifact is an
+inert scalar struct with exact kind-specific fields, explicit axes, timing,
+units, provenance, statuses, and dimension labels. Artifacts never contain
+function handles, objects, Dynare state, or structural matrices.
 
-The specification selects source `"path"` or `"irf"` and declares plotted
-series by output name, native variable, cumulative addends, and scale. A
-reported series is
+`validate_artifact` dispatches to a kind-specific contract and accepts schema
+`3.0` only. Historical schema-2 values remain numerical fixtures, not public
+values and not migration inputs.
 
-```text
-scale * (native variable + sum(cumsum(cumulative variables)))
+```matlab
+paths = save_artifact("results/study.mat",artifact);
+artifact = load_artifact("results/study.mat");
 ```
 
-This covers stationary-to-level transformations such as adding cumulative
-technology growth without embedding E&P-specific variable choices in the
-reporter. Figure generation is in-memory; saving and file naming are separate
-caller responsibilities.
+The MAT file is canonical, uses `-v7.3`, and contains exactly one variable
+named `artifact`. A same-stem JSON sidecar contains readable metadata and the
+MAT SHA-256 checksum, but no large numeric arrays. Saving validates first and
+rejects existing destinations unless `Overwrite=true`. Loading inspects the
+file before loading, validates the complete value, and verifies any present
+sidecar. A missing sidecar is allowed; an inconsistent one is an integrity
+failure.
 
 ## Validation and error policy
 

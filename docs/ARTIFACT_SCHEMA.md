@@ -1,80 +1,44 @@
-# Result Artifact Schema
+# Schema 3 artifact guide
 
-> **Historical documentation.** This describes the former paper-specific
-> artifact/reporting layer. The active branch has removed that layer while the
-> generic experiment contract is being rebuilt.
+Schema `3.0` is the active, pre-public artifact contract. It deliberately does
+not load or migrate schema-2 output. Older files and frozen fixtures remain
+useful as numerical references only.
 
-Public runners write schema-version `2.0.0` MAT artifacts and compact CSV
-summaries. The MAT file preserves configuration, draw-level evidence, and
-diagnostics; the CSV is the quickest route to paper-facing scalar results.
+Artifacts are nonexecutable scalar structs. The supported kinds are:
 
-## Common top-level fields
+- `single_run`: one primitive simulation;
+- `training`: a reusable training result and terminal state;
+- `irf`: baseline, shocked, native, reported, and RE responses;
+- `training_irf`: separate training and IRF artifacts from `run_case`;
+- `case_collection`: compact draw evidence and summaries for one case;
+- `comparison`: independently understandable case collections.
 
-Every public artifact contains:
+Every kind carries explicit identity, dimensions, axes, timing, status, and
+provenance. Reporting series carry `id`, `label`, `unit`, and transformation
+metadata. Use `describe_artifact` for a concise inspectable description and
+`validate_artifact` when accepting an in-memory value from another caller.
 
-- `schema_version`: the saved-data contract version.
-- `experiment`: stable experiment identifier.
-- `question`: the research question answered by the experiment.
-- `config`: common draw, training, gain, shock, and horizon settings.
-- `units`: definitions for responses, wedges, rates, and cumulative metrics.
-- `periods`: MATLAB indices and economic horizons. Column 1 is impact at
-  horizon 0; column `j` is `j-1` quarters after impact.
-- `axes`: dimension names for experiment-specific arrays.
-- `provenance`: UTC generation time, Git commit and dirty-state flag, MATLAB
-  version, and generating runner.
-- `summary`: paper-facing metrics and completion diagnostics.
-- `output_files`: paths only, including `summary_csv`.
-
-The files use MATLAB's `save(...,'-struct',...)` convention, so `load` returns a
-scalar struct whose fields are the artifact fields:
+## Persistence
 
 ```matlab
-A = load("results/ep_comparison/ep_comparison.mat");
-A.question
-A.periods
-A.axes
-A.summary
-readtable(A.output_files.summary_csv)
+paths = save_artifact("results/my_study.mat",artifact);
+restored = load_artifact(paths.mat);
 ```
 
-## Common simulation result
+The MAT file is the source of truth and contains exactly one scalar struct
+named `artifact`, saved in MATLAB v7.3 format. The JSON sidecar contains only
+human-readable metadata and the MAT file's SHA-256 checksum. It intentionally
+omits paths, innovations, beliefs, and matrices.
 
-Nested learning simulations retain a shared contract:
+Saving validates before writing and rejects existing files by default:
 
-```text
-learning_draws                    draw × quantity × period
-re_reported_path                 quantity × period
-terminal_training_coefficients   draw × learned outcome × regressor
-terminal_training_moments        draw × regressor × regressor
-statuses                         draw
+```matlab
+save_artifact("results/my_study.mat",artifact,'Overwrite',true);
 ```
 
-The simulation's own `axes`, `periods`, `units`, `quantity_names` from the
-parent artifact, and `variable_names` define those dimensions. Failed draws
-remain `NaN` in `learning_draws`; use `statuses` and `status_counts` rather than
-inferring completion from a conditional median.
+Loading first inspects the MAT contents, accepts schema `3.0` only, validates
+the complete artifact, and checks an existing sidecar. The MAT remains valid
+if its sidecar is absent; a present sidecar with a wrong checksum, schema, or
+kind raises an integrity error.
 
-## Summary conventions
-
-For ordinary learning comparisons,
-`summary.maximum_absolute_median_learning_minus_re_wedge` is indexed by
-`specification × quantity`. For gain experiments it is indexed by
-`specification × gain × quantity`. Gain metrics are results and therefore live
-under `summary`, never under `output_files`.
-
-Rates in MAT artifacts and CSVs are fractions from zero to one. Figures may
-multiply them by 100 and label them as percentages. Responses are percentage
-deviations; a learning-minus-RE wedge is therefore measured in percentage
-points of the reported response.
-
-Initialization robustness has larger arrays. Its `axes` field explicitly maps
-the six-dimensional draw-level IRF and all scalar summaries. The associated
-CSV remains the preferred interface for specification-by-horizon comparisons.
-
-## Compatibility boundary
-
-Artifacts created before schema `2.0.0` remain valid historical outputs, but
-their metrics may appear beneath `output_files` and their dimensions are not
-self-describing. Rerun the producing public runner to create the current schema
-and CSV. Code consuming saved artifacts should check `schema_version` before
-assuming the version-2 field layout.
+Figure and CSV export are deliberately separate from artifact persistence.

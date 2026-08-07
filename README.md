@@ -17,26 +17,53 @@ The active code contains the complete linear-model pipeline, one-step and
 infinite-horizon expectation mappings, one-draw and comparison runners, and
 nonexecutable artifact/reporting consumers.
 
-The verified E&P comparison is intentionally short to invoke:
+The public workflow separates model preparation, training, and IRF evaluation:
 
 ```matlab
 setup_project;
-options = ep_comparison_options();
-ee = prepare_case(ep_ee_case(options));
-ih = prepare_case(ep_ih_case(options));
-comparison = run_comparison({ee,ih},ep_comparison_design(options));
+case_options = ep_case_options();
+study_options = learning_irf_options();
+
+ee = prepare_case(ep_ee_case(case_options)); % Dynare runs here
+study = learning_irf_design(study_options);
+
+training = train_case(ee,study.training);
+irf = run_irf(ee,training,study.irf);
+result = run_case(ee,study); % equivalent convenience wrapper
 ```
 
-For a single explicit draw, select one row from the design's standardized
-innovations and call `run_case`. That artifact retains full training and IRF
-histories; `run_comparison` retains compact draw evidence and summaries.
+The prepared case may be reused without rerunning Dynare, and the training
+artifact may be reused for several IRF designs without retraining. To compare
+models under identical innovations:
+
+```matlab
+ih = prepare_case(ep_ih_case(case_options));
+comparison = run_comparison({ee,ih},study);
+```
+
+Several learning cases for one model can also reuse a loaded model and RE law:
+
+```matlab
+model = load_model(model_file,model_options);
+re = solve_re(model);
+case_a = prepare_case(definition_a,model,re);
+case_b = prepare_case(definition_b,model,re);
+```
 
 The nonlinear NK technology case uses the same public preparation and study
 boundary:
 
 ```matlab
-nk = prepare_case(nk_ee_case(options));
-nk_artifact = run_case(nk,one_draw_design);
+nk = prepare_case(nk_ee_case(nk_case_options()));
+nk_artifact = run_case(nk,study);
+```
+
+Artifacts are inert schema-3 data. Saving validates them and writes a canonical
+MAT file plus a readable JSON metadata sidecar:
+
+```matlab
+paths = save_artifact("results/example.mat",result);
+restored = load_artifact(paths.mat);
 ```
 
 ## Project map
@@ -49,7 +76,8 @@ nk_artifact = run_case(nk,one_draw_design);
   path primitives.
 - `src/case/` - readable model-specific case definitions and preparation.
 - `src/study/` - named-shock designs and single/comparison execution.
-- `src/artifact/` - nonexecutable schemas, validation, and description.
+- `src/artifact/` - nonexecutable schemas, validation, description, and safe
+  MAT/JSON persistence.
 - `src/reporting/` - pure summaries and in-memory graph consumers.
 - `tests/` - focused loader and engine tests.
 - `docs/` - historical research and experiment documentation retained for
