@@ -1,0 +1,23 @@
+function structural_model = load_model(model_file,model_options)
+%% LOAD_MODEL Load a model file into the public structural-model contract.
+% The public loader orchestrates the handoff. Dynare setup, generated files,
+% and residual-matrix extraction live in private helpers so this function
+% states the intended data flow without exposing Dynare's data store.
+
+if nargin<2
+    model_options = struct();
+end
+options = validate_load_options(model_options);
+source = validate_model_source(model_file,options);
+
+if options.kind=="linear"
+    components = run_dynare_linear(source,options);
+else
+    components = run_dynare_nonlinear(source,options);
+end
+verify_parameter_overrides(components.calibration,options.parameter_overrides);
+structural_model = assemble_structural_model(components,source,options);
+
+% Validate the canonical structural boundary before returning it.
+validate_structural_model(structural_model);
+end

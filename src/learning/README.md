@@ -1,14 +1,18 @@
-# Learning Engine
+# Learning Primitives
 
-This directory contains model-independent RLS updates, adaptive-learning path
-simulation, paired IRF construction, and the compilers that join an economic
-learning specification to a structural model.
+This directory contains the model-independent state transitions used by an
+adaptive-learning experiment:
 
-The simulation engine consumes a `learning_model` contract rather than knowing
-about E&P equations directly. Model-specific economics remain in the compilers
-and expectation mappings.
+- `compile_learning` resolves a declarative specification into callbacks;
+- `initialize_learning_beliefs` privately creates the mutable belief state;
+- `validate_learning_specification` checks declarative learning inputs;
+- `validate_learning_system` checks the compiled learning handoff.
 
-For E&P EE experiments, `build_ee_learning_model` validates the named
-consumption-forecast rule. Undeclared PLM rows remain at their RE values, which
-makes the archive-fixed treatment explicit without importing archive row
-numbers or inactive variables.
+The simulator consumes a `learning_system` contract containing callbacks for
+belief-to-PLM conversion, PLM-to-ALM conversion, regressors, and observed
+outcomes. It does not know the equations of a particular economic model.
+
+The current compiler supports RLS and a decide-then-update timing rule. Those
+choices remain explicit in the declarative learning specification. Prior
+treatments belong in `initialization.coefficients.scale`; compiled systems are
+not mutated after construction.

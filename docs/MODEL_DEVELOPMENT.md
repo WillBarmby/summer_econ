@@ -1,11 +1,17 @@
 # Balanced-Growth NK Model Development
 
+> **Historical documentation.** This records the former model-development
+> workflow and its experiment context. The active branch retains the Dynare
+> model-loader code and model files while rebuilding the surrounding contracts.
+
 ## Implemented design
 
-The active `models/nk_balanced_growth.mod` uses labor-augmenting technology and
+The active `experiments/nk_technology_ee/nk_balanced_growth.mod` uses
+labor-augmenting technology and
 stationary variables normalized by the stochastic technology level, matching
 the aspects of the E&P growth environment required for the comparison. The
-earlier technology-level specification is retained as `models/old_nk.mod` only
+earlier technology-level specification is retained as
+`experiments/archive/old_nk/old_nk.mod` only
 to make the rewrite auditable; supported runners never load it.
 
 The rewrite was developed in reviewable stages:

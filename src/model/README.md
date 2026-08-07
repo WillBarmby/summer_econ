@@ -1,8 +1,21 @@
-# Model Engine
+# Model Loader
 
-This directory contains separate Dynare 7.1 loaders for explicit-linear models
-and stationary nonlinear models. `load_nonlinear_dynare_model` asks Dynare for
-analytical first derivatives and converts additive level deviations into an
-explicitly documented percentage-point canonical system. The directory also
-contains structural-model validation, RE decision-rule extraction, Jacobian
-layout checks, and stationary covariance calculation.
+This directory is the active Dynare boundary. The loaders run Dynare in an
+isolated temporary workspace and return separate canonical MATLAB values with:
+
+- variable, shock, and equation names;
+- structural lag, current, lead, and shock matrices;
+- effective calibration;
+- stationary/deviation transformation metadata when needed.
+
+`load_model` handles both explicit `model(linear)` files and stationary
+nonlinear models. Both use Dynare's generated analytical dynamic Jacobian;
+the nonlinear path additionally resolves and applies declared deviation
+scales at the deterministic steady state. `solve_re` separately returns the
+declaration-ordered reduced-form RE law in those same units. Private helpers
+isolate Dynare's globals and decision-rule shape.
+
+The remaining helpers validate the contracts and calculate stationary
+covariances. Dynare-specific
+objects should remain inside this boundary; downstream learning code should
+consume the canonical contract.

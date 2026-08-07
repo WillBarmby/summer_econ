@@ -1,5 +1,9 @@
 # Experiment Design
 
+> **Historical documentation.** This file describes the former E&P/NK
+> experiment suite. It is retained as research provenance and is not an active
+> runner specification in this branch.
+
 ## E&P comparison
 
 **Research question:** holding the RBC structure and shock history fixed, how
