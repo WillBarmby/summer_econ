@@ -8,6 +8,16 @@ if comparison.kind~="comparison"
         'Comparison figure requires a comparison artifact.');
 end
 series = comparison.cases{1}.series;
+reference_ids = string({series.id});
+reference_units = string({series.unit});
+for j = 2:numel(comparison.cases)
+    candidate = comparison.cases{j}.series;
+    if ~isequal(string({candidate.id}),reference_ids) || ...
+            ~isequal(string({candidate.unit}),reference_units)
+        error('AdaptiveLearning:IncompatibleHandoff', ...
+            'Compared cases must expose the same series IDs and units.');
+    end
+end
 figure_handle = figure('Visible','off','Color','white');
 layout = tiledlayout(figure_handle,'flow');
 for quantity = 1:numel(series)
@@ -26,7 +36,8 @@ for quantity = 1:numel(series)
         labels(2*j) = item.case.label+" RE";
     end
     title(axes_handle,string(series(quantity).label),'Interpreter','none');
-    xlabel(axes_handle,'Quarters'); ylabel(axes_handle,'Percent deviation');
+    xlabel(axes_handle,'Quarters');
+    ylabel(axes_handle,strrep(string(series(quantity).unit),'_',' '));
     grid(axes_handle,'on');
     legend(axes_handle,cellstr(labels),'Interpreter','none');
 end

@@ -27,18 +27,18 @@ classdef TestNKCaseDefinition < matlab.unittest.TestCase
         end
 
         function runsShortTechnologyCaseWithPremiumShockZero(testCase)
-            options = ep_comparison_options();
+            options = learning_irf_options();
             options.draw_count = 1;
             options.training_periods = 8;
             options.irf_periods = 5;
             prepared = prepare_case(nk_ee_case(nk_case_options()));
-            artifact = run_case(prepared,ep_comparison_design(options));
-            testCase.verifyEqual(artifact.simulation_result.status,"completed");
-            testCase.verifyEqual(artifact.experiment_specification.training. ...
-                shocks(2,:),zeros(1,options.training_periods));
-            testCase.verifyEqual(artifact.experiment_specification.shocked. ...
-                shocks(2,:),zeros(1,options.irf_periods));
-            testCase.verifySize(artifact.reported_irf,[6 5]);
+            artifact = run_case(prepared,learning_irf_design(options));
+            testCase.verifyEqual(artifact.status,"completed");
+            testCase.verifyEqual(artifact.training.training_design.shocks(2,:), ...
+                zeros(1,options.training_periods));
+            testCase.verifyEqual(artifact.irf.irf_design.shocked_shocks(2,:), ...
+                zeros(1,options.irf_periods));
+            testCase.verifySize(artifact.irf.reported_irf,[6 5]);
         end
     end
 end

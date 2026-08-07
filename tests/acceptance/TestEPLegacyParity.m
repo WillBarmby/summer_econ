@@ -6,11 +6,11 @@ classdef TestEPLegacyParity < matlab.unittest.TestCase
             root = fileparts(fileparts(fileparts(mfilename('fullpath'))));
             frozen = load(fullfile(root,'tests','fixtures', ...
                 'ep_experiment_reference.mat'),'reference');
-            options = ep_comparison_options();
-            design = ep_comparison_design(options);
+            case_options = ep_case_options();
+            design = learning_irf_design(learning_irf_options());
             actual = run_comparison({ ...
-                prepare_case(ep_ee_case(options)), ...
-                prepare_case(ep_ih_case(options))},design);
+                prepare_case(ep_ee_case(case_options)), ...
+                prepare_case(ep_ih_case(case_options))},design);
 
             reference = frozen.reference.baseline;
             for j = 1:2
@@ -33,11 +33,11 @@ classdef TestEPLegacyParity < matlab.unittest.TestCase
             root = fileparts(fileparts(fileparts(mfilename('fullpath'))));
             frozen = load(fullfile(root,'tests','fixtures', ...
                 'ep_engine_reference.mat'),'fixture');
-            options = ep_comparison_options();
+            options = ep_case_options();
             options.gamma_bar = frozen.fixture.gamma_bar;
             options.gain = frozen.fixture.gain;
-            options.training_standard_deviation = ...
-                frozen.fixture.shock_standard_deviation;
+            options.belief_shock_covariance = ...
+                frozen.fixture.shock_standard_deviation^2;
             definitions = {ep_ee_case(options),ep_ih_case(options)};
             ids = {'ee','ih'};
             for j = 1:2
