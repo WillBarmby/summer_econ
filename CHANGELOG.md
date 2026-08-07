@@ -18,6 +18,9 @@ adaptive-learning engine.
   training/IRF workflows to the documented active contract.
 - Added a tiny self-contained experiment and documented the historical
   experiment/figure migration backlog.
+- Moved the retained E&P and NK definitions and active Dynare sources into
+  self-contained experiment folders; comparison manifests now support multiple
+  local cases.
 
 Historical paper runners are intentionally not all migrated in this release.
 See `ROADMAP.md` for the remaining work.

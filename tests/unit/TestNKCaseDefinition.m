@@ -3,7 +3,10 @@ classdef TestNKCaseDefinition < matlab.unittest.TestCase
 
     methods (Test)
         function definesTechnologyEEWithoutRunnerDetails(testCase)
-            definition = nk_ee_case(nk_case_options());
+            root = setup_project();
+            manifest = testsupport.load_experiment_manifest(fullfile( ...
+                root,'experiments','nk_technology_ee'));
+            definition = manifest.case_definition;
             testCase.verifyEqual(definition.id,"nk_technology_ee");
             testCase.verifyEqual(definition.model_options.kind,"nonlinear");
             testCase.verifyEqual(definition.model_options.deviation_scales, ...
@@ -14,7 +17,10 @@ classdef TestNKCaseDefinition < matlab.unittest.TestCase
         end
 
         function preparesTwoShockLearningContract(testCase)
-            prepared = prepare_case(nk_ee_case(nk_case_options()));
+            root = setup_project();
+            manifest = testsupport.load_experiment_manifest(fullfile( ...
+                root,'experiments','nk_technology_ee'));
+            prepared = prepare_case(manifest.case_definition);
             testCase.verifyEqual(prepared.learning_specification. ...
                 learned_variables, ...
                 {'rk','consumption','capital','inflation','output'});
@@ -31,7 +37,10 @@ classdef TestNKCaseDefinition < matlab.unittest.TestCase
             options.draw_count = 1;
             options.training_periods = 8;
             options.irf_periods = 5;
-            prepared = prepare_case(nk_ee_case(nk_case_options()));
+            root = setup_project();
+            manifest = testsupport.load_experiment_manifest(fullfile( ...
+                root,'experiments','nk_technology_ee'));
+            prepared = prepare_case(manifest.case_definition);
             artifact = run_case(prepared,learning_irf_design(options));
             testCase.verifyEqual(artifact.status,"completed");
             testCase.verifyEqual(artifact.training.training_design.shocks(2,:), ...

@@ -1,7 +1,6 @@
 classdef TestLearningIRFDesign < matlab.unittest.TestCase
     methods (Test)
         function separatesCaseAndStudyOptions(testCase)
-            testCase.verifyFalse(isfield(ep_case_options(),'training_periods'));
             testCase.verifyFalse(isfield(learning_irf_options(),'gain'));
         end
         function generatesSplitRowWiseInnovations(testCase)

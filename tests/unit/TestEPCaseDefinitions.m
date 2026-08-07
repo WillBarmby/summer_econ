@@ -3,21 +3,25 @@ classdef TestEPCaseDefinitions < matlab.unittest.TestCase
 
     methods (Test)
         function exposesVerifiedDefaults(testCase)
-            case_options = ep_case_options();
+            root = setup_project();
+            manifest = testsupport.load_experiment_manifest(fullfile( ...
+                root,'experiments','ep_comparison'));
             study_options = learning_irf_options();
-            testCase.verifyEqual(case_options.gain,0.002);
+            testCase.verifyEqual(manifest.case_definitions{1}.model_options. ...
+                parameter_overrides.gamma_bar,exp(0.0053));
             testCase.verifyEqual(study_options.random_seed,20260721);
             testCase.verifyEqual(study_options.draw_count,100);
             testCase.verifyEqual(study_options.training_periods,2000);
             testCase.verifyEqual(study_options.irf_periods,40);
             testCase.verifyEqual(study_options.shock_name,"eps_x");
-            testCase.verifyEqual(case_options.gamma_bar,exp(0.0053));
         end
 
         function definesDistinctEEAndIHCases(testCase)
-            options = ep_case_options();
-            ee = ep_ee_case(options);
-            ih = ep_ih_case(options);
+            root = setup_project();
+            manifest = testsupport.load_experiment_manifest(fullfile( ...
+                root,'experiments','ep_comparison'));
+            ee = manifest.case_definitions{1};
+            ih = manifest.case_definitions{2};
             testCase.verifyEqual(ee.id,"ep_ee");
             testCase.verifyEqual(ih.id,"ep_ih");
             testCase.verifyNotEqual(ee.model_file,ih.model_file);
@@ -26,7 +30,10 @@ classdef TestEPCaseDefinitions < matlab.unittest.TestCase
         end
 
         function preparesAndExposesEveryCoreHandoff(testCase)
-            prepared = prepare_case(ep_ee_case(ep_case_options()));
+            root = setup_project();
+            manifest = testsupport.load_experiment_manifest(fullfile( ...
+                root,'experiments','ep_comparison'));
+            prepared = prepare_case(manifest.case_definitions{1});
             testCase.verifyEqual(prepared.id,"ep_ee");
             testCase.verifyTrue(isfield(prepared,'structural_model'));
             testCase.verifyTrue(isfield(prepared,'re_solution'));
@@ -37,7 +44,10 @@ classdef TestEPCaseDefinitions < matlab.unittest.TestCase
         end
 
         function rejectsMalformedDefinitionBeforeLoading(testCase)
-            definition = ep_ee_case(ep_case_options());
+            root = setup_project();
+            manifest = testsupport.load_experiment_manifest(fullfile( ...
+                root,'experiments','ep_comparison'));
+            definition = manifest.case_definitions{1};
             definition.id = "";
             testCase.verifyError(@() prepare_case(definition), ...
                 'AdaptiveLearning:InvalidCaseDefinition');

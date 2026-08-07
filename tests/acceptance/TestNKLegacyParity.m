@@ -12,7 +12,9 @@ classdef TestNKLegacyParity < matlab.unittest.TestCase
             options.training_periods = reference.config.training_periods;
             options.irf_periods = reference.config.ir_periods;
             design = learning_irf_design(options);
-            artifact = run_case(prepare_case(nk_ee_case(nk_case_options())),design);
+            manifest = testsupport.load_experiment_manifest(fullfile( ...
+                root,'experiments','nk_technology_ee'));
+            artifact = run_case(prepare_case(manifest.case_definition),design);
 
             testCase.verifyEqual([design.training.standardized_innovations ...
                 design.irf.standardized_innovations], ...

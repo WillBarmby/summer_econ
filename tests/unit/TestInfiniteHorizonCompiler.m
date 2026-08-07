@@ -4,7 +4,8 @@ classdef TestInfiniteHorizonCompiler < matlab.unittest.TestCase
     methods (Test)
         function reproducesRetainedEPRELawAtREBeliefs(testCase)
             root = setup_project();
-            model = load_model(fullfile(root,'models','ep_rbc_ih.mod'),struct());
+            model = load_model(fullfile(root,'experiments','ep_comparison', ...
+                'ep_rbc_ih.mod'),struct());
             solution = solve_re(model);
             specification = testsupport.ep_ih_learning_specification(model);
 

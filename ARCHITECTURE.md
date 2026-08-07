@@ -337,7 +337,7 @@ Model-specific choices sit above the stable core. Case options own calibration
 and learning choices; study options own realized innovations and evaluation:
 
 ```matlab
-definition = ep_ee_case(ep_case_options());
+definition = manifest.case_definition;
 prepared = prepare_case(definition);             % loads and solves once
 study = learning_irf_design(learning_irf_options());
 training = train_case(prepared,study.training);  % reusable data artifact
@@ -345,11 +345,13 @@ irf = run_irf(prepared,training,study.irf);       % no Dynare or retraining
 result = run_case(prepared,study);                % thin composition
 ```
 
-`prepare_case(definition,structural_model,re_solution)` reuses an existing
-model solution for another compatible learning definition. A case definition
-contains identity, model source/options, a learning-specification factory, and
-a declarative reporting specification. Preparation exposes the structural
-model, RE solution, resolved learning specification, and compiled system.
+`prepare_case(definition,structural_model,re_solution)` is generic engine
+preparation and reuses an existing model solution for another compatible
+learning definition. Concrete E&P/NK definitions live in `experiments/`, not
+in the engine source tree. A case definition contains identity, model
+source/options, a learning-specification factory, and a declarative reporting
+specification. Preparation exposes the structural model, RE solution, resolved
+learning specification, and compiled system.
 
 Study designs have visibly separate `training`, `irf`, and `summary` sections.
 They identify one shock by economic name; materialization resolves declaration
@@ -371,19 +373,32 @@ The one-call convenience boundary is:
 artifact = run_experiment_folder(folder_path);
 ```
 
-The folder contains a local `experiment.m` function and any model files it
-uses. The manifest returns exactly:
+The folder contains a local `experiment.m` function and the model files it
+uses. A single-case manifest returns exactly:
 
 ```matlab
 struct('case_definition',case_definition, ...
        'study_options',study_options)
 ```
 
+A comparison manifest returns exactly:
+
+```matlab
+struct('case_definitions',{{case_definition_a,case_definition_b}}, ...
+       'study_options',study_options)
+```
+
+The case definitions are research-owned values assembled by the local
+manifest. `prepare_case`, `run_case`, and `run_comparison` remain generic
+engine/study functions. A single-case folder returns a `training_irf` artifact;
+a comparison folder prepares every local case and returns a schema-3
+`comparison` artifact.
+
 The runner temporarily places the folder on the MATLAB path, evaluates the
 manifest, delegates to the existing case and study toolkit, and restores the
-caller path before returning. A manifest is configuration above the engine;
-it does not change the structural, learning, experiment, or artifact
-contracts.
+temporary folder path and caller directory before returning. A manifest is
+configuration above the engine; it does not change the structural, learning,
+experiment, or artifact contracts.
 
 ## Reporting contract
 

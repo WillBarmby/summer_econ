@@ -1,14 +1,19 @@
 function artifact = run_experiment_folder(folder_path)
 %% RUN_EXPERIMENT_FOLDER Run a self-contained local experiment manifest.
-% The folder must contain an experiment.m function returning exactly:
-%   manifest.case_definition
-%   manifest.study_options
+% A single-case folder returns exactly manifest.case_definition and
+% manifest.study_options. A comparison folder returns exactly
+% manifest.case_definitions and manifest.study_options, where the case
+% definitions are a nonempty cell array.
 %
 % The folder is added temporarily to the MATLAB path while the manifest is
-% evaluated. The engine path and caller working directory are restored before
-% this function returns, including on errors.
+% evaluated. The temporary experiment path, caller path, and caller working
+% directory are restored before this function returns, including on errors.
 
 root = fileparts(fileparts(fileparts(mfilename('fullpath'))));
+caller_directory = pwd;
+caller_path = path;
+cleanup_directory = onCleanup(@() cd(caller_directory)); %#ok<NASGU>
+cleanup_caller_path = onCleanup(@() path(caller_path)); %#ok<NASGU>
 setup_project();
 
 folder_path = char(string(folder_path));
@@ -28,29 +33,52 @@ was_on_path = any(strcmp(entries,folder_path));
 if ~was_on_path
     addpath(folder_path,'-begin');
 end
-cleanup_path = onCleanup(@() restore_path(folder_path,was_on_path)); %#ok<NASGU>
+cleanup_folder_path = onCleanup(@() restore_path(folder_path,was_on_path)); %#ok<NASGU>
 
 % Ensure a same-named manifest from another experiment folder is not reused.
 clear experiment;
 manifest = experiment();
-validate_manifest(manifest);
+kind = validate_manifest(manifest);
 
 % Keep ROOT explicit in this function: it documents that local manifests are
 % configuration above the shared engine, not alternate MATLAB projects.
 assert(isfolder(root),'AdaptiveLearning:InvalidExperimentManifest', ...
     'The repository root could not be resolved.');
-prepared = prepare_case(manifest.case_definition);
 design = learning_irf_design(manifest.study_options);
-artifact = run_case(prepared,design);
+if kind=="single"
+    prepared = prepare_case(manifest.case_definition);
+    artifact = run_case(prepared,design);
+else
+    prepared = cell(size(manifest.case_definitions));
+    for j = 1:numel(manifest.case_definitions)
+        prepared{j} = prepare_case(manifest.case_definitions{j});
+    end
+    artifact = run_comparison(prepared,design);
+end
 end
 
-function validate_manifest(manifest)
+function kind = validate_manifest(manifest)
+kind = "";
 if ~isstruct(manifest) || ~isscalar(manifest) || ...
-        ~isequal(sort(fieldnames(manifest)),{'case_definition';'study_options'}) || ...
-        ~isstruct(manifest.case_definition) || ~isscalar(manifest.case_definition) || ...
+        ~isfield(manifest,'study_options') || ...
         ~isstruct(manifest.study_options) || ~isscalar(manifest.study_options)
     error('AdaptiveLearning:InvalidExperimentManifest', ...
-        'experiment.m must return case_definition and study_options structs.');
+        ['experiment.m must return either case_definition and study_options, ' ...
+        'or case_definitions and study_options.']);
+end
+fields = sort(fieldnames(manifest));
+if isequal(fields,{'case_definition';'study_options'}) && ...
+        isstruct(manifest.case_definition) && isscalar(manifest.case_definition)
+    kind = "single";
+elseif isequal(fields,{'case_definitions';'study_options'}) && ...
+        iscell(manifest.case_definitions) && ~isempty(manifest.case_definitions) && ...
+        all(cellfun(@(value) isstruct(value)&&isscalar(value), ...
+            manifest.case_definitions))
+    kind = "comparison";
+else
+    error('AdaptiveLearning:InvalidExperimentManifest', ...
+        ['experiment.m must return a valid single-case or comparison ' ...
+        'manifest with exact field names.']);
 end
 end
 

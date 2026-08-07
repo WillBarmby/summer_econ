@@ -60,15 +60,15 @@ The folder-local runner is intended to be the normal starting point for a new
 experiment. Lower-level functions remain available when a researcher needs to
 reuse a prepared case or training artifact.
 
-The public workflow separates model preparation, training, and IRF evaluation:
+The public lower-level workflow separates model preparation, training, and IRF
+evaluation. A research experiment normally supplies the definition from its
+local manifest:
 
 ```matlab
 setup_project;
-case_options = ep_case_options();
-study_options = learning_irf_options();
-
-ee = prepare_case(ep_ee_case(case_options)); % Dynare runs here
-study = learning_irf_design(study_options);
+definition = ... % supplied by the local experiment manifest
+ee = prepare_case(definition); % Dynare runs here
+study = learning_irf_design(learning_irf_options());
 
 training = train_case(ee,study.training);
 irf = run_irf(ee,training,study.irf);
@@ -76,12 +76,22 @@ result = run_case(ee,study); % equivalent convenience wrapper
 ```
 
 The prepared case may be reused without rerunning Dynare, and the training
-artifact may be reused for several IRF designs without retraining. To compare
-models under identical innovations:
+artifact may be reused for several IRF designs without retraining. The retained
+E&P comparison is packaged with both cases and its comparison-level manifest:
+
+```text
+experiments/ep_comparison/
+    ep_rbc_ee.mod
+    ep_rbc_ih.mod
+    experiment.m
+    README.md
+```
+
+Run it with:
 
 ```matlab
-ih = prepare_case(ep_ih_case(case_options));
-comparison = run_comparison({ee,ih},study);
+comparison = run_experiment_folder( ...
+    "/absolute/path/to/packaging/experiments/ep_comparison");
 ```
 
 Several learning cases for one model can also reuse a loaded model and RE law:
@@ -94,16 +104,17 @@ case_b = prepare_case(definition_b,model,re);
 ```
 
 The nonlinear NK technology case uses the same public preparation and study
-boundary:
+boundary from its own folder:
 
 ```matlab
-nk = prepare_case(nk_ee_case(nk_case_options()));
-nk_artifact = run_case(nk,study);
+nk_artifact = run_experiment_folder( ...
+    "/absolute/path/to/packaging/experiments/nk_technology_ee");
 ```
 
-New experiments can be self-contained folders. Each folder needs an
-`experiment.m` manifest that returns `case_definition` and `study_options`,
-plus any local Dynare model file:
+New experiments can be self-contained folders. A single-case folder's
+`experiment.m` manifest returns `case_definition` and `study_options`; a
+comparison folder returns `case_definitions` and `study_options`. Both keep
+their Dynare model files locally:
 
 ```matlab
 setup_project;
@@ -124,13 +135,14 @@ restored = load_artifact(paths.mat);
 
 ## Project map
 
-- `models/` - Dynare model files used as concrete loader examples.
+- `experiments/` - research-owned model files, manifests, and study designs.
 - `src/model/` - Dynare integration, stationary transformations, structural
   matrices, and RE-law extraction.
 - `src/expectations/` - expectation mappings from a PLM to an ALM.
 - `src/learning/` - declarative learning validation and the callback-based
   learning compiler.
-- `src/case/` - readable model-specific case definitions and preparation.
+- `src/case/` - generic case preparation from a definition to compiled runtime
+  values; concrete research cases live under `experiments/`.
 - `src/study/` - named-shock designs and single/comparison execution.
 - `src/artifact/` - nonexecutable schemas, validation, description, and safe
   MAT/JSON persistence.
@@ -140,5 +152,5 @@ restored = load_artifact(paths.mat);
   provenance; it does not describe every active file in this branch.
 
 Call `setup_project` from MATLAB before using the active functions. Historical
-paper-specific code remains in Git; the new E&P case layer reproduces its
-verified baseline without reintroducing the old bundled runner boundaries.
+paper-specific code remains in Git under `experiments/`; the engine does not
+contain paper-specific runners or assumptions.

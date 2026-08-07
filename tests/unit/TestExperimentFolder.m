@@ -4,15 +4,29 @@ classdef TestExperimentFolder < matlab.unittest.TestCase
             root = setup_project();
             folder = fullfile(root,'examples','tiny_linear_experiment');
             before_directory = pwd;
+            before_full_path = path;
             before_path = strsplit(path,pathsep);
             artifact = run_experiment_folder(folder);
 
             testCase.verifyEqual(string(pwd),string(before_directory));
+            testCase.verifyEqual(path,before_full_path);
             testCase.verifyEqual(artifact.kind,"training_irf");
             testCase.verifyEqual(artifact.case.id,"tiny_linear");
             testCase.verifyEqual(artifact.status,"completed");
             testCase.verifyFalse(any(strcmp(strsplit(path,pathsep),folder) & ...
                 ~any(strcmp(before_path,folder))));
+        end
+
+        function runsComparisonManifest(testCase)
+            root = setup_project();
+            artifact = run_experiment_folder(fullfile( ...
+                root,'experiments','ep_comparison'));
+
+            testCase.verifyEqual(artifact.kind,"comparison");
+            testCase.verifyEqual(numel(artifact.cases),2);
+            testCase.verifyEqual(artifact.cases{1}.case.id,"ep_ee");
+            testCase.verifyEqual(artifact.cases{2}.case.id,"ep_ih");
+            testCase.verifyEqual(artifact.status,"completed");
         end
 
         function rejectsMalformedManifest(testCase)

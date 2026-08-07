@@ -105,5 +105,6 @@ end
 
 function model = load_nk(options)
 root = setup_project();
-model = load_model(fullfile(root,'models','nk_balanced_growth.mod'),options);
+model = load_model(fullfile(root,'experiments','nk_technology_ee', ...
+    'nk_balanced_growth.mod'),options);
 end
