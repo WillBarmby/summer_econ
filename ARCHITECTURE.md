@@ -466,5 +466,6 @@ Tests proceed from pure values to external boundaries:
 3. learning compilation and specification validation;
 4. experiment timing, histories, and runtime failure statuses.
 
-The first phase intentionally leaves the suite red. It does not modify the
-current loaders, learning engine, simulator, or existing validators.
+The active suite covers these handoffs and external boundaries. Core and
+acceptance test entry points are documented in `tests/README.md`; a clean
+checkout should pass both before release.

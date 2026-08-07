@@ -17,6 +17,49 @@ The active code contains the complete linear-model pipeline, one-step and
 infinite-horizon expectation mappings, one-draw and comparison runners, and
 nonexecutable artifact/reporting consumers.
 
+## Install and verify
+
+The active workflow requires MATLAB R2026a and Dynare 7.1. The model boundary
+expects Dynare's MATLAB path at `/Applications/Dynare/7.1-arm64/matlab` on the
+reference macOS setup, or the equivalent path in the `DYNARE_MATLAB_PATH`
+environment variable. `setup_project` configures the repository paths and
+checks the Dynare boundary when a model is loaded.
+
+From the repository root in MATLAB, run:
+
+```matlab
+setup_project;
+run_core_tests;
+run_acceptance_tests;
+```
+
+From another working directory, add the checkout root once before calling the
+same setup function:
+
+```matlab
+addpath("/absolute/path/to/packaging");
+setup_project;
+```
+
+The core suite exercises the contracts and engine. The acceptance suite runs
+the retained E&P and NK numerical parity checks. The reference environment is
+recorded in `tests/fixtures/README.md`; other MATLAB/Dynare versions should be
+treated as unverified until the suites pass there.
+
+## Current release scope
+
+This is a research-preview engine, not a migration-complete release of every
+historical paper runner. The stable interface is the explicit model, RE,
+learning, experiment, study, and schema-3 artifact handoff described in
+`ARCHITECTURE.md`. Version 1 supports RLS learning, constant and lagged-variable
+regressor descriptors, the current gain schedules, declarative coefficient
+scaling, and the retained E&P/NK demonstrations. Historical experiments and
+their paper figures are tracked as migration work in `ROADMAP.md`.
+
+The folder-local runner is intended to be the normal starting point for a new
+experiment. Lower-level functions remain available when a researcher needs to
+reuse a prepared case or training artifact.
+
 The public workflow separates model preparation, training, and IRF evaluation:
 
 ```matlab
@@ -85,8 +128,8 @@ restored = load_artifact(paths.mat);
 - `src/model/` - Dynare integration, stationary transformations, structural
   matrices, and RE-law extraction.
 - `src/expectations/` - expectation mappings from a PLM to an ALM.
-- `src/learning/` - belief state, RLS updates, recursive simulation, and paired
-  path primitives.
+- `src/learning/` - declarative learning validation and the callback-based
+  learning compiler.
 - `src/case/` - readable model-specific case definitions and preparation.
 - `src/study/` - named-shock designs and single/comparison execution.
 - `src/artifact/` - nonexecutable schemas, validation, description, and safe
