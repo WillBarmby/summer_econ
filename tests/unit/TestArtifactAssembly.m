@@ -15,7 +15,7 @@ classdef TestArtifactAssembly < matlab.unittest.TestCase
                 'learning_specification','experiment_specification', ...
                 'simulation_result','axes','units','timing','provenance'};
             testCase.verifyEqual(sort(fieldnames(artifact)),sort(expected.'));
-            testCase.verifyEqual(artifact.schema_version,"2.0");
+            testCase.verifyEqual(artifact.schema_version,"3.0");
             testCase.verifyEqual(artifact.kind,"single_run");
             testCase.verifyEqual(artifact.model.variable_names,{'y'});
             testCase.verifyEqual(artifact.model.shock_names,{'eps'});
@@ -41,18 +41,16 @@ classdef TestArtifactAssembly < matlab.unittest.TestCase
             testCase.verifyEqual(artifact.simulation_result,result);
         end
 
-        function acceptsPairedTrainingIRFResult(testCase)
+        function directsPairedResultsToPublicComposition(testCase)
             model = testsupport.scalar_structural_model();
             learning = testsupport.scalar_learning_specification();
             experiment = paired_specification();
             result = run_training_irf( ...
                 adaptive_scalar_system(),experiment);
 
-            artifact = assemble_artifact(model,learning,experiment,result);
-
-            testCase.verifyEqual(artifact.kind,"training_irf");
-            testCase.verifyEqual(artifact.simulation_result.irf,[0 1 3]);
-            testCase.verifyEqual(artifact.simulation_result.status,"completed");
+            testCase.verifyError(@() assemble_artifact( ...
+                model,learning,experiment,result), ...
+                'AdaptiveLearning:InvalidArtifact');
         end
 
         function rejectsMalformedResult(testCase)

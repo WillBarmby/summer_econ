@@ -14,23 +14,6 @@ classdef TestArtifactReporting < matlab.unittest.TestCase
             testCase.verifyEqual(report.source,"path");
         end
 
-        function reportsPairedIRF(testCase)
-            artifact = scalar_artifact();
-            artifact.simulation_result = struct( ...
-                'training',struct(), ...
-                'baseline',struct(), ...
-                'shocked',struct(), ...
-                'irf',[0 2 1], ...
-                'status',"completed", ...
-                'termination',struct());
-            specification = scalar_reporting_specification("irf");
-
-            report = report_artifact(artifact,specification);
-
-            testCase.verifyEqual(report.values,[0 2 1]);
-            testCase.verifyEqual(report.horizons,0:2);
-        end
-
         function restoresLevelWithCumulativeNamedVariable(testCase)
             artifact = scalar_artifact();
             artifact.model.variable_names = {'output','gamma_x'};
